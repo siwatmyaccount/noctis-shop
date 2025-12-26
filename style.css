@@ -726,3 +726,200 @@ input, textarea { background-color: rgba(255, 255, 255, 0.05) !important; color:
     background: #fff;
     box-shadow: 0 0 20px var(--accent-glow);
 }
+
+/* =========================================
+   MOBILE FIXES V2 (Paste at bottom of style.css)
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* 1. เมนู Hamburger ในหน้า Shop */
+    .hamburger { display: block !important; z-index: 2001; }
+    
+    /* 2. ลดขนาด Modal เลือกไซส์ (Variant Box) */
+    .variant-box {
+        width: 85% !important;
+        max-width: 320px !important; /* บังคับไม่ให้กว้างเกินมือถือ */
+        padding: 20px !important;
+    }
+    
+    /* ปรับปุ่มใน Modal ให้เล็กลง */
+    .size-btn { width: 35px; height: 35px; font-size: 0.8rem; }
+    .color-btn { width: 30px; height: 30px; }
+    .qty-control-large { width: 110px; height: 40px; }
+    .qty-btn-large { width: 35px; }
+    .btn-add-confirm { height: 45px; font-size: 0.9rem; }
+
+    /* 3. Checkout Modal (ป้องกันล้นจอ) */
+    .checkout-modal {
+        max-height: 80vh; /* สูงสุด 80% ของจอ */
+        display: flex;
+        flex-direction: column;
+    }
+    /* ให้รายการข้างในเลื่อนได้ (ถ้ามี Class custom-scroll) */
+    .custom-scroll {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* จัด Header ให้ปุ่มอยู่ซ้ายขวาตามต้องการ */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* สำคัญ! */
+    z-index: 1000;
+}
+
+/* ปุ่ม 3 ขีด (Hamburger) */
+.hamburger-btn {
+    cursor: pointer;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+/* กล่องเมนู Popup (อยู่ซ้ายล่างของ Header) */
+.nav-popup {
+    display: none; /* ซ่อนไว้ก่อน */
+    position: absolute;
+    top: 100%;      /* ต่อจากขอบล่าง Header */
+    left: 20px;     /* ชิดซ้าย */
+    width: 180px;   /* กว้างแค่นิดเดียว */
+    background: #111;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 5px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    z-index: 9999;
+}
+
+/* เมื่อมี class active ให้แสดงผล */
+.nav-popup.active {
+    display: block !important;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Animation เล็กน้อย */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* รายการในเมนู */
+.nav-item-popup {
+    display: block;
+    padding: 12px 20px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-item-popup:last-child { border-bottom: none; }
+.nav-item-popup:hover {
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--accent);
+}
+
+/* ซ่อน Nav แบบเก่าถาวร */
+.nav-links { display: none !important; }
+
+/* ปรับระยะห่างไอคอนใน Header */
+header > div {
+    gap: 15px;
+}
+
+#user-account-btn svg {
+    width: 24px; 
+    height: 24px; 
+    fill: currentColor;
+    transition: 0.3s;
+}
+
+#user-account-btn:hover svg {
+    fill: var(--accent);
+    filter: drop-shadow(0 0 5px var(--accent-glow));
+}
+
+#user-name-display {
+    text-transform: uppercase;
+    color: var(--accent);
+    letter-spacing: 1px;
+}
+
+/* ซ่อนชื่อคนถ้าจอเล็กเกินไป (โชว์แต่ไอคอน) */
+@media (max-width: 400px) {
+    #user-name-display { display: none !important; }
+}
+
+#user-account-btn {
+    transition: 0.3s;
+}
+#user-account-btn:hover {
+    color: var(--accent) !important;
+}   
+
+/* =========================================
+   V7 UPGRADES: USER MENU, HISTORY, EMPTY CART
+   ========================================= */
+
+/* 1. User Dropdown Menu (เมนูเล็กๆ ใต้รูปคน) */
+.user-dropdown {
+    position: absolute;
+    top: 100%; right: 0;
+    width: 200px;
+    background: #111;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 10px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    opacity: 0; pointer-events: none; transform: translateY(-10px);
+    transition: 0.3s;
+    z-index: 5000;
+}
+.user-dropdown.active {
+    opacity: 1; pointer-events: auto; transform: translateY(10px);
+}
+.user-menu-item {
+    padding: 12px 20px;
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; gap: 10px;
+}
+.user-menu-item:hover { background: rgba(255, 215, 0, 0.1); color: var(--accent); }
+.user-menu-item:last-child { border-bottom: none; color: var(--danger); }
+
+/* 2. Empty Cart State (หน้าตาตอนตะกร้าว่าง) */
+.empty-cart-state {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100%; text-align: center; color: var(--text-muted);
+}
+.empty-cart-icon {
+    font-size: 3rem; margin-bottom: 20px; opacity: 0.3;
+}
+
+/* 3. Order History Modal (หน้าประวัติ) */
+.order-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 15px; margin-bottom: 15px;
+}
+.order-header {
+    display: flex; justify-content: space-between;
+    font-size: 0.8rem; color: var(--text-muted);
+    margin-bottom: 10px; padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+.order-item-row {
+    display: flex; gap: 10px; margin-bottom: 8px;
+}
+.status-badge {
+    padding: 3px 8px; border-radius: 4px;
+    background: rgba(46, 204, 113, 0.2); color: #2ecc71;
+    font-size: 0.7rem; font-weight: bold;
+}
