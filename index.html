@@ -10,7 +10,7 @@
 <body>
 
 <header>
-    <a href="index.html" class="logo" style="display:flex; align-items:center;">
+    <a href="index.html" class="logo" style="display:flex; align-items:center; margin-right: auto;">
         <svg class="logo-svg" viewBox="0 0 100 100">
             <path d="M50,0C22.4,0,0,22.4,0,50s22.4,50,50,50s50-22.4,50-50S77.6,0,50,0z M50,90c-22.1,0-40-17.9-40-40s17.9-40,40-40 c5.5,0,10.8,1.1,15.6,3.2C52.5,18.9,42.9,33.3,42.9,50c0,16.7,9.6,31.1,23.7,36.8C60.8,88.9,55.5,90,50,90z"/>
         </svg>
@@ -21,12 +21,6 @@
         <a href="shop.html" class="nav-item">Shop</a>
         <a href="about.html" class="nav-item">About</a>
     </nav>
-    <div class="cart-trigger" style="position:relative; cursor:pointer; color:var(--text-main);" onclick="App.toggleCart(true)">
-        <svg class="icon-svg" viewBox="0 0 24 24">
-            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-        </svg>
-        <div id="cart-count-badge" style="position:absolute; top:-8px; right:-8px; background:var(--danger); color:#fff; font-size:0.6rem; font-weight:bold; width:16px; height:16px; border-radius:50%; display:none; justify-content:center; align-items:center;">0</div>
-    </div>
 </header>
 
 <section class="hero-section">
@@ -39,45 +33,11 @@
 </section>
 
 <div style="background:var(--bg-surface); padding:80px 5%;">
-    </div>
+</div>
 
 <footer style="text-align:center; padding:40px; color:var(--text-muted); border-top:1px solid var(--border-light); background:#050505;">
     <p>© 2025 Noctis Wear. All Rights Reserved.</p>
 </footer>
-
-<div id="cart-sidebar" class="cart-sidebar" style="position:fixed; top:0; right:-100%; width:100%; max-width:400px; height:100vh; z-index:2000; transition:0.4s ease; display:flex; flex-direction:column;">
-    <div class="cart-header" style="padding:20px; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:700; font-size:1.1rem; letter-spacing: 1px;">YOUR CART</span>
-        <span style="cursor:pointer; font-size:1.5rem;" onclick="App.toggleCart(false)">✕</span>
-    </div>
-    <div id="cart-items" style="flex:1; overflow-y:auto; padding:20px;"></div>
-    <div class="cart-footer" style="padding:24px;">
-        <div id="cart-total" style="font-weight:700; margin-bottom:15px; font-size:1.2rem; text-align:right;">Total: ฿0</div>
-        <button class="btn-checkout" onclick="App.openCheckout()">SECURE CHECKOUT</button>
-    </div>
-</div>
-
-<div id="checkout-overlay" class="modal-overlay">
-    <div class="checkout-modal">
-        <button class="close-modal" onclick="App.closeCheckout()">✕</button>
-        <div class="checkout-header">SECURE CHECKOUT</div>
-        <form onsubmit="App.processCheckout(event)">
-            <div class="form-group">
-                <label class="form-label">FULL NAME</label>
-                <input type="text" class="form-input" required placeholder="John Doe">
-            </div>
-            <div class="form-group">
-                <label class="form-label">SHIPPING ADDRESS</label>
-                <input type="text" class="form-input" required placeholder="123 Street, City">
-            </div>
-            <div class="form-group">
-                <label class="form-label">PHONE NUMBER</label>
-                <input type="tel" class="form-input" required placeholder="08x-xxx-xxxx">
-            </div>
-            <button type="submit" class="btn-primary" style="width:100%; margin-top:20px;">CONFIRM ORDER</button>
-        </form>
-    </div>
-</div>
 
 <script src="app.js" defer></script>
 </body>

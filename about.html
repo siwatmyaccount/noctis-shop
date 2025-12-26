@@ -19,10 +19,6 @@
         <a href="shop.html" class="nav-item">Shop</a>
         <a href="about.html" class="nav-item active">About</a>
     </nav>
-    <div class="cart-trigger" style="position:relative; cursor:pointer; color:var(--text-main);" onclick="App.toggleCart(true)">
-        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        <div id="cart-count-badge" style="position:absolute; top:-8px; right:-8px; background:var(--danger); color:#fff; font-size:0.6rem; font-weight:bold; width:16px; height:16px; border-radius:50%; display:none; justify-content:center; align-items:center;">0</div>
-    </div>
 </header>
 
 <section class="about-hero">
@@ -34,49 +30,25 @@
         <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80" style="width:100%; border-radius:16px; border:1px solid var(--border-light);">
     </div>
     <div class="about-text">
-        <h2>OUR STORY</h2>
-        <p>Noctis Wear ก่อตั้งขึ้นในปี 2025 ด้วยวิสัยทัศน์ที่จะปฏิวัติวงการสตรีทแวร์ เราไม่ได้แค่ขายเสื้อผ้า แต่เราขาย "นวัตกรรม" ที่สวมใส่ได้</p>
-        <p>แรงบันดาลใจจาก Cyberpunk Culture และ Luxury Minimalist ทำให้ทุกคอลเลกชันของเรามีความโดดเด่น ไม่เหมือนใคร และสะท้อนตัวตนของผู้สวมใส่อย่างชัดเจน</p>
+        <h2 style="font-family: var(--font-heading); color: var(--accent); letter-spacing: 2px;">THE ORIGIN STORY</h2>
+        
+        <p style="margin-bottom: 20px;">
+            Noctis Wear ไม่ได้ถือกำเนิดขึ้นในห้องประชุมที่เงียบเชียบ แต่เริ่มต้นขึ้นในปี 2025 ท่ามกลางแสงไฟนีออนและจังหวะชีพจรของมหานครที่ไม่เคยหลับใหล เราตั้งคำถามที่ท้าทายว่า <em>"ทำไมเสื้อผ้าถึงเป็นได้แค่เครื่องนุ่งห่ม?"</em> ด้วยวิสัยทัศน์ที่ต้องการสร้าง <strong>"ชุดเกราะทางจิตวิญญาณ" (Soul Armor)</strong> สำหรับคนเมืองที่ต้องต่อสู้กับความวุ่นวาย เราจึงปฏิวัติวงการสตรีทแวร์ด้วยการผสานนวัตกรรม Technical Fabric เข้ากับสุนทรียศาสตร์แห่งโลกอนาคต เพื่อให้คุณพร้อมรับมือกับทุกสถานการณ์
+        </p>
+
+        <p style="margin-bottom: 20px;">
+            แรงบันดาลใจของเราหยั่งรากลึกในวัฒนธรรม <strong>Cyberpunk</strong> ที่ดิบเถื่อน ผสมผสานกับความเรียบหรูแบบ <strong>Luxury Minimalist</strong> อย่างลงตัว ทุกตะเข็บ ทุกรอยตัดเย็บ คือผลลัพธ์ของการคำนวณที่แม่นยำเพื่อความคล่องตัวสูงสุด เราไม่ได้แค่ขายเสื้อผ้า แต่เรากำลังมอบ "อัตลักษณ์ใหม่" ที่ช่วยให้คุณโดดเด่น สะท้อนตัวตนที่ชัดเจน และแตกต่างท่ามกลางผู้คนนับล้าน
+        </p>
+
+        <p>
+            นี่ไม่ใช่แค่แฟชั่น แต่มันคือบัตรเชิญสู่โลกใบใหม่... โลกที่คุณเป็นผู้กำหนดนิยามของตัวเอง Noctis Wear คือสัญลักษณ์ของผู้ที่กล้าจะแตกต่างและก้าวข้ามขีดจำกัดของความเป็นจริง
+        </p>
     </div>
 </section>
 
 <footer style="text-align:center; padding:40px; color:var(--text-muted); border-top:1px solid var(--border-light); background:#050505;">
     <p>© 2025 Noctis Wear. All Rights Reserved.</p>
 </footer>
-
-<div id="cart-sidebar" class="cart-sidebar" style="position:fixed; top:0; right:-100%; width:100%; max-width:400px; height:100vh; z-index:2000; transition:0.4s ease; display:flex; flex-direction:column;">
-    <div class="cart-header" style="padding:20px; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:700; font-size:1.1rem; letter-spacing: 1px;">YOUR CART</span>
-        <span style="cursor:pointer; font-size:1.5rem;" onclick="App.toggleCart(false)">✕</span>
-    </div>
-    <div id="cart-items" style="flex:1; overflow-y:auto; padding:20px;"></div>
-    <div class="cart-footer" style="padding:24px;">
-        <div id="cart-total" style="font-weight:700; margin-bottom:15px; font-size:1.2rem; text-align:right;">Total: ฿0</div>
-        <button class="btn-checkout" onclick="App.openCheckout()">SECURE CHECKOUT</button>
-    </div>
-</div>
-
-<div id="checkout-overlay" class="modal-overlay">
-    <div class="checkout-modal">
-        <button class="close-modal" onclick="App.closeCheckout()">✕</button>
-        <div class="checkout-header">SECURE CHECKOUT</div>
-        <form onsubmit="App.processCheckout(event)">
-            <div class="form-group">
-                <label class="form-label">FULL NAME</label>
-                <input type="text" class="form-input" required placeholder="John Doe">
-            </div>
-            <div class="form-group">
-                <label class="form-label">SHIPPING ADDRESS</label>
-                <input type="text" class="form-input" required placeholder="123 Street, City">
-            </div>
-            <div class="form-group">
-                <label class="form-label">PHONE NUMBER</label>
-                <input type="tel" class="form-input" required placeholder="08x-xxx-xxxx">
-            </div>
-            <button type="submit" class="btn-primary" style="width:100%; margin-top:20px;">CONFIRM ORDER</button>
-        </form>
-    </div>
-</div>
 
 <script src="app.js" defer></script>
 </body>

@@ -1,35 +1,49 @@
-/* --- 1. Core Settings & Fonts --- */
+/* =========================================
+   1. CONFIGURATION & VARIABLES
+   (Source of Truth - แก้ที่นี่เปลี่ยนทั้งเว็บ)
+   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@700&display=swap');
 
 :root {
-    /* Color Palette: Cyber-Luxe */
-    --bg-body: #050505;       /* ดำสนิทกว่าเดิม */
-    --bg-surface: rgba(255, 255, 255, 0.03);
+    /* --- Colors --- */
+    --bg-body: #050505;       /* พื้นหลังหลัก */
+    --bg-surface: #121212;    /* พื้นหลังการ์ด/กล่อง */
+    --bg-overlay: rgba(0, 0, 0, 0.85);
+    
     --text-main: #ffffff;
-    --text-muted: #888899;
-    --accent: #ffd700;        /* ทองคำ */
+    --text-muted: #a0a0b0;    /* ปรับให้สว่างขึ้นเพื่อให้อ่านง่าย */
+    
+    --accent: #ffd700;        /* สีทอง */
+    --accent-hover: #e5c100;
     --accent-glow: rgba(255, 215, 0, 0.3);
     --danger: #ff3b3b;
+
+    --border-light: 1px solid rgba(255, 255, 255, 0.15);
     
-    /* Gradients & Effects */
-    --gradient-gold: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
-    --gradient-dark: linear-gradient(to bottom, transparent, #050505);
-    --glass: blur(20px) saturate(180%);
-    --border-light: 1px solid rgba(255, 255, 255, 0.08);
-    
-    /* Layout */
-    --radius-sm: 8px;
-    --radius-md: 16px;
+    /* --- Typography --- */
+    --font-heading: 'Syncopate', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+
+    /* --- Spacing & Radius --- */
+    --radius-sm: 4px;
+    --radius-md: 12px;
     --radius-lg: 32px;
     --container-width: 1440px;
     
-    /* Typography */
-    --font-heading: 'Syncopate', sans-serif; /* ฟอนต์หัวข้อแบบล้ำยุค */
-    --font-body: 'Outfit', sans-serif;
+    /* --- Z-Index Management (Layering) --- */
+    --z-back: -1;
+    --z-normal: 1;
+    --z-sticky: 1000;  /* Header */
+    --z-drawer: 2000;  /* Cart Sidebar */
+    --z-modal: 3000;   /* Modals */
+    --z-toast: 4000;   /* Notifications */
 }
 
-/* Reset & Base */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+/* =========================================
+   2. RESET & BASE STYLES
+   ========================================= */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
 html { scroll-behavior: smooth; }
 
 body { 
@@ -39,15 +53,19 @@ body {
     line-height: 1.6; 
     overflow-x: hidden; 
     min-height: 100vh;
+    width: 100%;
 }
 
-a { text-decoration:none; color:inherit; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
-ul { list-style:none; }
-button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+a { text-decoration: none; color: inherit; transition: 0.3s ease; }
+ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; border: none; outline: none; background: none; }
+img { max-width: 100%; display: block; height: auto; }
 
-/* --- 2. Kinetic Typography & Utilities --- */
+/* =========================================
+   3. UTILITIES & ANIMATIONS
+   ========================================= */
 .text-gradient {
-    background: var(--gradient-gold);
+    background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
@@ -63,85 +81,13 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; }
     transform: translateY(0);
 }
 
-/* --- 3. Header (Ultra Glass) --- */
-header {
-    background: rgba(5, 5, 5, 0.7);
-    backdrop-filter: var(--glass);
-    -webkit-backdrop-filter: var(--glass);
-    border-bottom: var(--border-light);
-    padding: 20px 5%;
-    position: sticky; top: 0; z-index: 1000;
-    display: flex; justify-content: space-between; align-items: center;
-    transition: 0.3s;
-}
+.icon-svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; }
 
-.logo { 
-    font-family: var(--font-heading); 
-    font-size: 1.8rem; 
-    letter-spacing: 2px; 
-    color: var(--text-main); 
-    text-transform: uppercase; 
-}
-.logo span { color: var(--accent); }
+/* =========================================
+   4. COMPONENTS (Reusable UI)
+   ========================================= */
 
-.nav-links { display: flex; gap: 40px; }
-.nav-item { 
-    font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; color: var(--text-muted); 
-    text-transform: uppercase; position: relative; padding: 5px 0;
-}
-.nav-item::before { 
-    content:''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; 
-    background: var(--accent); transition: 0.4s ease;
-}
-.nav-item:hover::before, .nav-item.active::before { width: 100%; }
-.nav-item:hover, .nav-item.active { color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-
-/* --- 4. Hero Section (Immersive) --- */
-.hero-section {
-    min-height: 95vh;
-    position: relative;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    text-align: center;
-    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
-    overflow: hidden;
-}
-
-/* Background Video/Image simulation with Parallax */
-.hero-bg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: url('https://images.unsplash.com/photo-1550974639-6264d1421fce?auto=format&fit=crop&q=80') center/cover no-repeat;
-    opacity: 0.4;
-    filter: grayscale(100%) contrast(1.2);
-    z-index: 1;
-    transform: scale(1.1); /* Ready for parallax JS */
-}
-
-.hero-content { position: relative; z-index: 2; padding: 0 20px; }
-
-.hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(3rem, 10vw, 8rem);
-    line-height: 0.9;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-    letter-spacing: -2px;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
-    position: relative;
-}
-.hero-title span {
-    display: block;
-    color: var(--text-main);
-    text-shadow: 0 0 30px rgba(0,0,0,0.8);
-    -webkit-text-stroke: 0;
-}
-
-.hero-desc {
-    font-size: 1.1rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 40px;
-    font-weight: 300; letter-spacing: 0.5px;
-}
-
-/* Magnetic Button Effect */
+/* --- Buttons --- */
 .btn-primary {
     position: relative;
     padding: 18px 48px;
@@ -155,6 +101,7 @@ header {
     overflow: hidden;
     transition: 0.4s;
     z-index: 1;
+    display: inline-block;
 }
 .btn-primary::before {
     content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
@@ -163,64 +110,143 @@ header {
 .btn-primary:hover::before { width: 100%; }
 .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--accent-glow); }
 
-/* --- 5. Marquee (Infinite Scroll) --- */
-.marquee-container {
-    background: var(--accent);
-    color: #000;
-    padding: 15px 0;
-    overflow: hidden;
-    white-space: nowrap;
+.btn-icon {
+    width: 100%; padding: 12px;
+    background: var(--text-main); color: #000;
+    font-weight: 700; font-size: 0.8rem; text-transform: uppercase;
+    border-radius: var(--radius-sm); transition: 0.3s;
+}
+.btn-icon:hover { background: var(--accent); }
+
+.btn-checkout {
+    width: 100%; padding: 16px;
+    background: var(--accent); color: #000;
+    font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    border-radius: var(--radius-sm); transition: 0.3s;
+    margin-top: 10px;
+}
+.btn-checkout:hover { background: #fff; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+.btn-checkout:disabled { background: #555; cursor: not-allowed; opacity: 0.7; }
+
+/* --- Forms & Inputs (Fixed Visibility Issues) --- */
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
+
+.form-input, select {
+    width: 100%; 
+    padding: 12px; 
+    background: #1a1a1a;
+    border: 1px solid #444; 
+    color: #fff;
+    border-radius: var(--radius-sm); 
+    outline: none; 
+    transition: 0.3s;
+    font-family: var(--font-body);
+}
+.form-input:focus, select:focus { border-color: var(--accent); background: #222; }
+
+/* Checkbox Style */
+.checkmark {
+    position: absolute; top: 2px; left: 0; height: 18px; width: 18px;
+    background-color: transparent; border: 1px solid #555; border-radius: 4px;
+}
+.filter-option input:checked ~ .checkmark { background-color: var(--accent); border-color: var(--accent); }
+
+/* --- Badges --- */
+.badge-new {
+    position: absolute; top: 15px; left: 15px;
+    background: var(--text-main); color: #000;
+    padding: 4px 12px; font-weight: 800; font-size: 0.7rem;
+    text-transform: uppercase; z-index: 2;
+}
+
+/* =========================================
+   5. LAYOUT: HEADER & FOOTER
+   ========================================= */
+header {
+    background: rgba(5, 5, 5, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: var(--border-light);
+    padding: 20px 5%;
+    position: sticky; top: 0; 
+    z-index: var(--z-sticky);
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+.logo { 
+    font-family: var(--font-heading); 
+    font-size: 1.8rem; 
+    letter-spacing: 2px; 
+    text-transform: uppercase; 
+    display: flex; align-items: center;
+}
+.logo span { color: var(--accent); }
+.logo-svg { width: 32px; height: 32px; margin-right: 10px; fill: var(--text-main); transition: 0.3s; }
+.logo:hover .logo-svg { fill: var(--accent); }
+
+.nav-links { display: flex; gap: 40px; }
+.nav-item { 
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; color: var(--text-muted); 
+    text-transform: uppercase; position: relative; padding: 5px 0;
+}
+.nav-item::before { 
+    content:''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; 
+    background: var(--accent); transition: 0.4s ease;
+}
+.nav-item:hover::before, .nav-item.active::before { width: 100%; }
+.nav-item:hover, .nav-item.active { color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+/* =========================================
+   6. SECTIONS: HERO, SHOP, ABOUT
+   ========================================= */
+
+/* Hero Section */
+.hero-section {
+    min-height: 95vh;
     position: relative;
-    z-index: 5;
-    transform: rotate(-1deg) scale(1.05);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+    overflow: hidden;
 }
-.marquee-content {
-    display: inline-block;
-    animation: marquee 20s linear infinite;
+.hero-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://images.unsplash.com/photo-1550974639-6264d1421fce?auto=format&fit=crop&q=80') center/cover no-repeat;
+    opacity: 0.4; filter: grayscale(100%) contrast(1.2);
+    z-index: 0; transform: scale(1.1);
 }
-.marquee-item {
+.hero-content { position: relative; z-index: 2; padding: 0 20px; }
+.hero-title {
     font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin-right: 50px;
+    font-size: clamp(3rem, 10vw, 8rem);
+    line-height: 0.9;
     text-transform: uppercase;
+    margin-bottom: 30px;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
 }
-@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-/* --- 6. Bento Grid Features --- */
-.features-section { padding: 100px 5%; max-width: var(--container-width); margin: 0 auto; }
-.bento-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 300px);
-    gap: 20px;
+.hero-title span {
+    display: block; color: var(--text-main);
+    text-shadow: 0 0 30px rgba(0,0,0,0.8);
+    -webkit-text-stroke: 0;
 }
-.bento-item {
-    background: var(--bg-surface);
-    border: var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 40px;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    position: relative; overflow: hidden;
-    transition: 0.4s;
+.hero-desc {
+    font-size: 1.1rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 40px;
+    font-weight: 300; letter-spacing: 0.5px;
 }
-.bento-item:hover { border-color: var(--accent); background: rgba(255,255,255,0.05); }
-.bento-item h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px; z-index: 2; }
-.bento-item p { color: var(--text-muted); z-index: 2; }
-.bento-icon { font-size: 4rem; position: absolute; top: 20px; right: 20px; opacity: 0.1; transition: 0.4s; }
-.bento-item:hover .bento-icon { opacity: 0.8; transform: scale(1.2) rotate(-10deg); color: var(--accent); }
 
-.bento-large { grid-column: span 2; background: linear-gradient(to right, #111, transparent), url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&q=80') center/cover; }
-.bento-tall { grid-row: span 2; background: linear-gradient(to top, #111, transparent), url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80') center/cover; }
-
-/* --- 7. Shop UI (Refined) --- */
+/* Shop Layout */
 .shop-container { display: flex; gap: 50px; padding: 60px 5%; max-width: var(--container-width); margin: 0 auto; }
+.product-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
 
-/* Sidebar */
+/* Sidebar Filter */
 .sidebar-filter {
     width: 280px; flex-shrink: 0;
     position: sticky; top: 100px; height: fit-content;
-    padding-right: 20px; border-right: var(--border-light);
+    padding: 20px; border-right: var(--border-light);
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-md);
 }
 .filter-title { font-family: var(--font-heading); font-size: 0.9rem; margin-bottom: 25px; color: var(--accent); }
 .filter-option {
@@ -229,177 +255,474 @@ header {
 }
 .filter-option:hover { color: var(--text-main); }
 .filter-option input { position: absolute; opacity: 0; cursor: pointer; }
-.checkmark {
-    position: absolute; top: 2px; left: 0; height: 18px; width: 18px;
-    background-color: transparent; border: 1px solid #555; border-radius: 4px;
-}
-.filter-option input:checked ~ .checkmark { background-color: var(--accent); border-color: var(--accent); }
 
-/* Product Grid */
-.product-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-
-/* Ultra Product Card */
+/* Product Card */
 .product-card {
     background: var(--bg-surface);
     border-radius: var(--radius-md);
     overflow: hidden;
     position: relative;
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid transparent;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .product-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
 
-.product-img-wrapper { 
-    position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; 
-}
+.product-img-wrapper { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; }
 .product-img { width: 100%; height: 100%; object-fit: cover; transition: 0.7s; filter: grayscale(20%); }
 .product-card:hover .product-img { transform: scale(1.1); filter: grayscale(0%); }
 
 .card-overlay {
-    position: absolute; bottom: 0; left: 0; width: 100%;
-    padding: 20px;
+    position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
     background: linear-gradient(to top, #000, transparent);
     transform: translateY(100%); transition: 0.4s;
-    display: flex; gap: 10px;
 }
 .product-card:hover .card-overlay { transform: translateY(0); }
-
-.btn-icon {
-    flex: 1; padding: 12px;
-    background: var(--text-main); color: #000;
-    font-weight: 700; font-size: 0.8rem; text-transform: uppercase;
-    border-radius: 4px; transition: 0.3s;
-}
-.btn-icon:hover { background: var(--accent); }
 
 .product-info { padding: 20px; }
 .product-category { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 .product-title { font-size: 1.1rem; font-weight: 600; margin: 5px 0; }
 .product-price { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
-.old-price { color: #555; text-decoration: line-through; font-size: 0.9rem; margin-right: 8px; }
+.old-price { color: #666; text-decoration: line-through; font-size: 0.9rem; margin-right: 8px; }
 
-/* Badge */
-.badge-new {
-    position: absolute; top: 15px; left: 15px;
-    background: var(--text-main); color: #000;
-    padding: 4px 12px; font-weight: 800; font-size: 0.7rem;
-    text-transform: uppercase; z-index: 2;
-}
+/* About Page */
+.about-hero { padding: 100px 5%; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: var(--container-width); margin: 0 auto; padding: 80px 5%; align-items: center; }
+.about-text h2 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 20px; color: var(--text-main); }
 
-/* --- 8. Cart Sidebar (Modern Drawer) --- */
+/* =========================================
+   7. MODULES: CART SIDEBAR & MODALS
+   ========================================= */
+
+/* --- Cart Sidebar --- */
 .cart-sidebar {
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(20px);
+    position: fixed; top: 0; right: -100%; 
+    width: 100%; max-width: 400px; height: 100vh; 
+    background: #0a0a0a;
     border-left: var(--border-light);
     box-shadow: -10px 0 50px rgba(0,0,0,0.8);
+    z-index: var(--z-drawer);
+    transition: 0.4s ease;
+    display: flex; flex-direction: column;
 }
-.cart-header { padding: 30px; border-bottom: var(--border-light); }
-.cart-header h2 { font-family: var(--font-heading); font-size: 1.2rem; }
-.cart-footer { padding: 30px; background: #080808; }
-.btn-checkout {
-    width: 100%; padding: 16px;
-    background: var(--accent); color: #000;
-    font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-    border-radius: 4px; transition: 0.3s;
-}
-.btn-checkout:hover { background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.4); }
+.cart-header { padding: 30px; border-bottom: var(--border-light); display: flex; justify-content: space-between; align-items: center; }
+.cart-footer { padding: 30px; background: #050505; border-top: var(--border-light); }
 
-/* --- Responsive --- */
-@media(max-width: 1024px) {
-    .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-    .bento-large, .bento-tall { grid-column: span 1; grid-row: span 1; height: 300px; }
-    .shop-container { flex-direction: column; }
-    .sidebar-filter { width: 100%; border-right: none; border-bottom: var(--border-light); padding-bottom: 20px; position: relative; top: 0; }
-    .hero-title { font-size: 4rem; }
+/* Advanced Cart Items */
+.cart-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
 }
-/* --- 9. Checkout Modal (New) --- */
-.modal-overlay {
+.cart-checkbox { width: 18px; height: 18px; margin-top: 5px; accent-color: var(--accent); cursor: pointer; }
+.cart-img { width: 70px; height: 90px; object-fit: cover; border-radius: 4px; }
+.cart-details { flex: 1; }
+.cart-name { font-weight: 700; font-size: 0.95rem; line-height: 1.2; margin-bottom: 5px; }
+
+/* --- Modals (Universal) --- */
+.modal-overlay, .variant-modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
-    z-index: 9999; display: flex; justify-content: center; align-items: center;
+    background: var(--bg-overlay); backdrop-filter: blur(8px);
+    z-index: var(--z-modal);
+    display: flex; justify-content: center; align-items: center;
     opacity: 0; pointer-events: none; transition: 0.3s;
 }
-.modal-overlay.active { opacity: 1; pointer-events: auto; }
+.modal-overlay.active, .variant-modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-.checkout-modal {
-    background: #111; border: 1px solid var(--border-light);
-    width: 90%; max-width: 500px; padding: 40px; border-radius: var(--radius-md);
-    position: relative; box-shadow: 0 0 50px rgba(255, 215, 0, 0.1);
+.checkout-modal, .variant-box {
+    background: #111;
+    border: 1px solid var(--accent);
+    width: 90%; max-width: 500px;
+    padding: 30px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
     transform: translateY(20px); transition: 0.3s;
+    position: relative;
 }
-.modal-overlay.active .checkout-modal { transform: translateY(0); }
+.modal-overlay.active .checkout-modal, .variant-modal-overlay.active .variant-box { transform: translateY(0); }
 
-.checkout-header { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px; color: var(--accent); }
-.form-group { margin-bottom: 20px; }
-.form-label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 1px; }
-.form-input {
-    width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1); color: #fff;
-    border-radius: 4px; outline: none; transition: 0.3s;
+/* Quick Shop Modal Specifics */
+.variant-title { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+.option-group { margin-bottom: 20px; }
+.option-label { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; }
+
+.size-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+.size-btn {
+    border: 1px solid #444; background: #000; color: #fff;
+    width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
+    cursor: pointer; transition: 0.2s; border-radius: 4px;
 }
-.form-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); }
+.size-btn.selected { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
+
+.color-grid { display: flex; gap: 10px; }
+.color-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+.color-btn.selected { border-color: var(--accent); transform: scale(1.2); box-shadow: 0 0 10px var(--accent-glow); }
+
+.modal-actions { margin-top: 25px; display: flex; gap: 10px; }
+.btn-cancel { flex: 1; padding: 12px; background: #333; color: #fff; border-radius: 4px; font-weight: bold; }
+.btn-confirm { flex: 2; padding: 12px; background: var(--accent); color: #000; font-weight: bold; border-radius: 4px; }
+
+
+/* =========================================
+   8. RESPONSIVE & MOBILE FIXES (UPDATED)
+   ========================================= */
+
+@media (max-width: 1024px) {
+    .shop-container { flex-direction: column; }
+    /* ปรับ Sidebar บน Tablet/Mobile ให้เต็มจอ */
+    .sidebar-filter { width: 100% !important; border-right: none; margin-bottom: 20px; position: relative; }
+}
+
+@media (max-width: 768px) {
+    /* 1. แก้หน้าจอเลื่อนแนวนอน (Horizontal Scroll) */
+    html, body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* 2. แก้ Header ล้นจอ */
+    header {
+        padding: 15px 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .logo { font-size: 1.4rem; }
+
+    /* 3. แก้เมนู Hamburger ให้ทำงานถูกต้อง */
+    .nav-links {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+        background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
+        flex-direction: column; justify-content: center; align-items: center;
+        z-index: 2000; transform: translateY(-100%); transition: 0.4s; opacity: 0;
+    }
+    .nav-links.active { transform: translateY(0); opacity: 1; }
+    .mobile-close { display: block !important; }
+    .nav-item { font-size: 1.5rem; margin: 15px 0; }
+
+    /* 4. แก้หน้า Shop (Sort Bar ล้นจอ) -> ตัวสำคัญที่ทำให้ต้องซูม */
+    .shop-container main .reveal-on-scroll {
+        flex-wrap: wrap !important; /* บังคับตัดบรรทัด */
+        gap: 15px;
+    }
+    #sort-select { width: 100%; margin-top: 5px; } /* Dropdown เต็มจอ */
+    .shop-container { padding: 30px 15px; width: 100%; box-sizing: border-box; }
+
+    /* 5. แก้ตารางสินค้า (2 คอลัมน์) */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    .product-card { border-radius: 8px; }
+    .product-info { padding: 10px; }
+    .product-title { font-size: 0.9rem; margin: 5px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-price { font-size: 1rem; }
+    .btn-icon { padding: 8px; font-size: 0.7rem; }
+
+    /* 6. แก้ตะกร้าตกขอบ */
+    .cart-sidebar {
+        height: 100vh !important;
+        position: fixed !important;
+        top: 0 !important; right: -100%;
+        width: 85% !important;
+        z-index: 9999 !important;
+    }
+    #cart-items { flex: 1; overflow-y: auto; padding-bottom: 20px; }
+
+    /* ปรับปุ่ม Add to Cart บนมือถือ */
+    .card-overlay {
+        background: rgba(0,0,0,0.6);
+        transform: translateY(0); padding: 0;
+        display: flex; justify-content: center; align-items: center;
+        bottom: 10px; left: 10px; right: 10px; width: auto; height: auto;
+        border-radius: 4px;
+    }
+    .btn-icon { width: 100%; text-align: center; }
+}
+
+/* =========================================
+   BUG FIXES: COLORS & VISIBILITY
+   ========================================= */
+/* แก้ Dropdown (Sort By) มองไม่เห็นตัวหนังสือ */
+select { background-color: #111 !important; color: #fff !important; }
+select option { background-color: #111 !important; color: #fff !important; padding: 10px; }
+/* ป้องกัน Input อื่นๆ สีเพี้ยน */
+input, textarea { background-color: rgba(255, 255, 255, 0.05) !important; color: #fff !important; }
+
+/* =========================================
+   MOBILE & UI FIXES (FINAL PATCH)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+/* --- 1. แก้ปุ่มกากบาทในหน้า Checkout (ให้เป็นสีขาวและชิดมุม) --- */
 .close-modal {
-    position: absolute; top: 20px; right: 20px;
-    background: none; color: #555; font-size: 1.5rem; cursor: pointer;
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    color: #ffffff !important; /* เปลี่ยนเป็นสีขาว */
+    background: transparent !important;
+    font-size: 1.8rem !important;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
 }
-.close-modal:hover { color: #fff; }
+.close-modal:hover { color: var(--accent) !important; transform: scale(1.1); }
 
-/* --- 10. About Page Styles (New) --- */
-.about-hero {
-    padding: 100px 5%; text-align: center;
-    background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-}
-.about-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
-    max-width: var(--container-width); margin: 0 auto; padding: 80px 5%;
+/* --- 2. แก้ปุ่มกากบาทในหน้า Cart Sidebar (ให้ชิดขวาและอยู่บรรทัดเดียวกับหัวข้อ) --- */
+.cart-header > div {
+    width: 100%; /* บังคับให้กล่องข้างในกว้างเต็ม 100% */
+    display: flex;
+    justify-content: space-between; /* ดันข้อความกับปุ่มกากบาทไปคนละฝั่ง */
     align-items: center;
 }
-.about-text h2 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 20px; color: var(--text-main); }
-.about-text p { color: var(--text-muted); margin-bottom: 20px; font-size: 1.1rem; }
-@media(max-width: 900px) { .about-grid { grid-template-columns: 1fr; } }
 
-/* --- 11. Custom Icons Updates --- */
-.icon-svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; }
-.cart-trigger:hover .icon-svg { fill: var(--accent); filter: drop-shadow(0 0 5px var(--accent-glow)); }
-.logo-svg { width: 32px; height: 32px; margin-right: 10px; fill: var(--text-main); }
-.logo:hover .logo-svg { fill: var(--accent); }
+/* --- 3. จัดการ Layout มือถือ (แก้หน้าจอเลื่อน/ซูม และเมนู) --- */
+@media (max-width: 768px) {
+    /* ป้องกันหน้าจอเลื่อนซ้ายขวา */
+    html, body {
+        width: 100%;
+        overflow-x: hidden;
+    }
 
-/* --- Checkout Modal Styles --- */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
-    z-index: 9999; display: flex; justify-content: center; align-items: center;
-    opacity: 0; pointer-events: none; transition: 0.3s;
-}
-.modal-overlay.active { opacity: 1; pointer-events: auto; }
+    /* จัด Header ให้แน่นและสวยงาม */
+    header {
+        padding: 15px 20px;
+        flex-wrap: nowrap !important; /* ห้ามตัดบรรทัด */
+        gap: 15px;
+        justify-content: space-between;
+    }
 
-.checkout-modal {
-    background: #111; border: 1px solid var(--border);
-    width: 90%; max-width: 500px; padding: 40px; border-radius: var(--radius-md);
-    position: relative; box-shadow: 0 0 50px rgba(255, 215, 0, 0.15);
-    transform: translateY(20px); transition: 0.3s;
-}
-.modal-overlay.active .checkout-modal { transform: translateY(0); }
+    /* ปรับขนาด Logo */
+    .logo { font-size: 1.4rem; white-space: nowrap; }
 
-.checkout-header { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 25px; color: var(--accent); letter-spacing: 2px; }
-.form-group { margin-bottom: 20px; }
-.form-label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
-.form-input {
-    width: 100%; padding: 14px; background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1); color: #fff;
-    border-radius: 4px; outline: none; transition: 0.3s;
-}
-.form-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); }
-.close-modal {
-    position: absolute; top: 20px; right: 20px;
-    background: none; color: #555; font-size: 1.5rem; cursor: pointer; transition: 0.3s;
-}
-.close-modal:hover { color: #fff; transform: rotate(90deg); }
+    /* เมนู Hamburger (3 ขีด) */
+    .hamburger {
+        display: block !important; /* โชว์ปุ่มเมนู */
+        font-size: 1.5rem;
+        z-index: 2001; /* อยู่เหนือทุกอย่าง */
+    }
 
-.btn-checkout {
-    width: 100%; padding: 16px;
-    background: var(--accent); color: #000;
-    font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-    border-radius: 4px; transition: 0.3s; margin-top: 10px;
+    /* เมนู Nav Links (Home/Shop/About) เมื่อเปิดบนมือถือ */
+    .nav-links {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100vh;
+        background: rgba(0,0,0,0.95); /* พื้นหลังดำทึบ */
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        transform: translateY(-100%); /* ซ่อนไว้ข้างบน */
+        transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        opacity: 0;
+        pointer-events: none; /* ห้ามกดถ้ายังไม่เปิด */
+    }
+
+    /* เมื่อกดเปิดเมนู */
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-item {
+        font-size: 1.8rem; /* ตัวหนังสือใหญ่ขึ้น */
+        margin: 20px 0;
+        font-weight: 800;
+    }
+
+    /* ปุ่มปิดเมนู (X) ใน Nav Links */
+    .mobile-close {
+        display: block !important;
+        position: absolute;
+        top: 20px; right: 20px;
+        color: #fff;
+        font-size: 2rem;
+    }
+
+    /* --- หน้า Shop (แก้ Sort Bar ล้นจอ) --- */
+    .shop-container main .reveal-on-scroll {
+        flex-wrap: wrap !important;
+        gap: 10px;
+    }
+    #sort-select { width: 100%; margin-top: 5px; background: #111; color: #fff; } 
+    .shop-container { padding: 20px 15px; width: 100%; }
+
+    /* --- ตารางสินค้า (2 คอลัมน์) --- */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+    .product-card { border-radius: 8px; }
+    .product-title { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-price { font-size: 0.95rem; }
+    
+    /* --- ตะกร้าสินค้า (Cart Sidebar) --- */
+    .cart-sidebar {
+        width: 85% !important;
+        max-width: none;
+    }
+    
+    /* --- Checkout Modal (จัดระเบียบแบบฟอร์ม) --- */
+    .checkout-modal {
+        width: 95% !important;
+        padding: 25px 20px;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
 }
-.btn-checkout:hover { background: #fff; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+
+/* =========================================
+   IMPROVED VARIANT MODAL (UX UPDATE)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+/* ปรับขนาดกล่อง Modal ให้กระชับ */
+.variant-box {
+    max-width: 400px !important;
+    background: #111 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9) !important;
+    padding: 25px !important;
+}
+
+/* หัวข้อตัวเลือก (SIZE, COLOR, QTY) */
+.option-label {
+    display: block;
+    color: #888;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+}
+
+/* ปุ่มปิด Modal เฉพาะหน้า Variant */
+.close-modal-variant {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 5px;
+}
+.close-modal-variant:hover { color: var(--accent); }
+
+/* --- 1. Size Selectors (ปุ่มใหญ่ขึ้น) --- */
+.size-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.size-btn {
+    min-width: 50px;
+    height: 45px;
+    background: transparent;
+    border: 1px solid #444;
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex; align-items: center; justify-content: center;
+}
+.size-btn:hover { border-color: #fff; }
+.size-btn.active {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+    font-weight: 800;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+/* --- 2. Color Selectors (วงกลมชัดขึ้น) --- */
+.color-grid {
+    display: flex;
+    gap: 15px;
+}
+.color-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #333; /* กรอบปกติ */
+    position: relative;
+    transition: 0.2s;
+}
+.color-btn::after {
+    /* สร้างวงแหวนซ้อนเมื่อเลือก */
+    content: '';
+    position: absolute;
+    top: -4px; left: -4px; right: -4px; bottom: -4px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+.color-btn.active {
+    border-color: transparent;
+    transform: scale(1.1);
+}
+.color-btn.active::after {
+    border-color: var(--accent); /* วงแหวนสีทอง */
+}
+
+/* --- 3. Quantity Control (แบบใหม่ ใช้ง่าย) --- */
+.qty-control-large {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 5px;
+    width: 160px; /* ความกว้างคงที่ */
+    height: 50px;
+}
+
+.qty-btn-large {
+    width: 45px;
+    height: 100%;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.2s;
+}
+.qty-btn-large:hover { background: #333; color: var(--accent); }
+.qty-btn-large:active { transform: scale(0.95); }
+
+#modal-qty {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    width: 40px;
+    text-align: center;
+}
+
+/* ปุ่ม ADD TO CART ให้เด่นสุด */
+.btn-add-confirm {
+    width: 100%;
+    height: 55px;
+    font-size: 1rem;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+.btn-add-confirm:hover {
+    background: #fff;
+    box-shadow: 0 0 20px var(--accent-glow);
+}
