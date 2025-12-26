@@ -237,7 +237,7 @@ header {
 }
 
 /* Shop Layout */
-.shop-container { display: flex; gap: 50px; padding: 60px 5%; max-width: var(--container-width); margin: 0 auto; }
+.shop-container { display: flex; gap: 50px; padding: 10px 5%; max-width: var(--container-width); margin: 0 auto; }
 .product-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
 
 /* Sidebar Filter */
@@ -579,7 +579,6 @@ input, textarea { background-color: rgba(255, 255, 255, 0.05) !important; color:
         overflow-y: auto;
     }
 }
-
 /* =========================================
    IMPROVED VARIANT MODAL (UX UPDATE)
    วางต่อท้ายสุดของไฟล์ style.css
@@ -726,7 +725,6 @@ input, textarea { background-color: rgba(255, 255, 255, 0.05) !important; color:
     background: #fff;
     box-shadow: 0 0 20px var(--accent-glow);
 }
-
 /* =========================================
    MOBILE FIXES V2 (Paste at bottom of style.css)
    ========================================= */
@@ -859,7 +857,6 @@ header > div {
 #user-account-btn:hover {
     color: var(--accent) !important;
 }   
-
 /* =========================================
    V7 UPGRADES: USER MENU, HISTORY, EMPTY CART
    ========================================= */
@@ -922,4 +919,106 @@ header > div {
     padding: 3px 8px; border-radius: 4px;
     background: rgba(46, 204, 113, 0.2); color: #2ecc71;
     font-size: 0.7rem; font-weight: bold;
+}
+/* =========================================
+   FINAL MOBILE LAYOUT FIX (CLEAN VERSION)
+   ========================================= */
+
+/* 1. จัดระเบียบกล่องค้นหา (Search Wrapper) */
+.search-section-wrapper {
+    padding: 10px 5% 0 5%;
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 2. การแสดงผลเฉพาะมือถือ (Mobile Only) */
+@media (max-width: 768px) {
+    
+    /* กล่องค้นหา: ลดขอบล่างให้ชิดที่สุด */
+    .search-section-wrapper {
+        padding: 15px 15px 0 15px !important; /* ล่าง 0 */
+        margin-bottom: -25px !important; /* ดึงขึ้นนิดนึงเพื่อความชิด */
+        position: relative;
+        z-index: 10;
+    }
+
+    /* กล่องสินค้าใหญ่ (Shop Container): ดึงขึ้นไปชน Search Bar */
+    .shop-container {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+
+    /* กล่อง Sidebar Filter (ที่มีคำว่า CATEGORY) */
+    .sidebar-filter {
+        padding: 0 15px !important; 
+        margin-top: 0 !important;
+        margin-bottom: 40px !important; /* [เพิ่มบรรทัดนี้] ดันกล่องข้างล่างให้ห่างออกมา */
+        border: none !important;
+        background: transparent !important;
+    }
+
+    /* หัวข้อ CATEGORY: ขยับระยะห่างให้พอดี */
+    .filter-title:first-child {
+        margin-top: -35px !important; /* ระยะห่างจาก Search Bar */
+        margin-bottom: 15px !important;
+        padding-top: 0 !important;
+    }
+    
+    /* ปรับช่อง Input ให้ดูพอดีนิ้ว */
+    #search-input {
+        padding: 12px 15px !important;
+        font-size: 0.9rem !important;
+    }
+}
+/* =========================================
+   TOAST NOTIFICATION (REDESIGN: TOP STYLE)
+   วางทับโค้ด .toast เดิมใน style.css
+   ========================================= */
+.toast {
+    position: fixed;
+    top: 30px; /* ย้ายมาอยู่ด้านบน */
+    left: 50%;
+    /* เริ่มต้นซ่อนไว้ข้างบน (ติดลบ Y) */
+    transform: translateX(-50%) translateY(-200%);
+    
+    /* ดีไซน์ใหม่: กระจกสีดำ + ขอบทองเรืองแสง */
+    background: rgba(10, 10, 10, 0.85); 
+    backdrop-filter: blur(12px);         /* เอฟเฟกต์เบลอฉากหลัง */
+    -webkit-backdrop-filter: blur(12px);
+    
+    color: #fff;
+    padding: 16px 35px;
+    min-width: 320px; /* กำหนดความกว้างขั้นต่ำให้ดูดี */
+    text-align: center;
+    
+    /* รูปทรงเหลี่ยมมน ทันสมัยกว่าวงรี */
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 215, 0, 0.3); /* ขอบทองจางๆ */
+    border-top: 3px solid var(--accent);      /* เส้นเน้นสีทองด้านบน */
+    
+    /* แสงเงา Glow */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6), 
+                0 0 15px rgba(255, 215, 0, 0.15); 
+    
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    
+    /* Typography */
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    
+    /* Animation แบบเด้ง (Bouncy) */
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* เมื่อมี Class show ให้เด้งลงมา */
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
 }

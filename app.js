@@ -1,27 +1,25 @@
 /**
- * Noctis Wear - Core Application Logic V7 (Final Ultimate)
- * Features: Auth, Real Checkout History, Empty State, User Dropdown
+ * Noctis Wear - Core Application Logic V8 (Thai Language Support)
  */
 
 const App = (() => {
     const CONFIG = {
-        STORAGE_KEY: 'noctis_cart_premium_v3', // Key ตะกร้า
+        STORAGE_KEY: 'noctis_cart_premium_v3', 
         TOAST_DURATION: 3000,
         USER_KEY: 'noctis_users_v1',     
         SESSION_KEY: 'noctis_session_v1'
     };
 
-    // ✅ อัปเดต: เพิ่มข้อมูล Sizes และ Colors ให้สินค้า
     const state = {
         products: [
-            { id: 1, name: "Lumix Heavy Tee", category: "T-Shirt", price: 590, oldPrice: 890, sale: true, new: false, image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L','XL'], colors: ['#000000','#FFFFFF'] },
-            { id: 2, name: "Vortex Oversize", category: "T-Shirt", price: 450, oldPrice: null, sale: false, new: true, image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&q=80&w=600", sizes: ['M','L','XL'], colors: ['#1a1a1a','#333333'] },
-            { id: 3, name: "Nova Silk Shirt", category: "Shirt", price: 1290, oldPrice: 1590, sale: true, new: false, image: "https://images.unsplash.com/photo-1626497764746-6dc36546b388?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L'], colors: ['#000000','#550000'] },
-            { id: 4, name: "Eclipse Hoodie", category: "Hoodie", price: 1500, oldPrice: null, sale: false, new: true, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=600", sizes: ['M','L','XL'], colors: ['#000000'] },
-            { id: 5, name: "Orion Smart Shirt", category: "Shirt", price: 990, oldPrice: null, sale: false, new: false, image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L','XL'], colors: ['#FFFFFF','#DDDDDD'] },
-            { id: 6, name: "Comet Graphic Tee", category: "T-Shirt", price: 390, oldPrice: 590, sale: true, new: false, image: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L'], colors: ['#000000','#FFD700'] },
-            { id: 7, name: "Nebula Jacket", category: "Hoodie", price: 2100, oldPrice: 2500, sale: true, new: false, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=600", sizes: ['L','XL'], colors: ['#000000','#222222'] },
-            {  id: 8, name: "Galaxy Zip Hoodie", category: "Hoodie", price: 1890, oldPrice: null, sale: false, new: true, image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&q=80&w=600", sizes: ['M','L','XL'], colors: ['#000000'] }
+            { id: 1, name: "Lumix Heavy Tee", category: "T-Shirt", price: 590, oldPrice: 890, sale: true, image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L','XL'], colors: ['#000000','#FFFFFF'] },
+            { id: 2, name: "Vortex Oversize", category: "T-Shirt", price: 450, oldPrice: null, sale: false, image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&q=80&w=600", sizes: ['M','L','XL'], colors: ['#1a1a1a','#333333'] },
+            { id: 3, name: "Nova Silk Shirt", category: "Shirt", price: 1290, oldPrice: 1590, sale: true, image: "https://images.unsplash.com/photo-1626497764746-6dc36546b388?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L'], colors: ['#000000','#550000'] },
+            { id: 4, name: "Eclipse Hoodie", category: "Hoodie", price: 1500, oldPrice: null, sale: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=600", sizes: ['M','L','XL'], colors: ['#000000'] },
+            { id: 5, name: "Orion Smart Shirt", category: "Shirt", price: 990, oldPrice: null, sale: false, image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L','XL'], colors: ['#FFFFFF','#DDDDDD'] },
+            { id: 6, name: "Comet Graphic Tee", category: "T-Shirt", price: 390, oldPrice: 590, sale: true, image: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&q=80&w=600", sizes: ['S','M','L'], colors: ['#000000','#FFD700'] },
+            { id: 7, name: "Nebula Jacket", category: "Hoodie", price: 2100, oldPrice: 2500, sale: true, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=600", sizes: ['L','XL'], colors: ['#000000','#222222'] },
+            { id: 8, name: "Galaxy Zip Hoodie", category: "Hoodie", price: 1890, oldPrice: null, sale: false, image: "https://images.unsplash.com/photo-1620799140408-ed5341cd2431?auto=format&fit=crop&q=80&w=600", sizes: ['M','L','XL'], colors: ['#000000'] }
         ],
         cart: [],
         tempProduct: null, 
@@ -37,8 +35,6 @@ const App = (() => {
         loadUsers();      
         checkSession();   
         injectAuthModal(); 
-        
-        // --- [เพิ่มใหม่] Inject ส่วนประกอบเสริม ---
         injectUserMenu();    
         injectHistoryModal();
         
@@ -64,7 +60,7 @@ const App = (() => {
         elements.sortSelect = document.getElementById('sort-select');
         elements.userNameDisplay = document.getElementById('user-name-display');
         elements.searchInput = document.getElementById('search-input');
-        elements.userBtn = document.getElementById('user-account-btn'); // [เพิ่ม] ปุ่ม User
+        elements.userBtn = document.getElementById('user-account-btn');
     };
 
     const initScrollAnimations = () => {
@@ -89,7 +85,7 @@ const App = (() => {
         renderCartSidebar();
     };
 
-    // --- HTML Modal Injection ---
+    // --- HTML Modal Injection (แปลไทยบางส่วน) ---
     const injectModal = () => {
         const modalHTML = `
         <div id="variant-modal" class="modal-overlay">
@@ -114,14 +110,14 @@ const App = (() => {
                         <button class="qty-btn-large" onclick="App.adjustTempQty(1)">+</button>
                     </div>
                 </div>
-                <button class="btn-checkout btn-add-confirm" onclick="App.confirmAddToCart()">ADD TO CART</button>
+                <button class="btn-checkout btn-add-confirm" onclick="App.confirmAddToCart()">เพิ่มลงตะกร้า / ADD TO CART</button>
             </div>
         </div>`;
         document.body.insertAdjacentHTML('beforeend', modalHTML);
     };
 
     const injectUserMenu = () => {
-        // [เพิ่มใหม่] เมนู Dropdown ใต้ปุ่ม User
+        // [แปลไทย] เมนู Dropdown
         if(!elements.userBtn) return;
         const menuHTML = `
         <div id="user-dropdown" class="user-dropdown">
@@ -129,10 +125,10 @@ const App = (() => {
                 👤 <span id="menu-user-name">Guest</span>
             </div>
             <div class="user-menu-item" onclick="App.showOrderHistory()">
-                📦 My Orders
+                📦 ประวัติการสั่งซื้อ / My Orders
             </div>
             <div class="user-menu-item" onclick="App.handleLogout()">
-                🚪 Logout
+                🚪 ออกจากระบบ / Logout
             </div>
         </div>`;
         elements.userBtn.style.position = 'relative'; 
@@ -140,17 +136,16 @@ const App = (() => {
     };
 
     const injectHistoryModal = () => {
-        // [เพิ่มใหม่] หน้าต่างประวัติการซื้อ
         if(document.getElementById('history-modal')) return;
         const html = `
         <div id="history-modal" class="modal-overlay">
             <div class="checkout-modal variant-box" style="max-width:600px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h3 class="variant-title" style="margin:0; color:var(--accent);">MY ORDERS</h3>
+                    <h3 class="variant-title" style="margin:0; color:var(--accent);">ประวัติการสั่งซื้อ / MY ORDERS</h3>
                     <button class="close-modal-variant" onclick="App.closeModal('history-modal')">✕</button>
                 </div>
                 <div id="order-history-list" style="max-height:60vh; overflow-y:auto; padding-right:5px;">
-                    </div>
+                </div>
             </div>
         </div>`;
         document.body.insertAdjacentHTML('beforeend', html);
@@ -203,17 +198,17 @@ const App = (() => {
         saveCart(); closeModal('variant-modal'); showToast(`ADDED: ${name}`); toggleCart(true);
     };
 
-    // --- Cart Logic (Updated: Empty State) ---
+    // --- Cart Logic (แปลไทย) ---
     const renderCartSidebar = () => {
         if (!elements.cartItems) return;
         
-        // [เพิ่มใหม่] เช็คถ้าตะกร้าว่าง
+        // ตะกร้าว่าง
         if (state.cart.length === 0) {
             elements.cartItems.innerHTML = `
                 <div class="empty-cart-state">
                     <div class="empty-cart-icon">🛒</div>
-                    <h3 style="margin-bottom:10px;">YOUR CART IS EMPTY</h3>
-                    <button class="btn-primary" onclick="App.toggleCart(false); window.location.href='shop.html'" style="padding:10px 30px; font-size:0.8rem;">GO SHOPPING</button>
+                    <h3 style="margin-bottom:10px;">ตะกร้าว่างเปล่า / EMPTY</h3>
+                    <button class="btn-primary" onclick="App.toggleCart(false); window.location.href='shop.html'" style="padding:10px 30px; font-size:0.8rem;">ไปเลือกซื้อสินค้า / SHOP NOW</button>
                 </div>`;
             if(elements.cartTotal) elements.cartTotal.querySelector('span:last-child').innerText = `฿0`;
             return;
@@ -240,19 +235,16 @@ const App = (() => {
 
     const toggleItemCheck = (index) => { state.cart[index].checked = !state.cart[index].checked; saveCart(); };
     
-    // --- Shop Filter Logic (With Search) ---
+    // --- Shop Filter Logic ---
     const bindShopEvents = () => {
         const handleFilter = () => {
             let result = [...state.products];
-            // Search Logic
             const searchTerm = elements.searchInput ? elements.searchInput.value.toLowerCase() : '';
             if (searchTerm) result = result.filter(p => p.name.toLowerCase().includes(searchTerm));
             
-            // Category Logic
             const checkedCats = Array.from(elements.filterCats).filter(cb => cb.checked).map(cb => cb.value);
             if (checkedCats.length) result = result.filter(p => checkedCats.includes(p.category));
             
-            // Price Logic
             const priceVal = document.querySelector('input[name="price"]:checked')?.value;
             if (priceVal) {
                 if (priceVal === '500') result = result.filter(p => p.price <= 500);
@@ -260,7 +252,6 @@ const App = (() => {
                 else if (priceVal === '1000+') result = result.filter(p => p.price > 1000);
             }
             
-            // Sort Logic
             const sortVal = elements.sortSelect.value;
             if (sortVal === 'low-high') result.sort((a,b) => a.price - b.price);
             else if (sortVal === 'high-low') result.sort((a,b) => b.price - a.price);
@@ -283,7 +274,7 @@ const App = (() => {
     // --- Checkout & History Logic ---
     const openCheckout = () => {
         const checkedItems = state.cart.filter(i => i.checked);
-        if (checkedItems.length === 0) return showToast("Select items to checkout!");
+        if (checkedItems.length === 0) return showToast("กรุณาเลือกสินค้า / Select items!");
         toggleCart(false);
         const overlay = document.getElementById('checkout-overlay');
         const modal = overlay.querySelector('.checkout-modal');
@@ -303,16 +294,28 @@ const App = (() => {
 
     const processCheckout = (e) => {
         e.preventDefault();
+
+        // 1. [แปลไทย] เช็คว่าล็อกอินหรือยัง?
+        if (!state.currentUser) {
+            showToast("⚠️ กรุณาเข้าสู่ระบบ! / Please Login"); 
+            closeCheckout(); 
+            const authModal = document.getElementById('auth-modal');
+            if(authModal) {
+                authModal.classList.add('active');
+                switchAuthMode('register'); 
+            }
+            return;
+        }
+
         const btn = e.target.querySelector('button[type="submit"]');
         const originalText = btn.innerText;
-        btn.innerText = "PROCESSING...";
+        btn.innerText = "กำลังดำเนินการ...";
         btn.disabled = true;
 
         setTimeout(() => {
             const itemsToBuy = state.cart.filter(i => i.checked);
             const totalAmount = itemsToBuy.reduce((sum, i) => sum + (i.price * i.qty), 0);
 
-            // [เพิ่มใหม่] บันทึก Order ลง User History
             if(state.currentUser) {
                 const newOrder = {
                     id: Date.now(),
@@ -324,7 +327,6 @@ const App = (() => {
                 state.currentUser.orders = state.currentUser.orders || [];
                 state.currentUser.orders.push(newOrder);
                 
-                // Update Database (LocalStorage)
                 const userIndex = state.users.findIndex(u => u.email === state.currentUser.email);
                 if(userIndex !== -1) {
                     state.users[userIndex] = state.currentUser;
@@ -336,7 +338,7 @@ const App = (() => {
             state.cart = state.cart.filter(i => !i.checked);
             saveCart();
             closeCheckout();
-            showToast("🎉 Order Placed Successfully!");
+            showToast("🎉 สั่งซื้อสำเร็จ! / Order Placed");
             btn.innerText = originalText;
             btn.disabled = false;
             e.target.reset();
@@ -344,23 +346,21 @@ const App = (() => {
     };
 
     const showOrderHistory = () => {
-        // [เพิ่มใหม่] เปิดหน้าต่าง History
         if(!state.currentUser) return;
         const historyList = document.getElementById('order-history-list');
         const orders = state.currentUser.orders || [];
 
         if(orders.length === 0) {
-            historyList.innerHTML = `<div style="text-align:center; color:#888; padding:20px;">No orders yet.</div>`;
+            historyList.innerHTML = `<div style="text-align:center; color:#888; padding:20px;">ยังไม่มีประวัติการสั่งซื้อ</div>`;
         } else {
             historyList.innerHTML = orders.slice().reverse().map(order => `
                 <div class="order-card">
-                    <div class="order-header"><span>DATE: ${order.date}</span><span class="status-badge">COMPLETED</span></div>
+                    <div class="order-header"><span>วันที่: ${order.date}</span><span class="status-badge">สำเร็จ</span></div>
                     ${order.items.map(item => `<div class="order-item-row"><img src="${item.image}" style="width:30px; height:30px; object-fit:cover; border-radius:4px;"><div><div style="color:#fff; font-size:0.8rem;">${item.name}</div><div style="color:#888; font-size:0.7rem;">${item.size} x ${item.qty}</div></div><div style="margin-left:auto; font-weight:bold;">฿${formatNumber(item.price * item.qty)}</div></div>`).join('')}
-                    <div style="text-align:right; margin-top:5px; padding-top:5px; border-top:1px solid rgba(255,255,255,0.1); color:var(--accent);">TOTAL: ฿${formatNumber(order.total)}</div>
+                    <div style="text-align:right; margin-top:5px; padding-top:5px; border-top:1px solid rgba(255,255,255,0.1); color:var(--accent);">ยอดรวม: ฿${formatNumber(order.total)}</div>
                 </div>`).join('');
         }
         document.getElementById('history-modal').classList.add('active');
-        // ปิดเมนู User เมื่อเปิด History
         document.getElementById('user-dropdown').classList.remove('active');
     };
 
@@ -369,14 +369,14 @@ const App = (() => {
         localStorage.removeItem(CONFIG.SESSION_KEY);
         updateUserUI();
         document.getElementById('user-dropdown').classList.remove('active');
-        showToast("LOGGED OUT");
+        showToast("ออกจากระบบแล้ว / LOGGED OUT");
     };
 
     const toggleMenu = () => { const nav = document.querySelector('.nav-popup'); if(nav) nav.classList.toggle('active'); };
     const closeModal = (id) => { document.getElementById(id).classList.remove('active'); };
     const closeCheckout = () => closeModal('checkout-overlay');
 
-    // --- Auth Logic ---
+    // --- Auth Logic (แปลไทย) ---
     const loadUsers = () => { try { state.users = JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || '[]'); } catch(e){ state.users = []; } };
     const checkSession = () => { try { const session = JSON.parse(localStorage.getItem(CONFIG.SESSION_KEY)); if(session) { state.currentUser = session; updateUserUI(); } } catch(e){} };
     
@@ -396,7 +396,6 @@ const App = (() => {
 
     const toggleAuthModal = () => {
         if(state.currentUser) {
-            // [เพิ่มใหม่] เปิด Dropdown แทน confirm
             const dropdown = document.getElementById('user-dropdown');
             dropdown.classList.toggle('active');
         } else {
@@ -411,7 +410,7 @@ const App = (() => {
     const switchAuthMode = (mode) => {
         document.getElementById('auth-login').style.display = mode === 'login' ? 'block' : 'none';
         document.getElementById('auth-register').style.display = mode === 'register' ? 'block' : 'none';
-        document.getElementById('auth-title').innerText = mode === 'login' ? 'LOGIN' : 'REGISTER';
+        document.getElementById('auth-title').innerText = mode === 'login' ? 'เข้าสู่ระบบ / LOGIN' : 'สมัครสมาชิก / REGISTER';
     };
 
     const handleLogin = (e) => {
@@ -424,9 +423,9 @@ const App = (() => {
             localStorage.setItem(CONFIG.SESSION_KEY, JSON.stringify(user));
             updateUserUI();
             closeModal('auth-modal');
-            showToast(`WELCOME BACK, ${user.name}`);
+            showToast(`ยินดีต้อนรับ, ${user.name}`);
             e.target.reset();
-        } else { showToast("INVALID EMAIL OR PASSWORD"); }
+        } else { showToast("อีเมลหรือรหัสผ่านไม่ถูกต้อง"); }
     };
 
     const handleRegister = (e) => {
@@ -434,11 +433,11 @@ const App = (() => {
         const name = document.getElementById('reg-name').value;
         const email = document.getElementById('reg-email').value;
         const pass = document.getElementById('reg-pass').value;
-        if(state.users.find(u => u.email === email)) return showToast("EMAIL ALREADY EXISTS");
-        const newUser = { name, email, pass, orders: [] }; // เริ่มต้น Orders ว่าง
+        if(state.users.find(u => u.email === email)) return showToast("อีเมลนี้ถูกใช้ไปแล้ว");
+        const newUser = { name, email, pass, orders: [] }; 
         state.users.push(newUser);
         localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(state.users));
-        showToast("REGISTER SUCCESS! PLEASE LOGIN");
+        showToast("สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ");
         switchAuthMode('login');
         e.target.reset();
     };
@@ -449,25 +448,25 @@ const App = (() => {
         <div id="auth-modal" class="modal-overlay">
             <div class="checkout-modal variant-box" style="text-align:center;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h3 id="auth-title" class="variant-title" style="margin:0; color:var(--accent);">LOGIN</h3>
+                    <h3 id="auth-title" class="variant-title" style="margin:0; color:var(--accent);">เข้าสู่ระบบ / LOGIN</h3>
                     <button class="close-modal-variant" onclick="App.closeModal('auth-modal')">✕</button>
                 </div>
                 <div id="auth-login">
                     <form onsubmit="App.handleLogin(event)">
-                        <input type="email" id="login-email" class="form-input" placeholder="Email" required style="margin-bottom:15px;">
-                        <input type="password" id="login-pass" class="form-input" placeholder="Password" required style="margin-bottom:20px;">
-                        <button type="submit" class="btn-checkout btn-add-confirm">LOGIN</button>
+                        <input type="email" id="login-email" class="form-input" placeholder="อีเมล / Email" required style="margin-bottom:15px;">
+                        <input type="password" id="login-pass" class="form-input" placeholder="รหัสผ่าน / Password" required style="margin-bottom:20px;">
+                        <button type="submit" class="btn-checkout btn-add-confirm">เข้าสู่ระบบ / LOGIN</button>
                     </form>
-                    <p style="margin-top:15px; font-size:0.8rem; color:#888;">New here? <span onclick="App.switchAuthMode('register')" style="color:var(--accent); cursor:pointer; text-decoration:underline;">Register</span></p>
+                    <p style="margin-top:15px; font-size:0.8rem; color:#888;">ยังไม่มีบัญชี? <span onclick="App.switchAuthMode('register')" style="color:var(--accent); cursor:pointer; text-decoration:underline;">สมัครสมาชิก / Register</span></p>
                 </div>
                 <div id="auth-register" style="display:none;">
                     <form onsubmit="App.handleRegister(event)">
-                        <input type="text" id="reg-name" class="form-input" placeholder="Your Name" required style="margin-bottom:15px;">
-                        <input type="email" id="reg-email" class="form-input" placeholder="Email" required style="margin-bottom:15px;">
-                        <input type="password" id="reg-pass" class="form-input" placeholder="Password" required style="margin-bottom:20px;">
-                        <button type="submit" class="btn-checkout btn-add-confirm">CREATE ACCOUNT</button>
+                        <input type="text" id="reg-name" class="form-input" placeholder="ชื่อของคุณ / Your Name" required style="margin-bottom:15px;">
+                        <input type="email" id="reg-email" class="form-input" placeholder="อีเมล / Email" required style="margin-bottom:15px;">
+                        <input type="password" id="reg-pass" class="form-input" placeholder="รหัสผ่าน / Password" required style="margin-bottom:20px;">
+                        <button type="submit" class="btn-checkout btn-add-confirm">สร้างบัญชี / CREATE ACCOUNT</button>
                     </form>
-                    <p style="margin-top:15px; font-size:0.8rem; color:#888;">Have an account? <span onclick="App.switchAuthMode('login')" style="color:var(--accent); cursor:pointer; text-decoration:underline;">Login</span></p>
+                    <p style="margin-top:15px; font-size:0.8rem; color:#888;">มีบัญชีแล้ว? <span onclick="App.switchAuthMode('login')" style="color:var(--accent); cursor:pointer; text-decoration:underline;">เข้าสู่ระบบ / Login</span></p>
                 </div>
             </div>
         </div>`;
@@ -479,7 +478,6 @@ const App = (() => {
         openVariantModal, closeModal, selectSize, selectColor, adjustTempQty, confirmAddToCart,
         removeFromCart, toggleItemCheck, toggleMenu, injectAuthModal,
         toggleAuthModal, handleLogin, handleRegister, switchAuthMode,
-        // [New Export]
         handleLogout, showOrderHistory
     };
 })();

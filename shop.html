@@ -18,7 +18,6 @@
     </div>
 
     <div style="display:flex; gap:20px; align-items:center;">
-        
         <div id="user-account-btn" onclick="App.toggleAuthModal()" style="cursor:pointer; display:flex; align-items:center; gap:5px; color:var(--text-main);">
             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
             <span id="user-name-display" style="font-size:0.8rem; font-weight:bold; display:none; text-transform:uppercase; color:var(--accent);"></span>
@@ -37,17 +36,15 @@
     </nav>
 </header>
 
-    <nav class="nav-popup">
-        <a href="index.html" class="nav-item-popup">Home</a>
-        <a href="shop.html" class="nav-item-popup">Collections</a>
-        <a href="about.html" class="nav-item-popup">About</a>
-    </nav>
-</header>
+    <div class="search-section-wrapper"> 
+    <div class="search-wrapper" style="position:relative;">
+        <input type="text" id="search-input" placeholder="SEARCH PRODUCTS..." 
+               style="width: 100%; padding: 15px 20px; background:rgba(255,255,255,0.05); border:1px solid var(--border-light); color:#fff; border-radius:4px; font-family:var(--font-body); letter-spacing:1px;">
+        <svg style="position:absolute; right:15px; top:50%; transform:translateY(-50%); width:20px; height:20px; fill:var(--text-muted); pointer-events:none;" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    </div>
+</div>
 
-
-<div class="shop-container">
-    
-    <aside class="sidebar-filter reveal-on-scroll">
+<div class="shop-container"> <aside class="sidebar-filter reveal-on-scroll">
         <h3 class="filter-title">CATEGORY</h3>
         <label class="filter-option">
             <input type="checkbox" class="filter-cat" value="T-Shirt">
@@ -82,12 +79,7 @@
     </aside>
 
     <main style="width: 100%;">
-        <div class="search-wrapper" style="margin-bottom: 20px;">
-            <input type="text" id="search-input" placeholder="Search products..." 
-                   style="width: 100%; padding: 12px; background:var(--bg-surface); border:1px solid var(--border-light); color:#fff; border-radius:4px;">
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;" class="reveal-on-scroll">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;" class="reveal-on-scroll">
             <div id="result-count" style="color:var(--text-muted); font-size: 0.8rem; letter-spacing:1px; text-transform:uppercase;">LOADING ASSETS...</div>
             <select id="sort-select" style="background:var(--bg-surface); color:var(--text-main); border:1px solid var(--border-light); padding:10px 20px; border-radius:4px; font-size:0.8rem; letter-spacing:1px;">
                 <option value="default">SORT BY: RECOMMENDED</option>
@@ -98,6 +90,7 @@
         
         <div id="product-grid" class="product-grid"></div>
     </main>
+</div>
 
 <div id="cart-sidebar" class="cart-sidebar" style="position:fixed; top:0; right:-100%; width:100%; max-width:400px; height:100vh; z-index:2000; transition:0.4s ease; display:flex; flex-direction:column;">
     <div class="cart-header">
