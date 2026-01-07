@@ -578,236 +578,119 @@ const App = (() => {
 })();
 
 /* =========================================
-   SYSTEM C: ADMIN LOGIC MODULE (Updated V4: Edit System)
+   SYSTEM C: ADMIN LOGIC MODULE (Fixed Syntax)
    ========================================= */
 const AdminApp = (() => {
-    const CONFIG = { PRODUCTS_KEY: 'noctis_products_custom_v1', USER_KEY: 'noctis_users_v1' ,COUPONS_KEY: 'noctis_coupons_v1'}
-    
-    // ตัวแปรเก็บสถานะว่ากำลังแก้ไขสินค้า ID อะไรอยู่ (ถ้า null แปลว่าเพิ่มใหม่)
+    const CONFIG = { PRODUCTS_KEY: 'noctis_products_custom_v1', USER_KEY: 'noctis_users_v1', COUPONS_KEY: 'noctis_coupons_v1' };
     let editingProductId = null;
 
-    // --- DATA FETCHING ---
-    const getProducts = () => { const stored = localStorage.getItem(CONFIG.PRODUCTS_KEY); return stored ? JSON.parse(stored) : []; };
-    const getUsers = () => { return JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || '[]'); };
-    
-    const getAllOrders = () => {
-        const users = getUsers();
-        let allOrders = [];
-        users.forEach(user => { 
-            if (user.orders && user.orders.length > 0) { 
-                user.orders.forEach(order => { 
-                    allOrders.push({ ...order, customerName: user.name, customerEmail: user.email }); 
-                }); 
-            } 
-        });
-        return allOrders.sort((a, b) => b.id - a.id);
-    };
+    const getData = (key) => JSON.parse(localStorage.getItem(key) || '[]');
+    const saveData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
-    // --- DASHBOARD LOGIC ---
+    // 1. DASHBOARD
     const renderDashboard = () => {
-        const orders = getAllOrders();
-        const users = getUsers();
-        const totalRevenue = orders.reduce((sum, order) => order.status !== 'Cancelled' ? sum + order.total : sum, 0);
-        const totalOrders = orders.length;
-        const itemsSold = orders.reduce((sum, order) => order.status === 'Cancelled' ? sum : sum + order.items.reduce((isum, item) => isum + item.qty, 0), 0);
-        const totalCustomers = users.length;
-
-        if(document.getElementById('stat-revenue')) document.getElementById('stat-revenue').innerText = `฿${new Intl.NumberFormat().format(totalRevenue)}`;
-        if(document.getElementById('stat-orders')) document.getElementById('stat-orders').innerText = new Intl.NumberFormat().format(totalOrders);
-        if(document.getElementById('stat-items')) document.getElementById('stat-items').innerText = new Intl.NumberFormat().format(itemsSold);
-        if(document.getElementById('stat-users')) document.getElementById('stat-users').innerText = new Intl.NumberFormat().format(totalCustomers);
+        const orders = []; getData(CONFIG.USER_KEY).forEach(u => u.orders?.forEach(o => orders.push({...o, customer: u.name})));
+        if(document.getElementById('stat-revenue')) document.getElementById('stat-revenue').innerText = `฿${new Intl.NumberFormat().format(orders.reduce((s,o)=>o.status!=='Cancelled'?s+o.total:s,0))}`;
+        if(document.getElementById('stat-orders')) document.getElementById('stat-orders').innerText = orders.length;
+        if(document.getElementById('stat-items')) document.getElementById('stat-items').innerText = orders.reduce((s,o)=>o.status!=='Cancelled'?s+o.items.length:s,0);
+        if(document.getElementById('stat-users')) document.getElementById('stat-users').innerText = getData(CONFIG.USER_KEY).length;
     };
 
-    // --- RENDER FUNCTIONS (Updated Table) ---
+    // 2. PRODUCTS
     const renderProducts = () => {
-        const list = document.getElementById('admin-product-list'); if(!list) return; const products = getProducts();
-        if (products.length === 0) { list.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:#666;">No Products Found</td></tr>`; return; }
-        
-        list.innerHTML = products.map(p => `
-            <tr>
-                <td><img src="${p.image}" class="admin-img-thumb"></td>
-                <td><div style="font-weight:bold; color:#fff;">${p.name}</div><div style="font-size:0.75rem; color:#666;">ID: ${p.id}</div></td>
-                <td><span style="background:#222; padding:2px 8px; border-radius:4px; font-size:0.75rem;">${p.category}</span></td>
-                <td style="color:var(--accent);">฿${p.price}</td>
-                <td>
-                    <button class="btn-edit" onclick="AdminApp.openEditModal(${p.id})">EDIT</button>
-                    <button class="btn-delete" onclick="AdminApp.deleteProduct(${p.id})">DELETE</button>
-                </td>
-            </tr>`).join('');
+        const list = document.getElementById('admin-product-list'); if(!list) return;
+        const products = getData(CONFIG.PRODUCTS_KEY);
+        list.innerHTML = products.map(p => `<tr><td><img src="${p.image}" class="admin-img-thumb"></td><td>${p.name}</td><td>${p.category}</td><td>฿${p.price}</td><td><button class="btn-edit" onclick="AdminApp.openEditModal(${p.id})">EDIT</button><button class="btn-delete" onclick="AdminApp.deleteProduct(${p.id})">DEL</button></td></tr>`).join('');
     };
 
-    const renderOrders = () => {
-        const list = document.getElementById('admin-order-list'); if(!list) return; const orders = getAllOrders();
-        if (orders.length === 0) { list.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#666;">No Orders Yet</td></tr>`; return; }
-        list.innerHTML = orders.map(o => {
-            const status = o.status || 'Pending'; let statusColor = status==='Shipped'?'#2ecc71':(status==='Cancelled'?'#ff3b3b':'#ffd700');
-            return `<tr><td><span style="font-family:monospace; color:#888;">#${o.id}</span><br><span style="font-size:0.7rem; color:#555;">${o.date}</span></td><td><div style="font-weight:bold; color:#fff;">${o.customerName}</div><div style="font-size:0.75rem; color:#666;">${o.customerEmail}</div></td><td><div style="font-size:0.8rem; color:#ccc;">${o.items.map(i => `<div>- ${i.name} (x${i.qty})</div>`).join('')}</div></td><td style="color:var(--accent); font-weight:bold;">฿${new Intl.NumberFormat().format(o.total)}</td><td><span style="color:${statusColor}; font-weight:bold; border:1px solid ${statusColor}; padding:2px 6px; border-radius:4px; font-size:0.7rem;">${status.toUpperCase()}</span></td><td><select onchange="AdminApp.updateOrderStatus(${o.id}, '${o.customerEmail}', this.value)" style="background:#111; color:#fff; border:1px solid #444; padding:5px; border-radius:4px; font-size:0.8rem;"><option value="Pending" ${status === 'Pending' ? 'selected' : ''}>Pending</option><option value="Paid" ${status === 'Paid' ? 'selected' : ''}>Paid</option><option value="Shipped" ${status === 'Shipped' ? 'selected' : ''}>Shipped</option><option value="Cancelled" ${status === 'Cancelled' ? 'selected' : ''}>Cancelled</option></select></td></tr>`
-        }).join('');
-    };
-    // --- COUPON SYSTEM (วางเพิ่มเข้าไป) ---
-    const getCoupons = () => JSON.parse(localStorage.getItem(CONFIG.COUPONS_KEY) || '[]');
-    
-    const renderCoupons = () => {
-        const list = document.getElementById('admin-coupon-list');
-        if(!list) return;
-        const coupons = getCoupons();
+    const handleSaveProduct = (e) => {
+        e.preventDefault();
+        const name=document.getElementById('p-name').value, cat=document.getElementById('p-cat').value, price=Number(document.getElementById('p-price').value), img=document.getElementById('p-img').value;
+        let products=getData(CONFIG.PRODUCTS_KEY);
         
-        if(coupons.length === 0) {
-            list.innerHTML = `<tr><td colspan="5" style="text-align:center;">No Coupons Created</td></tr>`;
-            return;
+        if(editingProductId){
+            const idx=products.findIndex(p=>p.id===editingProductId);
+            if(idx!==-1) products[idx]={...products[idx], name, category:cat, price, image:img};
+        } else {
+            products.unshift({id:Date.now(), name, category:cat, price, image:img, sale:false, sizes:['S','M','L'], colors:['#000000']});
         }
+        saveData(CONFIG.PRODUCTS_KEY, products);
+        renderProducts(); closeModal('add-product-modal');
+    };
 
-        list.innerHTML = coupons.map((c, index) => `
-            <tr>
-                <td style="color:var(--accent); font-weight:bold;">${c.code}</td>
-                <td>${c.type.toUpperCase()}</td>
-                <td>${c.type === 'percent' ? (c.value * 100) + '%' : '฿' + c.value}</td>
-                <td><span style="color:${c.active ? '#2ecc71':'#e74c3c'}">${c.active ? 'ACTIVE' : 'INACTIVE'}</span></td>
-                <td><button class="btn-delete" onclick="AdminApp.deleteCoupon(${index})">DELETE</button></td>
-            </tr>
-        `).join('');
+    const deleteProduct = (id) => { if(!confirm("Delete?")) return; saveData(CONFIG.PRODUCTS_KEY, getData(CONFIG.PRODUCTS_KEY).filter(p=>p.id!==id)); renderProducts(); };
+    
+    // 3. ORDERS
+    const renderOrders = () => {
+        const list = document.getElementById('admin-order-list'); if(!list) return;
+        const orders = []; getData(CONFIG.USER_KEY).forEach(u => u.orders?.forEach(o => orders.push({...o, email: u.email})));
+        list.innerHTML = orders.sort((a,b)=>b.id-a.id).map(o => `<tr><td>#${o.id}</td><td>${o.email}</td><td>${o.items.length} Items</td><td>฿${o.total}</td><td>${o.status}</td><td><select onchange="AdminApp.updateOrderStatus(${o.id}, '${o.email}', this.value)" style="background:#111; color:#fff; border:1px solid #444; padding:2px;"><option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option><option value="Paid" ${o.status==='Paid'?'selected':''}>Paid</option><option value="Shipped" ${o.status==='Shipped'?'selected':''}>Shipped</option><option value="Cancelled" ${o.status==='Cancelled'?'selected':''}>Cancelled</option></select></td></tr>`).join('');
+    };
+
+    const updateOrderStatus = (orderId, email, newStatus) => {
+        const users = getData(CONFIG.USER_KEY);
+        const uIdx = users.findIndex(u => u.email === email);
+        if(uIdx !== -1) {
+            const oIdx = users[uIdx].orders.findIndex(o => o.id === orderId);
+            if(oIdx !== -1) {
+                users[uIdx].orders[oIdx].status = newStatus;
+                saveData(CONFIG.USER_KEY, users);
+                renderOrders(); renderDashboard();
+            }
+        }
+    };
+
+    // 4. COUPONS
+    const renderCoupons = () => {
+        const list = document.getElementById('admin-coupon-list'); if(!list) return;
+        const coupons = getData(CONFIG.COUPONS_KEY);
+        list.innerHTML = coupons.map((c, i) => `<tr><td>${c.code}</td><td>${c.type}</td><td>${c.value}</td><td>${c.active?'ACTIVE':'INACTIVE'}</td><td><button class="btn-delete" onclick="AdminApp.deleteCoupon(${i})">DEL</button></td></tr>`).join('');
     };
 
     const handleAddCoupon = (e) => {
         e.preventDefault();
-        const code = document.getElementById('c-code').value.trim().toUpperCase();
-        const type = document.getElementById('c-type').value;
-        let value = Number(document.getElementById('c-value').value);
-        
-        if(type === 'percent' && value > 1) value = value / 100; // แปลง 10% เป็น 0.1
-        
-        const coupons = getCoupons();
-        coupons.push({ code, type, value, active: true });
-        localStorage.setItem(CONFIG.COUPONS_KEY, JSON.stringify(coupons));
-        
-        closeModal('add-coupon-modal');
-        renderCoupons();
-        e.target.reset();
+        const code = document.getElementById('c-code').value.toUpperCase(), type = document.getElementById('c-type').value;
+        let val = Number(document.getElementById('c-value').value);
+        if(type==='percent' && val > 1) val = val/100;
+        const coupons = getData(CONFIG.COUPONS_KEY);
+        coupons.push({code, type, value:val, active:true});
+        saveData(CONFIG.COUPONS_KEY, coupons);
+        closeModal('add-coupon-modal'); renderCoupons(); e.target.reset();
     };
 
-    const deleteCoupon = (index) => {
-        if(!confirm("Delete this coupon?")) return;
-        const coupons = getCoupons();
-        coupons.splice(index, 1);
-        localStorage.setItem(CONFIG.COUPONS_KEY, JSON.stringify(coupons));
-        renderCoupons();
+    const deleteCoupon = (i) => { if(confirm("Delete?")) { const c=getData(CONFIG.COUPONS_KEY); c.splice(i,1); saveData(CONFIG.COUPONS_KEY, c); renderCoupons(); }};
+
+    // CONTROLLER
+    const switchTab = (tab) => {
+        document.querySelectorAll('.admin-link').forEach(el => el.classList.remove('active')); if(event) event.currentTarget.classList.add('active');
+        ['section-dashboard','section-products','section-orders','section-coupons'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+        document.getElementById('btn-add-product').style.display='none';
+
+        if(tab === 'dashboard') { document.getElementById('section-dashboard').style.display='grid'; document.getElementById('page-title').innerText='DASHBOARD'; renderDashboard(); }
+        else if(tab === 'products') { document.getElementById('section-products').style.display='block'; document.getElementById('btn-add-product').style.display='block'; document.getElementById('page-title').innerText='PRODUCTS'; renderProducts(); }
+        else if(tab === 'orders') { document.getElementById('section-orders').style.display='block'; document.getElementById('page-title').innerText='ORDERS'; renderOrders(); }
+        else if(tab === 'coupons') { document.getElementById('section-coupons').style.display='block'; document.getElementById('page-title').innerHTML = `COUPONS <button class="btn-primary" onclick="AdminApp.openAddCouponModal()" style="font-size:0.8rem; margin-left:15px;">+ NEW CODE</button>`; renderCoupons(); }
     };
-    
+
+    const openEditModal = (id) => { const p = getData(CONFIG.PRODUCTS_KEY).find(x=>x.id===id); if(!p)return; editingProductId=id; document.getElementById('p-name').value=p.name; document.getElementById('p-cat').value=p.category; document.getElementById('p-price').value=p.price; document.getElementById('p-img').value=p.image; document.getElementById('add-product-modal').classList.add('active'); document.querySelector('#add-product-modal .variant-title').innerText="EDIT PRODUCT"; };
+    const openAddModal = () => { editingProductId=null; document.querySelector('#add-product-modal form').reset(); document.getElementById('add-product-modal').classList.add('active'); document.querySelector('#add-product-modal .variant-title').innerText="ADD PRODUCT"; };
     const openAddCouponModal = () => document.getElementById('add-coupon-modal').classList.add('active');
+    const closeModal = (id) => document.getElementById(id ? id : 'add-product-modal').classList.remove('active');
 
-    // --- CONTROLLER ---
-    const init = () => {
-        console.log("Admin Panel Initialized");
-        if(document.getElementById('section-dashboard')) renderDashboard(); 
-        else renderProducts();
+    const init = () => { if(document.querySelector('.admin-container')) renderDashboard(); };
+
+    // ✅ แก้ไขส่วน return ให้ถูกต้อง (ใส่ลูกน้ำคั่น)
+    return { 
+        init, handleSaveProduct, deleteProduct, openAddModal, openEditModal, closeModal, switchTab, 
+        updateOrderStatus, handleAddCoupon, deleteCoupon, openAddCouponModal 
     };
-
-    const switchTab = (tabName) => {
-        // ... (โค้ดจัดการ class active เดิม) ...
-        document.querySelectorAll('.admin-link').forEach(el => el.classList.remove('active')); 
-        if(event && event.currentTarget) event.currentTarget.classList.add('active');
-
-        // ซ่อนทุกหน้า
-        const sections = ['section-dashboard', 'section-products', 'section-orders', 'section-coupons'];
-        sections.forEach(id => { 
-            const el = document.getElementById(id); 
-            if(el) el.style.display = 'none'; 
-        });
-        document.getElementById('btn-add-product').style.display = 'none';
-        const title = document.getElementById('page-title');
-
-        // แสดงหน้าตามที่เลือก
-        if(tabName === 'dashboard') {
-            document.getElementById('section-dashboard').style.display = 'grid';
-            title.innerText = 'DASHBOARD OVERVIEW';
-            renderDashboard();
-        } 
-        else if(tabName === 'products') {
-            document.getElementById('section-products').style.display = 'block';
-            document.getElementById('btn-add-product').style.display = 'block';
-            title.innerText = 'PRODUCT MANAGEMENT';
-            renderProducts();
-        } 
-        else if(tabName === 'orders') {
-            document.getElementById('section-orders').style.display = 'block';
-            title.innerText = 'ORDER MANAGEMENT';
-            renderOrders();
-        }
-        // [เพิ่มส่วนนี้]
-        else if(tabName === 'coupons') {
-            const couponSec = document.getElementById('section-coupons');
-            if(couponSec) couponSec.style.display = 'block';
-            // เปลี่ยน Title และเพิ่มปุ่ม New Code
-            title.innerHTML = `COUPON MANAGEMENT <button class="btn-primary" onclick="AdminApp.openAddCouponModal()" style="font-size:0.8rem; margin-left:15px; padding:5px 15px;">+ NEW CODE</button>`;
-            renderCoupons();
-        }
-    };
-
-    // [NEW] ฟังก์ชันสำหรับบันทึก (ใช้ร่วมกันทั้ง Add และ Edit)
-    const handleSaveProduct = (e) => {
-        e.preventDefault();
-        const name = document.getElementById('p-name').value;
-        const cat = document.getElementById('p-cat').value;
-        const price = Number(document.getElementById('p-price').value);
-        const img = document.getElementById('p-img').value;
-        let products = getProducts();
-
-        if (editingProductId) {
-            // โหมดแก้ไข: หาตัวเดิมแล้วอัปเดตข้อมูล
-            const index = products.findIndex(p => p.id === editingProductId);
-            if(index !== -1) {
-                products[index] = { ...products[index], name, category: cat, price, image: img };
-                alert("อัปเดตสินค้าเรียบร้อย!");
-            }
-        } else {
-            // โหมดเพิ่มใหม่
-            const newProduct = { id: Date.now(), name, category: cat, price, image: img, sale: false, sizes: ['S','M','L','XL'], colors: ['#000000'] };
-            products.unshift(newProduct);
-            alert("เพิ่มสินค้าใหม่เรียบร้อย!");
-        }
-
-        localStorage.setItem(CONFIG.PRODUCTS_KEY, JSON.stringify(products));
-        renderProducts();
-        closeModal();
-    };
-
-    // [NEW] เปิด Modal สำหรับแก้ไข
-    const openEditModal = (id) => {
-        const products = getProducts();
-        const product = products.find(p => p.id === id);
-        if(!product) return;
-
-        editingProductId = id; // ตั้งค่า ID ที่กำลังแก้
-        
-        // ใส่ข้อมูลเดิมลงในช่อง
-        document.getElementById('p-name').value = product.name;
-        document.getElementById('p-cat').value = product.category;
-        document.getElementById('p-price').value = product.price;
-        document.getElementById('p-img').value = product.image;
-
-        // เปลี่ยนหัวข้อ Modal ให้รู้ว่ากำลังแก้
-        document.querySelector('#add-product-modal .variant-title').innerText = "EDIT PRODUCT";
-        document.querySelector('#add-product-modal .btn-add-confirm').innerText = "UPDATE PRODUCT";
-
-        document.getElementById('add-product-modal').classList.add('active');
-    };
-
-    // เปิด Modal สำหรับเพิ่มใหม่ (ต้องเคลียร์ค่าเก่าออก)
-    const openAddModal = () => {
-        editingProductId = null; // รีเซ็ต ID เป็น null
-        document.getElementById('add-product-modal').classList.add('active');
-        document.querySelector('#add-product-modal form').reset(); // ล้างฟอร์ม
-        
-        // คืนค่าหัวข้อ Modal เป็น Add
-        document.querySelector('#add-product-modal .variant-title').innerText = "ADD NEW PRODUCT";
-        document.querySelector('#add-product-modal .btn-add-confirm').innerText = "SAVE PRODUCT";
-    };
-
-    const deleteProduct = (id) => { if(!confirm("ยืนยันการลบสินค้านี้?")) return; let products = getProducts(); products = products.filter(p => p.id !== id); localStorage.setItem(CONFIG.PRODUCTS_KEY, JSON.stringify(products)); renderProducts(); };
-    const updateOrderStatus = (orderId, customerEmail, newStatus) => { const users = getUsers(); const userIndex = users.findIndex(u => u.email === customerEmail); if (userIndex !== -1) { const orderIndex = users[userIndex].orders.findIndex(o => o.id === orderId); if (orderIndex !== -1) { users[userIndex].orders[orderIndex].status = newStatus; localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(users)); if(document.getElementById('section-orders').style.display === 'block') renderOrders(); if(document.getElementById('section-dashboard').style.display === 'grid') renderDashboard(); } } };
-    const closeModal = () => document.getElementById('add-product-modal').classList.remove('active');
-
-    return { init, handleSaveProduct, deleteProduct, openAddModal, openEditModal, closeModal, switchTab, updateOrderStatus,handleAddCoupon, deleteCoupon, openAddCouponModal, };
 })();
 
-if(document.querySelector('.admin-container')) { document.addEventListener('DOMContentLoaded', AdminApp.init); }
+// Start App: แยกการทำงานระหว่างหน้า Admin กับหน้า Shop
+document.addEventListener('DOMContentLoaded', () => { 
+    if(document.querySelector('.admin-container')) {
+        AdminApp.init(); // ถ้าเจอ class admin-container ให้รันระบบ Admin
+    } else {
+        App.init(); // ถ้าไม่เจอ (หน้า Shop/Home) ให้รันระบบหน้าร้าน
+    }
+});
