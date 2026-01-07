@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Noctis Wear</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23ffd700' d='M50,0C22.4,0,0,22.4,0,50s22.4,50,50,50s50-22.4,50-50S77.6,0,50,0z'/></svg>">
+</head>
+<body style="background:#050505;">
+
+<div class="admin-container">
+    <aside class="admin-sidebar">
+        <div class="logo" style="margin-bottom:40px;">NOCTIS<span>.</span> <div style="font-size:0.6rem; color:#666; letter-spacing:1px; margin-top:5px;">ADMIN PANEL</div></div>
+        
+        <nav class="admin-nav">
+            <a href="#" class="admin-link active" onclick="AdminApp.switchTab('dashboard')">
+                <span style="margin-right:10px;">📊</span> Dashboard
+            </a>
+            <a href="#" class="admin-link" onclick="AdminApp.switchTab('products')">
+                <span style="margin-right:10px;">📦</span> Products
+            </a>
+            <a href="#" class="admin-link" onclick="AdminApp.switchTab('orders')">
+                <span style="margin-right:10px;">📃</span> Orders
+            </a>
+            <a href="#" class="admin-link" onclick="AdminApp.switchTab('coupons')">
+                <span style="margin-right:10px;">🎫</span> Coupons
+            </a>
+            
+            <a href="index.html" class="admin-link" style="margin-top:auto; color:var(--danger);">
+                <span style="margin-right:10px;">⬅</span> Back to Shop
+            </a>
+        </nav>
+    </aside>
+
+    <main class="admin-content">
+        <header class="admin-header">
+            <h2 id="page-title">DASHBOARD OVERVIEW</h2>
+            <button id="btn-add-product" class="btn-primary" onclick="AdminApp.openAddModal()" style="padding:10px 25px; font-size:0.8rem; display:none;">+ ADD PRODUCT</button>
+        </header>
+
+        <div id="section-dashboard" class="dashboard-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(46, 204, 113, 0.1); color:#2ecc71;">💰</div>
+                <div class="stat-info"><h3>TOTAL REVENUE</h3><div id="stat-revenue" class="stat-value">฿0</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(52, 152, 219, 0.1); color:#3498db;">📃</div>
+                <div class="stat-info"><h3>TOTAL ORDERS</h3><div id="stat-orders" class="stat-value">0</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(155, 89, 182, 0.1); color:#9b59b6;">👕</div>
+                <div class="stat-info"><h3>ITEMS SOLD</h3><div id="stat-items" class="stat-value">0</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(230, 126, 34, 0.1); color:#e67e22;">👥</div>
+                <div class="stat-info"><h3>CUSTOMERS</h3><div id="stat-users" class="stat-value">0</div></div>
+            </div>
+        </div>
+
+        <div id="section-products" class="table-container" style="display:none;">
+            <table class="data-table">
+                <thead>
+                    <tr><th width="60">IMG</th><th>NAME</th><th>CATEGORY</th><th>PRICE</th><th>ACTION</th></tr>
+                </thead>
+                <tbody id="admin-product-list"></tbody>
+            </table>
+        </div>
+
+        <div id="section-orders" class="table-container" style="display:none;">
+            <table class="data-table">
+                <thead>
+                    <tr><th>ORDER ID</th><th>CUSTOMER</th><th>ITEMS</th><th>TOTAL</th><th>STATUS</th><th>ACTION</th></tr>
+                </thead>
+                <tbody id="admin-order-list"></tbody>
+            </table>
+        </div>
+
+        <div id="section-coupons" class="table-container" style="display:none;">
+            <table class="data-table">
+                <thead>
+                    <tr><th>CODE</th><th>TYPE</th><th>VALUE</th><th>STATUS</th><th>ACTION</th></tr>
+                </thead>
+                <tbody id="admin-coupon-list"></tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<div id="add-product-modal" class="modal-overlay">
+    <div class="checkout-modal variant-box">
+        <button class="close-modal-variant" onclick="AdminApp.closeModal('add-product-modal')">✕</button>
+        <h3 class="variant-title" style="color:var(--accent);">ADD NEW PRODUCT</h3>
+        
+        <form onsubmit="AdminApp.handleSaveProduct(event)">
+            <div class="form-group">
+                <label class="form-label">Product Name</label>
+                <input type="text" id="p-name" class="form-input" required placeholder="Ex. Cyber Punk Tee">
+            </div>
+            <div class="form-group" style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label class="form-label">Category</label>
+                    <select id="p-cat" class="form-input">
+                        <option value="T-Shirt">T-Shirt</option>
+                        <option value="Shirt">Shirt</option>
+                        <option value="Hoodie">Hoodie</option>
+                    </select>
+                </div>
+                <div style="flex:1;">
+                    <label class="form-label">Price (฿)</label>
+                    <input type="number" id="p-price" class="form-input" required placeholder="590">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Image URL</label>
+                <input type="url" id="p-img" class="form-input" required placeholder="https://...">
+                <div style="font-size:0.7rem; color:#666; margin-top:5px;">*ใส่ลิงก์รูปภาพ (เช่นจาก Unsplash)</div>
+            </div>
+            <button type="submit" class="btn-checkout btn-add-confirm">SAVE PRODUCT</button>
+        </form>
+    </div>
+</div>
+
+<div id="add-coupon-modal" class="modal-overlay">
+    <div class="checkout-modal variant-box" style="max-width:400px;">
+        <button class="close-modal-variant" onclick="AdminApp.closeModal('add-coupon-modal')">✕</button>
+        <h3 class="variant-title" style="color:var(--accent);">ADD NEW COUPON</h3>
+        
+        <form onsubmit="AdminApp.handleAddCoupon(event)">
+            <div class="form-group">
+                <label class="form-label">Coupon Code</label>
+                <input type="text" id="c-code" class="form-input" required placeholder="Ex. SALE50" style="text-transform:uppercase;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Type</label>
+                <select id="c-type" class="form-input">
+                    <option value="percent">Percent (%)</option>
+                    <option value="fixed">Fixed Amount (฿)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Value (Amount/%)</label>
+                <input type="number" id="c-value" class="form-input" required placeholder="Ex. 10 or 100">
+            </div>
+            <button type="submit" class="btn-checkout btn-add-confirm">CREATE COUPON</button>
+        </form>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if(typeof AdminApp !== 'undefined') AdminApp.init();
+        else console.warn("AdminApp not loaded yet.");
+    });
+</script>
+</body>
+</html>

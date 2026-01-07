@@ -1093,3 +1093,1014 @@ header > div {
         margin-bottom: 20px !important;
     }
 }
+
+/* =========================================
+   SYSTEM A: WISHLIST & COUPON STYLES
+   (Add to bottom of style.css)
+   ========================================= */
+
+/* --- 1. Wishlist Heart Button --- */
+.btn-wishlist {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s;
+    backdrop-filter: blur(4px);
+}
+.btn-wishlist svg {
+    width: 18px; height: 18px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    transition: 0.3s;
+}
+.btn-wishlist:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+
+/* สถานะกดถูกใจแล้ว (สีแดง) */
+.btn-wishlist.active svg {
+    fill: var(--danger);
+    stroke: var(--danger);
+    animation: heartBeat 0.4s;
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+/* --- 2. Coupon Box in Cart Sidebar --- */
+.coupon-section {
+    padding: 15px 20px;
+    background: #0e0e0e;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+.coupon-input-group {
+    display: flex; gap: 10px;
+    margin-top: 10px;
+}
+.coupon-input {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.btn-apply {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 0 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+.btn-apply:hover { background: var(--accent); color: #000; }
+
+/* แสดงส่วนลด */
+.discount-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.9rem; color: var(--danger);
+    margin-bottom: 5px;
+}
+/* =========================================
+   WISHLIST FILTER STYLE
+   (Add to bottom of style.css)
+   ========================================= */
+
+/* ปกติ: หัวใจสีจาง */
+.filter-option:hover .wishlist-label {
+    color: #fff !important; /* เมาส์ชี้แล้วสว่างขึ้น */
+}
+
+/* เมื่อติ๊กถูก: หัวใจเป็นสีแดง + ตัวหนังสือสว่าง */
+.filter-option input:checked ~ .wishlist-label {
+    color: #fff;
+}
+
+.filter-option input:checked ~ .wishlist-label svg {
+    fill: var(--danger);   /* ถมสีแดงข้างใน */
+    stroke: var(--danger); /* เส้นขอบแดง */
+    filter: drop-shadow(0 0 5px rgba(255, 59, 59, 0.5)); /* เรืองแสงนิดๆ */
+}
+
+/* =========================================
+   SYSTEM B: PRODUCT GALLERY & REVIEWS
+   (Add to bottom of style.css)
+   ========================================= */
+
+/* ขยายขนาด Modal ให้กว้างขึ้นเพื่อแบ่ง 2 ฝั่ง */
+.variant-box {
+    max-width: 900px !important; /* กว้างขึ้น */
+    width: 95% !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 30px !important;
+}
+
+/* --- Left Column: Gallery --- */
+.product-gallery {
+    flex: 1;
+    min-width: 300px;
+}
+.main-img-frame {
+    width: 100%;
+    aspect-ratio: 1/1; /* สี่เหลี่ยมจัตุรัส */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 1px solid #333;
+}
+.main-img-display {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: 0.3s;
+}
+.thumb-grid {
+    display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;
+}
+.thumb-img {
+    width: 60px; height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.6; transition: 0.2s;
+}
+.thumb-img:hover, .thumb-img.active {
+    border-color: var(--accent);
+    opacity: 1;
+}
+
+/* --- Right Column: Details & Reviews --- */
+.product-details-col {
+    flex: 1;
+    min-width: 300px;
+    display: flex; flex-direction: column;
+}
+
+/* Review Section */
+.review-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+.review-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 15px;
+}
+.star-rating { color: var(--accent); letter-spacing: 2px; }
+
+.review-list {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding-right: 5px;
+}
+.review-item {
+    background: rgba(255,255,255,0.03);
+    padding: 10px; border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+}
+.review-user { font-weight: bold; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2px; }
+.review-text { color: #ddd; line-height: 1.4; }
+
+/* Review Input Form */
+.review-form { display: flex; gap: 10px; }
+.review-input {
+    flex: 1;
+    background: #111; border: 1px solid #333;
+    color: #fff; padding: 8px; border-radius: 4px;
+    font-size: 0.85rem;
+}
+.btn-submit-review {
+    background: #333; color: #fff; border: none;
+    padding: 0 15px; border-radius: 4px; cursor: pointer;
+}
+.btn-submit-review:hover { background: var(--accent); color: #000; }
+
+/* Responsive: มือถือให้เรียงลงมา */
+@media (max-width: 768px) {
+    .variant-box { flex-direction: column; max-height: 85vh; overflow-y: auto; }
+}
+/* =========================================
+   FIXES: LOGIN LAYOUT & MODAL SIZING
+   (Paste at the very bottom of style.css)
+   ========================================= */
+
+/* --- 1. แก้หน้า Login เบี้ยว --- */
+/* บังคับให้หน้า Login เรียงแนวตั้ง (ไม่ใช้ Flex แบบ Gallery) และลดขนาดให้พอดี */
+#auth-modal .variant-box {
+    display: block !important;    /* เรียงลงมาตามปกติ */
+    max-width: 420px !important;  /* ความกว้างพอดีๆ ไม่กว้างเท่า Gallery */
+    width: 90% !important;        /* เว้นขอบข้างในมือถือ */
+    margin: 0 auto;
+    text-align: center;           /* จัดกึ่งกลาง */
+}
+
+/* ปรับระยะห่างหัวข้อในหน้า Login */
+#auth-modal .variant-title {
+    margin-bottom: 25px !important;
+    justify-content: center;      /* จัด title กึ่งกลาง */
+}
+
+/* --- 2. แก้หน้าสินค้า (Product Modal) เต็มจอเกินไป --- */
+#variant-modal .variant-box {
+    max-width: 850px !important;  /* ลดความกว้างสูงสุดจาก 900px เหลือ 850px */
+    width: 92% !important;        /* เว้นขอบข้างเพิ่มขึ้น */
+    max-height: 90vh;             /* จำกัดความสูงไม่ให้ล้นจอ (90% ของความสูงจอ) */
+    overflow-y: auto;             /* ถ้าเนื้อหายาวเกิน ให้มี Scrollbar เฉพาะในกล่อง */
+    padding: 25px !important;     /* ลด Padding ลงนิดหน่อย */
+    
+    /* จัดกึ่งกลางจอ */
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ปรับ Layout มือถือให้พอดี (Mobile Fit) */
+@media (max-width: 768px) {
+    #variant-modal .variant-box {
+        padding: 15px !important; /* ลดขอบในมือถือเพื่อเพิ่มพื้นที่ */
+        width: 95% !important;
+        max-height: 70vh;         /* ลดความสูงลงอีกนิดในมือถือ */
+        display: block !important; /* เรียงลงมาตรงๆ */
+    }
+
+    /* ให้รูปและข้อมูลเต็มความกว้าง */
+    .product-gallery, 
+    .product-details-col {
+        width: 100% !important;
+        min-width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    /* ปรับขนาดรูปในมือถือไม่ให้กินที่เกินไป */
+    .main-img-frame {
+        height: 300px; /* ล็อกความสูงรูปไม่ให้ยาวจนต้องเลื่อนเยอะ */
+    }
+    .main-img-display {
+        object-fit: contain; /* โชว์รูปให้ครบ */
+        background: #000;
+    }
+}
+/* =========================================
+   🔥 FINAL MODAL FIX V2 (FIXED SCROLL & REVIEWS)
+   วางทับส่วน Compact เดิม หรือวางล่างสุดของ style.css
+   ========================================= */
+
+/* 1. จัดโครงสร้าง Modal บน PC */
+#variant-modal .variant-box {
+    max-width: 800px !important;
+    width: 90% !important;
+    height: 85vh !important;          /* บังคับความสูงคงที่เพื่อให้จัด Scroll ได้ */
+    max-height: 700px !important;
+    padding: 30px !important;
+    overflow: hidden !important;      /* ห้ามตัวกล่องหลักเลื่อน */
+    display: flex !important;
+    flex-direction: row !important;   /* เรียงซ้าย-ขวา */
+    gap: 30px !important;
+    align-items: stretch;             /* ยืดให้เต็มความสูง */
+    
+    /* จัดกึ่งกลางจอ */
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    background: #161616 !important;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+}
+
+/* 2. ฝั่งซ้าย (รูปภาพ) บน PC */
+.product-gallery {
+    flex: 0 0 45% !important; /* กว้าง 45% */
+    display: flex; 
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.main-img-frame {
+    width: 100%;
+    height: auto !important;
+    aspect-ratio: 1/1;       /* ให้เป็นสี่เหลี่ยมจัตุรัสสวยๆ */
+    max-height: 350px;       /* ไม่ให้สูงเกินไป */
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #000;
+    margin-bottom: 10px;
+}
+
+.main-img-display {
+    width: 100%; height: 100%; 
+    object-fit: contain !important;
+}
+
+/* 3. ฝั่งขวา (ข้อมูล + รีวิว) - แก้ให้ Scroll ได้ */
+.product-details-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto !important;  /* ✅ อนุญาตให้เลื่อนเฉพาะฝั่งขวา */
+    padding-right: 10px;          /* เว้นที่ให้ Scrollbar ไม่ทับเนื้อหา */
+    height: 100%;                 /* ใช้ความสูงเต็มพื้นที่ */
+}
+
+/* ตกแต่ง Scrollbar ฝั่งขวาให้น่าใช้ */
+.product-details-col::-webkit-scrollbar { width: 5px; }
+.product-details-col::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+.product-details-col::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; }
+.product-details-col::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ดันส่วนรีวิวให้ห่างจากปุ่ม Add to Cart */
+.review-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 20px; /* เพิ่มขอบล่างกันตกขอบ */
+}
+
+/* =========================================
+   📱 MOBILE FIX (แก้ให้เลื่อนดูคอมเมนต์ได้ง่าย)
+   ========================================= */
+@media (max-width: 768px) {
+    #variant-modal .variant-box {
+        display: block !important;    /* เรียงลงมาปกติ */
+        height: auto !important;      /* ความสูงตามเนื้อหา */
+        max-height: 85vh !important;  /* แต่ห้ามเกิน 85% ของจอ */
+        overflow-y: auto !important;  /* ✅ ให้ Scroll ทั้งกล่อง */
+        width: 90% !important;
+        padding: 20px !important;
+        flex-direction: column !important;
+    }
+
+    /* รีเซ็ตค่าฝั่งขวาบนมือถือ (ให้เลื่อนตามกล่องหลัก) */
+    .product-details-col {
+        overflow-y: visible !important; 
+        height: auto !important;
+        padding-right: 0;
+    }
+
+    .product-gallery {
+        width: 100% !important;
+        flex: none !important;
+    }
+
+    .main-img-frame {
+        height: 200px !important; /* ลดขนาดรูปบนมือถือ */
+        margin: 0 auto 15px auto;
+    }
+}
+
+
+/* =========================================
+   📱 MOBILE ADJUSTMENTS (COMPACT VIEW)
+   ========================================= */
+@media (max-width: 768px) {
+    #variant-modal .variant-box {
+        display: flex !important;
+        flex-direction: column !important; /* เรียงลงมา */
+        width: 88% !important;        /* เว้นขอบข้าง */
+        max-height: 80vh !important;  /* สูงแค่ 80% ของจอ */
+        padding: 15px !important;
+        gap: 15px !important;
+        overflow-y: auto !important;  /* ให้ Scroll ในกล่องได้ */
+        border-radius: 16px !important;
+    }
+
+    /* ลดขนาดรูปบนมือถือ (สำคัญมาก!) */
+    .product-gallery {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        margin-bottom: 0 !important;
+    }
+
+    .main-img-frame {
+        height: 180px !important;     /* ลดความสูงรูปลงเยอะๆ ให้เหลือที่ใส่เนื้อหา */
+        margin-bottom: 10px;
+        border: none !important;      /* เอาขอบออกให้ดูคลีน */
+        background: transparent !important;
+    }
+
+    .main-img-display {
+        padding: 0;
+        object-fit: contain !important;
+    }
+    
+    /* ซ่อนรูปเล็ก (Thumbnails) บนมือถือถ้าเกะกะ หรือจะย่อขนาดก็ได้ */
+    .thumb-grid {
+        justify-content: center;
+        gap: 8px;
+    }
+    .thumb-img {
+        width: 40px !important; 
+        height: 40px !important;
+    }
+
+    /* ปรับตัวอักษรให้เล็กลงนิดนึงบนมือถือ */
+    #modal-title { font-size: 1.1rem !important; margin-bottom: 5px !important; text-align: center; }
+    #modal-price { font-size: 1.1rem !important; text-align: center; margin-bottom: 15px !important; }
+
+    /* ปรับ Layout ปุ่มเลือกไซส์/สี ให้อยู่กลาง */
+    .size-grid, .color-grid { justify-content: center; }
+    .option-label { text-align: center; }
+    
+    /* ปุ่ม Add to Cart ลอยเด่น */
+    .btn-add-confirm {
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        box-shadow: 0 -10px 20px rgba(0,0,0,0.5); /* เงาให้รู้ว่าปุ่มลอย */
+    }
+}
+
+/* =========================================
+   SYSTEM C: ADMIN DASHBOARD STYLES
+   (Add to bottom of style.css)
+   ========================================= */
+
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 250px;
+    background: #0a0a0a;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    padding: 30px;
+    display: flex; flex-direction: column;
+}
+.admin-nav { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.admin-link {
+    padding: 12px 15px;
+    color: #888;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.admin-link:hover, .admin-link.active {
+    background: rgba(255,255,255,0.05);
+    color: var(--accent);
+}
+
+/* Content Area */
+.admin-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+.admin-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Data Table */
+.table-container {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+.data-table th {
+    background: #1a1a1a;
+    color: var(--text-muted);
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid #333;
+}
+.data-table td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: #ccc;
+    vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover { background: rgba(255,255,255,0.02); }
+
+.admin-img-thumb {
+    width: 40px; height: 40px;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid #333;
+}
+
+/* Action Buttons */
+.btn-delete {
+    color: var(--danger);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    cursor: pointer;
+    background: none; border: none;
+}
+.btn-delete:hover { color: #ff6b6b; }
+
+/* Mobile Admin */
+@media (max-width: 768px) {
+    .admin-container { flex-direction: column; }
+    .admin-sidebar { width: 100%; padding: 20px; border-right: none; border-bottom: 1px solid #333; }
+    .admin-content { padding: 20px; }
+    .data-table th:nth-child(3), .data-table td:nth-child(3) { display: none; /* ซ่อน Category ในมือถือ */ }
+}
+/* =========================================
+   ADMIN MODAL CLOSE BUTTON FIX
+   (แก้ปุ่มกากบาทหน้า Admin ให้อยู่ขวาบน)
+   ========================================= */
+
+/* 1. กำหนดให้กล่อง Modal เป็นจุดอ้างอิง */
+#add-product-modal .variant-box {
+    position: relative !important;
+}
+
+/* 2. บังคับปุ่มกากบาทให้ลอยไปมุมขวาบน */
+#add-product-modal .close-modal-variant {
+    position: absolute !important; /* ลอยอิสระ */
+    top: 20px !important;          /* ห่างจากขอบบน 20px */
+    right: 20px !important;        /* ห่างจากขอบขวา 20px */
+    left: auto !important;         /* ยกเลิกการชิดซ้าย */
+    transform: none !important;    /* ยกเลิกการจัดกึ่งกลาง (ถ้ามี) */
+    
+    /* ปรับแต่งปุ่มให้ดูดีขึ้น */
+    background: rgba(255, 255, 255, 0.1) !important;
+    width: 35px; height: 35px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    color: #fff !important;
+    z-index: 100;
+}
+
+#add-product-modal .close-modal-variant:hover {
+    background: var(--danger) !important;
+    color: #fff !important;
+}
+
+/* =========================================
+   FIX: HISTORY MODAL LAYOUT
+   (แก้หน้าประวัติสั่งซื้อที่เบี้ยว ให้เรียงบนลงล่างปกติ)
+   ========================================= */
+
+/* 1. บังคับให้กล่อง History เรียงแนวตั้ง (Block) ไม่ใช่แนวนอน */
+#history-modal .variant-box {
+    display: block !important;       /* ยกเลิกการเรียงซ้ายขวา */
+    width: 95% !important;
+    max-width: 600px !important;     /* ความกว้างที่พอดี */
+    height: auto !important;         /* สูงตามเนื้อหา */
+    max-height: 80vh !important;     /* ไม่ให้ล้นจอ */
+    padding: 25px !important;
+    
+    /* ยกเลิกค่าของหน้าสินค้า */
+    position: relative !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    overflow-y: auto !important;     /* ให้ Scroll ได้ */
+}
+
+/* 2. จัดหัวข้อและปุ่มปิดให้เต็มความกว้าง */
+#history-modal .variant-box > div:first-child {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 20px !important;
+}
+
+/* 3. ปรับขนาดปุ่มปิด (X) ในหน้าประวัติให้พอดี */
+#history-modal .close-modal-variant {
+    position: static !important; /* ยกเลิกการลอย */
+    font-size: 1.5rem !important;
+    background: none !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* =========================================
+   🚨 EMERGENCY FIX: FORCE LAYOUT RESET
+   (วางล่างสุดของไฟล์ เพื่อแก้หน้าต่างเบี้ยวหายขาด)
+   ========================================= */
+
+/* 1. บังคับหน้าประวัติ (History) ให้เรียงแนวตั้ง */
+#history-modal .variant-box {
+    display: block !important;        /* เลิกใช้ Flexbox */
+    flex-direction: column !important;
+    width: 95% !important;
+    max-width: 600px !important;
+    height: auto !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    padding: 30px !important;
+    
+    /* รีเซ็ตตำแหน่งให้อยู่กลางจอ */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+/* 2. บังคับหน้า Login/Register ให้เรียงแนวตั้ง */
+#auth-modal .variant-box {
+    display: block !important;
+    max-width: 400px !important;
+    text-align: center !important;
+}
+
+/* 3. บังคับหน้า Checkout ให้เรียงแนวตั้ง */
+#checkout-overlay .checkout-modal {
+    display: block !important;
+    max-width: 500px !important;
+}
+
+/* 4. ปรับหัวข้อในหน้าประวัติให้ชิดซ้ายขวาถูกต้อง */
+#history-modal .variant-box > div:first-child {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+}
+
+/* 5. แก้ปุ่มปิด (X) ไม่ให้ลอยผิดที่ */
+#history-modal .close-modal-variant,
+#auth-modal .close-modal-variant {
+    position: static !important; /* ยกเลิกการลอยอิสระ */
+    width: auto !important;
+    height: auto !important;
+    background: none !important;
+    font-size: 1.5rem !important;
+    transform: none !important;
+}
+#history-modal .close-modal-variant:hover {
+    color: var(--danger) !important;
+    background: none !important;
+}
+
+/* =========================================
+   🚨 HISTORY MODAL FIX (แก้หน้าประวัติเบี้ยว แบบบังคับ)
+   วางส่วนนี้ไว้ล่างสุดของ style.css เสมอ
+   ========================================= */
+
+/* 1. บังคับโครงสร้างกล่องให้กลับมาเป็นปกติ */
+#history-modal .variant-box {
+    display: block !important;          /* ยกเลิก Flexbox แนวนอน */
+    width: 90% !important;              /* ให้กว้าง 90% ของจอ */
+    max-width: 600px !important;        /* แต่ไม่เกิน 600px */
+    height: auto !important;            /* สูงตามเนื้อหา */
+    max-height: 80vh !important;        /* ไม่ให้ล้นจอ */
+    padding: 30px !important;
+    background: #111 !important;
+    
+    /* จัดกึ่งกลางจอ */
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    
+    /* ให้ Scroll ได้ถ้าประวัติยาว */
+    overflow-y: auto !important;
+}
+
+/* 2. จัดส่วนหัวข้อ (Title) และปุ่มปิด (X) ให้แยกซ้ายขวา */
+#history-modal .variant-box > div:first-child {
+    display: flex !important;
+    width: 100% !important;             /* บังคับกว้างเต็ม */
+    justify-content: space-between !important; /* ดันคนละฝั่ง */
+    align-items: center !important;
+    margin-bottom: 25px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+}
+
+/* 3. ปรับปุ่มกากบาทให้สวยงามและกดง่าย */
+#history-modal .close-modal-variant {
+    position: static !important;        /* ยกเลิกการลอยมั่ว */
+    font-size: 2rem !important;
+    color: #888 !important;
+    background: transparent !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer;
+    border: none !important;
+}
+#history-modal .close-modal-variant:hover {
+    color: var(--danger) !important;    /* ชี้แล้วเป็นสีแดง */
+    transform: scale(1.1);
+}
+
+/* 4. ปรับรายการออเดอร์ให้เต็มความกว้าง */
+#order-history-list {
+    width: 100% !important;
+    padding-right: 5px;
+}
+.order-card {
+    width: 100% !important;
+    box-sizing: border-box; /* รวม padding ในความกว้าง */
+}
+/* =========================================
+   SYSTEM: PAYMENT GATEWAY STYLES
+   ========================================= */
+
+/* ปรับแต่ง Modal ชำระเงิน */
+#payment-modal .variant-box {
+    max-width: 450px !important;
+    text-align: center;
+}
+
+/* หัวข้อ */
+.payment-title {
+    font-family: var(--font-heading);
+    color: var(--accent);
+    margin-bottom: 25px;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+/* ปุ่มเลือกวิธีชำระเงิน */
+.payment-methods {
+    display: flex; gap: 15px; margin-bottom: 25px;
+}
+.pay-method-btn {
+    flex: 1;
+    padding: 15px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #888;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.pay-method-btn svg { width: 30px; height: 30px; fill: currentColor; }
+.pay-method-btn:hover, .pay-method-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+/* ส่วนแสดงผล QR และแบบฟอร์ม */
+.payment-content {
+    background: rgba(255,255,255,0.03);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    min-height: 200px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* QR Code จำลอง */
+.qr-container { text-align: center; }
+.qr-img {
+    width: 150px; height: 150px;
+    background: #fff; padding: 10px;
+    margin: 0 auto 15px auto;
+    border-radius: 8px;
+}
+.file-upload-btn {
+    width: 100%; padding: 10px;
+    background: #333; color: #fff;
+    border: 1px dashed #666;
+    border-radius: 4px; cursor: pointer;
+    font-size: 0.8rem;
+}
+
+/* Credit Card Form */
+.cc-form { width: 100%; text-align: left; }
+.cc-input {
+    width: 100%; background: #000;
+    border: 1px solid #444; color: #fff;
+    padding: 12px; border-radius: 4px;
+    margin-bottom: 15px; font-family: monospace;
+}
+.cc-row { display: flex; gap: 10px; }
+
+/* =========================================
+   FIX: PAYMENT MODAL SIZE
+   (แก้หน้าต่างชำระเงินให้เล็กและกระชับ)
+   ========================================= */
+
+/* 1. บังคับขนาดกล่องให้เล็กลง */
+#payment-modal .variant-box,
+#payment-modal .checkout-modal {
+    max-width: 400px !important;  /* จำกัดความกว้างแค่ 400px (จากเดิม 500-900px) */
+    width: 90% !important;        /* ในมือถือให้กว้าง 90% ของจอ */
+    padding: 25px 20px !important; /* ลดช่องว่างขอบใน */
+    height: auto !important;      /* ความสูงตามเนื้อหา */
+    max-height: 85vh !important;  /* ห้ามสูงเกิน 85% ของจอ */
+    overflow-y: auto !important;  /* ถ้าเนื้อหาล้นให้เลื่อนได้ */
+    
+    /* จัดกึ่งกลางจอเป๊ะๆ */
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    
+    display: block !important;    /* ยกเลิก Flexbox ที่อาจทำให้ยืด */
+    text-align: center !important; /* จัดทุกอย่างกึ่งกลาง */
+}
+
+/* 2. ปรับขนาดรูป QR Code ให้เล็กลง */
+.qr-img {
+    width: 120px !important;      /* ลดขนาด QR Code */
+    height: 120px !important;
+    margin: 0 auto 10px auto;     /* จัดกึ่งกลาง */
+    padding: 5px !important;
+}
+
+/* 3. ปรับขนาดปุ่มเลือกวิธีชำระเงิน */
+.payment-methods {
+    margin-bottom: 20px !important;
+    gap: 10px !important;
+}
+.pay-method-btn {
+    padding: 10px !important;     /* ลดความหนาปุ่ม */
+    font-size: 0.85rem !important;
+}
+.pay-method-btn svg {
+    width: 24px !important;       /* ลดขนาดไอคอน */
+    height: 24px !important;
+}
+
+/* 4. ปรับหัวข้อให้เล็กลง */
+.payment-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 15px !important;
+    background: #111 !important;  /* สีพื้นหลังให้กลืนกับกล่อง */
+    color: var(--accent) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 5. ปรับปุ่ม Confirm ด้านล่าง */
+#payment-modal .btn-add-confirm {
+    margin-top: 15px !important;
+    height: 40px !important;      /* ลดความสูงปุ่ม */
+    font-size: 0.9rem !important;
+}
+/* =========================================
+   FIX: PAYMENT CLOSE BUTTON POSITION
+   (ย้ายปุ่มกากบาทหน้าชำระเงินไปมุมขวาบนสุด)
+   ========================================= */
+
+#payment-modal .close-modal-variant {
+    position: absolute !important;   /* สั่งให้ลอยอิสระ */
+    top: 15px !important;            /* ห่างจากขอบบน 15px */
+    right: 15px !important;          /* ห่างจากขอบขวา 15px */
+    left: auto !important;           /* ยกเลิกการจัดกึ่งกลาง */
+    transform: none !important;      /* ยกเลิก Effect หมุน/เลื่อนเดิม */
+    
+    /* ปรับหน้าตาปุ่มให้คลีนๆ */
+    background: transparent !important;
+    border: none !important;
+    color: #666 !important;
+    font-size: 1.5rem !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* เอฟเฟกต์ตอนเอาเมาส์ชี้ */
+#payment-modal .close-modal-variant:hover {
+    color: var(--danger) !important;
+    transform: scale(1.1) !important;
+}
+/* =========================================
+   FIX: PAYMENT TITLE OVERLAP
+   (แก้ปุ่มกากบาทบังตัวหนังสือ SELECT PAYMENT)
+   ========================================= */
+
+/* 1. จัดหัวข้อใหม่ ให้หลบปุ่มกากบาท */
+.payment-title {
+    margin-top: 15px !important;    /* ดันข้อความลงมา */
+    padding: 0 40px !important;     /* บีบข้อความเข้ามา 40px ทั้งซ้ายและขวา (เพื่อไม่ให้ยาวไปชนปุ่ม) */
+    line-height: 1.4 !important;    /* เพิ่มความสูงบรรทัด */
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. ปรับตำแหน่งปุ่ม X ให้ชิดมุมขวาบนสุด */
+#payment-modal .close-modal-variant {
+    top: 10px !important;           /* ขยับขึ้นไปติดขอบบนมากขึ้น */
+    right: 10px !important;         /* ขยับชิดขวามากขึ้น */
+    z-index: 100 !important;        /* ให้มั่นใจว่าปุ่มอยู่บนสุด */
+    
+    /* (เสริม) เพิ่มพื้นหลังจางๆ ให้ปุ่มเห็นชัดขึ้น ไม่จมไปกับพื้นหลัง */
+    background: rgba(255, 255, 255, 0.05) !important; 
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50%;
+}
+
+/* =========================================
+   🚨 EMERGENCY FIX: PRODUCT MODAL POSITION
+   (แก้หน้าสินค้าที่ไหลไปทางขวา ให้กลับมาตรงกลาง)
+   ========================================= */
+
+/* 1. ดึงกล่องสินค้ากลับมาอยู่ตรงกลาง */
+#variant-modal .variant-box {
+    position: fixed !important;      /* ใช้ fixed เพื่อให้อ้างอิงจากหน้าจอ */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important; /* ดึงกลับมา 50% ให้อยู่กลางเป๊ะ */
+    margin: 0 !important;
+}
+
+/* 2. ปุ่มกากบาท (ย้ำตำแหน่งอีกครั้ง) */
+#variant-modal .close-modal-variant {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    left: auto !important;           /* ยกเลิกค่าซ้าย */
+    transform: none !important;
+    z-index: 100 !important;
+}
+
+/* =========================================
+   SYSTEM C: DASHBOARD ANALYTICS STYLES
+   ========================================= */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: 0.3s;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.stat-icon {
+    width: 60px; height: 60px;
+    border-radius: 12px;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 1.8rem;
+}
+
+.stat-info h3 {
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: var(--font-heading);
+}
+
+/* =========================================
+   SYSTEM: EDIT BUTTON STYLE
+   ========================================= */
+.btn-edit {
+    color: var(--accent); /* สีทอง */
+    font-size: 0.8rem;
+    text-decoration: underline;
+    cursor: pointer;
+    background: none; border: none;
+    margin-right: 10px; /* เว้นระยะห่างจากปุ่ม Delete */
+}
+.btn-edit:hover { color: #fff; }
