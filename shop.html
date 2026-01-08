@@ -35,7 +35,42 @@
         <a href="about.html" class="nav-item-popup">About</a>
     </nav>
 </header>
-
+<div class="shop-hero-container reveal-on-scroll">
+    <div class="hero-slider" id="hero-slider">
+        <div class="hero-slide active">
+            <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&q=80&w=1600" class="slide-bg">
+            <div class="slide-content">
+                <div class="slide-subtitle">MID-SEASON SALE</div>
+                <h2 class="slide-title">CYBER <span style="color:var(--accent);">WEEK</span></h2>
+                <p class="slide-desc">ลดสูงสุด 50% พร้อมโค้ดส่วนลดพิเศษ</p>
+                <button class="btn-primary" onclick="App.copyCode('NOCTIS10')">GET CODE: NOCTIS10</button>
+            </div>
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1600" class="slide-bg">
+            <div class="slide-content">
+                <div class="slide-subtitle">NEW ARRIVALS</div>
+                <h2 class="slide-title">FUTURE <span style="color:var(--accent);">READY</span></h2>
+                <p class="slide-desc">คอลเลกชันใหม่ล่าสุดสำหรับสาย Techwear</p>
+                <button class="btn-primary" style="background:#fff; color:#000;" onclick="document.getElementById('product-grid').scrollIntoView()">SHOP NOW</button>
+            </div>
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&q=80&w=1600" class="slide-bg">
+            <div class="slide-content">
+                <div class="slide-subtitle">LIMITED EDITION</div>
+                <h2 class="slide-title">URBAN <span style="color:var(--accent);">NINJA</span></h2>
+                <p class="slide-desc">ดีไซน์เฉพาะตัว จำนวนจำกัด หมดแล้วหมดเลย</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slider-nav">
+        <button onclick="App.prevSlide()">❮</button>
+        <button onclick="App.nextSlide()">❯</button>
+    </div>
+    <div class="slider-dots" id="slider-dots"></div>
+</div>
     <div class="search-section-wrapper"> 
     <div class="search-wrapper" style="position:relative;">
         <input type="text" id="search-input" placeholder="SEARCH PRODUCTS..." 

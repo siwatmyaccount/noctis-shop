@@ -1,19 +1,19 @@
 /* =========================================
    1. CONFIGURATION & VARIABLES
-   (Source of Truth - แก้ที่นี่เปลี่ยนทั้งเว็บ)
+   (Source of Truth)
    ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@700&display=swap');
 
 :root {
     /* --- Colors --- */
-    --bg-body: #050505;       /* พื้นหลังหลัก */
-    --bg-surface: #121212;    /* พื้นหลังการ์ด/กล่อง */
+    --bg-body: #050505;
+    --bg-surface: #121212;
     --bg-overlay: rgba(0, 0, 0, 0.85);
     
     --text-main: #ffffff;
-    --text-muted: #a0a0b0;    /* ปรับให้สว่างขึ้นเพื่อให้อ่านง่าย */
+    --text-muted: #a0a0b0;
     
-    --accent: #ffd700;        /* สีทอง */
+    --accent: #ffd700;
     --accent-hover: #e5c100;
     --accent-glow: rgba(255, 215, 0, 0.3);
     --danger: #ff3b3b;
@@ -30,13 +30,13 @@
     --radius-lg: 32px;
     --container-width: 1440px;
     
-    /* --- Z-Index Management (Layering) --- */
+    /* --- Z-Index Management --- */
     --z-back: -1;
     --z-normal: 1;
-    --z-sticky: 1000;  /* Header */
-    --z-drawer: 2000;  /* Cart Sidebar */
-    --z-modal: 3000;   /* Modals */
-    --z-toast: 4000;   /* Notifications */
+    --z-sticky: 1000;  
+    --z-drawer: 2000;
+    --z-modal: 3000;
+    --z-toast: 4000;
 }
 
 /* =========================================
@@ -83,6 +83,12 @@ img { max-width: 100%; display: block; height: auto; }
 
 .icon-svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; }
 
+/* Scrollbar Styling (Custom) */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
 /* =========================================
    4. COMPONENTS (Reusable UI)
    ========================================= */
@@ -118,39 +124,85 @@ img { max-width: 100%; display: block; height: auto; }
 }
 .btn-icon:hover { background: var(--accent); }
 
-.btn-checkout {
+.btn-checkout, .btn-add-confirm {
     width: 100%; padding: 16px;
     background: var(--accent); color: #000;
     font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
     border-radius: var(--radius-sm); transition: 0.3s;
     margin-top: 10px;
 }
-.btn-checkout:hover { background: #fff; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+.btn-checkout:hover, .btn-add-confirm:hover { background: #fff; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
 .btn-checkout:disabled { background: #555; cursor: not-allowed; opacity: 0.7; }
 
-/* --- Forms & Inputs (Fixed Visibility Issues) --- */
+.btn-delete {
+    color: var(--danger);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.btn-delete:hover { color: #ff6b6b; }
+
+.btn-edit {
+    color: var(--accent);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.btn-edit:hover { color: #fff; }
+
+.btn-wishlist {
+    position: absolute; top: 15px; right: 15px;
+    background: rgba(0,0,0,0.5); border: none;
+    width: 35px; height: 35px; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; z-index: 10; transition: 0.3s;
+    backdrop-filter: blur(4px);
+}
+.btn-wishlist svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; transition: 0.3s; }
+.btn-wishlist:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+.btn-wishlist.active svg { fill: var(--danger); stroke: var(--danger); animation: heartBeat 0.4s; }
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+/* --- Forms & Inputs --- */
 .form-group { margin-bottom: 20px; }
 .form-label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
 
-.form-input, select {
-    width: 100%; 
-    padding: 12px; 
+.form-input, select, textarea {
+    width: 100%; padding: 12px;
     background: #1a1a1a;
-    border: 1px solid #444; 
-    color: #fff;
-    border-radius: var(--radius-sm); 
-    outline: none; 
-    transition: 0.3s;
+    border: 1px solid #444; color: #fff;
+    border-radius: var(--radius-sm); outline: none; transition: 0.3s;
     font-family: var(--font-body);
 }
-.form-input:focus, select:focus { border-color: var(--accent); background: #222; }
+.form-input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #222; }
 
-/* Checkbox Style */
+/* Custom Checkbox/Radio */
+.filter-option {
+    display: block; position: relative; padding-left: 30px; margin-bottom: 15px;
+    cursor: pointer; color: var(--text-muted); transition: 0.3s;
+}
+.filter-option:hover { color: var(--text-main); }
+.filter-option input { position: absolute; opacity: 0; cursor: pointer; }
 .checkmark {
     position: absolute; top: 2px; left: 0; height: 18px; width: 18px;
     background-color: transparent; border: 1px solid #555; border-radius: 4px;
 }
 .filter-option input:checked ~ .checkmark { background-color: var(--accent); border-color: var(--accent); }
+.filter-option input[type="radio"] ~ .checkmark { border-radius: 50%; }
+
+/* Wishlist Label Specifics */
+.filter-option:hover .wishlist-label { color: #fff; }
+.filter-option input:checked ~ .wishlist-label { color: #fff; }
+.filter-option input:checked ~ .wishlist-label svg {
+    fill: var(--danger); stroke: var(--danger);
+    filter: drop-shadow(0 0 5px rgba(255, 59, 59, 0.5));
+}
 
 /* --- Badges --- */
 .badge-new {
@@ -160,1947 +212,1222 @@ img { max-width: 100%; display: block; height: auto; }
     text-transform: uppercase; z-index: 2;
 }
 
+/* --- Toast Notification (Top Style) --- */
+.toast {
+    position: fixed; top: 30px; left: 50%;
+    transform: translateX(-50%) translateY(-200%);
+    background: rgba(10, 10, 10, 0.85); 
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    color: #fff; padding: 16px 35px; min-width: 320px; text-align: center;
+    border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.3); border-top: 3px solid var(--accent);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 15px rgba(255, 215, 0, 0.15); 
+    z-index: var(--z-toast); opacity: 0; pointer-events: none;
+    font-family: var(--font-heading); font-size: 0.85rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
 /* =========================================
    5. LAYOUT: HEADER & FOOTER
    ========================================= */
 header {
     background: rgba(5, 5, 5, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border-bottom: var(--border-light);
     padding: 20px 5%;
-    position: sticky; top: 0; 
-    z-index: var(--z-sticky);
-    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: var(--z-sticky);
+    display: flex; justify-content: space-between; align-items: center; gap: 15px;
 }
 
 .logo { 
-    font-family: var(--font-heading); 
-    font-size: 1.8rem; 
-    letter-spacing: 2px; 
-    text-transform: uppercase; 
+    font-family: var(--font-heading); font-size: 1.8rem; 
+    letter-spacing: 2px; text-transform: uppercase; 
     display: flex; align-items: center;
 }
 .logo span { color: var(--accent); }
-.logo-svg { width: 32px; height: 32px; margin-right: 10px; fill: var(--text-main); transition: 0.3s; }
 .logo:hover .logo-svg { fill: var(--accent); }
 
-.nav-links { display: flex; gap: 40px; }
-.nav-item { 
-    font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; color: var(--text-muted); 
-    text-transform: uppercase; position: relative; padding: 5px 0;
+/* Icons & User Menu */
+header > div:last-child { display: flex; gap: 20px; align-items: center; }
+#user-account-btn { cursor: pointer; display: flex; align-items: center; gap: 5px; color: var(--text-main); transition: 0.3s; }
+#user-account-btn:hover { color: var(--accent); }
+#user-name-display { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; color: var(--accent); }
+
+/* Hamburger Menu & Popup */
+.hamburger-btn { cursor: pointer; color: var(--text-main); padding: 5px; }
+.nav-popup {
+    display: none; position: absolute; top: 100%; left: 20px; width: 180px;
+    background: #111; border: 1px solid var(--accent); border-radius: 8px;
+    padding: 5px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999;
 }
-.nav-item::before { 
-    content:''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; 
-    background: var(--accent); transition: 0.4s ease;
+.nav-popup.active { display: block; animation: fadeIn 0.2s ease-out; }
+.nav-item-popup {
+    display: block; padding: 12px 20px; color: #fff;
+    font-size: 0.9rem; font-weight: 600; text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-.nav-item:hover::before, .nav-item.active::before { width: 100%; }
-.nav-item:hover, .nav-item.active { color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+.nav-item-popup:last-child { border-bottom: none; }
+.nav-item-popup:hover { background: rgba(255, 215, 0, 0.1); color: var(--accent); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+.nav-links { display: none !important; /* Hide old nav */ }
+
+/* User Dropdown */
+.user-dropdown {
+    position: absolute; top: 100%; right: 0; width: 200px;
+    background: #111; border: 1px solid var(--border-light); border-radius: 8px;
+    padding: 10px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    opacity: 0; pointer-events: none; transform: translateY(-10px); transition: 0.3s;
+    z-index: 5000;
+}
+.user-dropdown.active { opacity: 1; pointer-events: auto; transform: translateY(10px); }
+.user-menu-item {
+    padding: 12px 20px; color: #fff; font-size: 0.85rem; cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px;
+}
+.user-menu-item:hover { background: rgba(255, 215, 0, 0.1); color: var(--accent); }
+.user-menu-item:last-child { border-bottom: none; color: var(--danger); }
 
 /* =========================================
-   6. SECTIONS: HERO, SHOP, ABOUT
+   6. PAGES: HOME, ABOUT, SHOP
    ========================================= */
 
-/* Hero Section */
+/* --- Hero Section (Home) --- */
 .hero-section {
-    min-height: 95vh;
-    position: relative;
+    min-height: 95vh; position: relative;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    text-align: center;
-    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+    text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
     overflow: hidden;
 }
 .hero-bg {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: url('https://images.unsplash.com/photo-1550974639-6264d1421fce?auto=format&fit=crop&q=80') center/cover no-repeat;
-    opacity: 0.4; filter: grayscale(100%) contrast(1.2);
-    z-index: 0; transform: scale(1.1);
+    opacity: 0.4; filter: grayscale(100%) contrast(1.2); z-index: 0; transform: scale(1.1);
 }
 .hero-content { position: relative; z-index: 2; padding: 0 20px; }
 .hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(3rem, 10vw, 8rem);
-    line-height: 0.9;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-    color: transparent;
+    font-family: var(--font-heading); font-size: clamp(3rem, 10vw, 8rem); line-height: 0.9;
+    text-transform: uppercase; margin-bottom: 30px; color: transparent;
     -webkit-text-stroke: 1px rgba(255,255,255,0.3);
 }
-.hero-title span {
-    display: block; color: var(--text-main);
-    text-shadow: 0 0 30px rgba(0,0,0,0.8);
-    -webkit-text-stroke: 0;
-}
-.hero-desc {
-    font-size: 1.1rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 40px;
-    font-weight: 300; letter-spacing: 0.5px;
-}
+.hero-title span { display: block; color: var(--text-main); text-shadow: 0 0 30px rgba(0,0,0,0.8); -webkit-text-stroke: 0; }
+.hero-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 40px; font-weight: 300; }
 
-/* Shop Layout */
+/* --- About Page --- */
+.about-hero { padding: 100px 5%; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: var(--container-width); margin: 0 auto; padding: 80px 5%; align-items: center; }
+.about-text h2 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 20px; color: var(--accent); }
+.about-img-element { width: 100%; border-radius: 16px; border: 1px solid var(--border-light); display: block; }
+
+/* --- Shop Layout --- */
+.search-section-wrapper { padding: 10px 5% 0 5%; max-width: 1440px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 .shop-container { display: flex; gap: 50px; padding: 10px 5%; max-width: var(--container-width); margin: 0 auto; }
 .product-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
 
 /* Sidebar Filter */
 .sidebar-filter {
-    width: 280px; flex-shrink: 0;
-    position: sticky; top: 100px; height: fit-content;
+    width: 280px; flex-shrink: 0; position: sticky; top: 100px; height: fit-content;
     padding: 20px; border-right: var(--border-light);
-    background: rgba(255,255,255,0.02);
-    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.02); border-radius: var(--radius-md);
 }
 .filter-title { font-family: var(--font-heading); font-size: 0.9rem; margin-bottom: 25px; color: var(--accent); }
-.filter-option {
-    display: block; position: relative; padding-left: 30px; margin-bottom: 15px;
-    cursor: pointer; color: var(--text-muted); transition: 0.3s;
-}
-.filter-option:hover { color: var(--text-main); }
-.filter-option input { position: absolute; opacity: 0; cursor: pointer; }
 
 /* Product Card */
 .product-card {
-    background: var(--bg-surface);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    position: relative;
-    border: 1px solid transparent;
+    background: var(--bg-surface); border-radius: var(--radius-md); overflow: hidden;
+    position: relative; border: 1px solid transparent;
     transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .product-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-
 .product-img-wrapper { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; }
 .product-img { width: 100%; height: 100%; object-fit: cover; transition: 0.7s; filter: grayscale(20%); }
 .product-card:hover .product-img { transform: scale(1.1); filter: grayscale(0%); }
-
 .card-overlay {
     position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
     background: linear-gradient(to top, #000, transparent);
     transform: translateY(100%); transition: 0.4s;
 }
 .product-card:hover .card-overlay { transform: translateY(0); }
-
 .product-info { padding: 20px; }
 .product-category { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 .product-title { font-size: 1.1rem; font-weight: 600; margin: 5px 0; }
 .product-price { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
 .old-price { color: #666; text-decoration: line-through; font-size: 0.9rem; margin-right: 8px; }
 
-/* About Page */
-.about-hero { padding: 100px 5%; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: var(--container-width); margin: 0 auto; padding: 80px 5%; align-items: center; }
-.about-text h2 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 20px; color: var(--text-main); }
-
 /* =========================================
-   7. MODULES: CART SIDEBAR & MODALS
+   7. MODALS & SIDEBARS
    ========================================= */
+
+/* --- Modal Base --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-overlay); backdrop-filter: blur(8px);
+    z-index: var(--z-modal); display: flex; justify-content: center; align-items: center;
+    opacity: 0; pointer-events: none; transition: 0.3s;
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+.checkout-modal, .variant-box {
+    background: #111; border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+    position: relative; transform: translateY(20px); transition: 0.3s;
+}
+.modal-overlay.active .checkout-modal, .modal-overlay.active .variant-box { transform: translateY(0); }
+
+/* Universal Close Button (Top Right Fix) */
+.close-modal-variant, .close-modal {
+    position: absolute !important; 
+    top: 15px !important; 
+    right: 15px !important;
+    left: auto !important;
+    transform: none !important;
+    background: rgba(255,255,255,0.05) !important; 
+    border: none !important; 
+    color: #fff !important;
+    font-size: 1.5rem !important; 
+    width: 35px !important; 
+    height: 35px !important;
+    border-radius: 50% !important;
+    display: flex !important; justify-content: center !important; align-items: center !important;
+    cursor: pointer !important; z-index: 100 !important; padding: 0 !important;
+}
+.close-modal-variant:hover, .close-modal:hover { 
+    background: var(--danger) !important; 
+    transform: scale(1.1) !important; 
+}
+
+/* --- Specific Modals --- */
+
+/* 1. Product Variant Modal (PC: Row, Mobile: Column) */
+#variant-modal .variant-box {
+    max-width: 800px; width: 90%; height: 85vh; max-height: 700px;
+    padding: 30px; display: flex; gap: 30px; overflow: hidden;
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;
+}
+.product-gallery { flex: 0 0 45%; display: flex; flex-direction: column; }
+.main-img-frame { width: 100%; aspect-ratio: 1/1; max-height: 350px; border-radius: 8px; overflow: hidden; border: 1px solid #333; margin-bottom: 10px; }
+.main-img-display { width: 100%; height: 100%; object-fit: contain; }
+.thumb-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+.thumb-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 2px solid transparent; opacity: 0.6; transition: 0.2s; }
+.thumb-img:hover, .thumb-img.active { border-color: var(--accent); opacity: 1; }
+
+.product-details-col { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding-right: 10px; }
+.variant-title { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+.option-label { display: block; color: #888; font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; margin-bottom: 10px; }
+
+/* Selectors */
+.size-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+.size-btn {
+    min-width: 50px; height: 45px; background: transparent; border: 1px solid #444; color: #fff;
+    border-radius: 4px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.size-btn.active { background: #fff; color: #000; border-color: #fff; font-weight: 800; }
+.color-grid { display: flex; gap: 15px; }
+.color-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #333; cursor: pointer; position: relative; }
+.color-btn.active { border-color: transparent; transform: scale(1.1); }
+.color-btn.active::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--accent); }
+
+/* Qty Control */
+.qty-control-large {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #000; border: 1px solid #333; border-radius: 8px;
+    padding: 5px; width: 160px; height: 50px;
+}
+.qty-btn-large { width: 45px; height: 100%; background: #1a1a1a; color: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+.qty-btn-large:hover { background: #333; color: var(--accent); }
+#modal-qty { font-size: 1.2rem; font-weight: 700; color: #fff; width: 40px; text-align: center; }
+
+/* Reviews */
+.review-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+.review-list { max-height: 150px; overflow-y: auto; margin-bottom: 15px; }
+.review-item { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem; }
+.review-form { display: flex; gap: 10px; }
+.btn-submit-review { background: #333; color: #fff; padding: 0 15px; border-radius: 4px; }
+
+/* 2. Login, History, Customer Modals (Vertical Layout Fix) */
+#auth-modal .variant-box, #history-modal .variant-box, #customer-modal .variant-box {
+    display: block !important; max-width: 500px; width: 90%; padding: 30px;
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;
+    max-height: 85vh; overflow-y: auto;
+}
+#auth-modal .variant-box { text-align: center; max-width: 420px; }
+#history-modal .variant-box > div:first-child,
+#customer-modal .variant-box > div:first-child { 
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%;
+}
+
+/* 3. Payment Modal (Compact) */
+#payment-modal .variant-box { max-width: 400px; width: 90%; text-align: center; padding: 25px 20px; display: block !important; }
+.payment-methods { display: flex; gap: 10px; margin-bottom: 20px; }
+.pay-method-btn { flex: 1; padding: 10px; background: #111; border: 1px solid #333; border-radius: 8px; color: #888; font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.pay-method-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(255, 215, 0, 0.05); }
+.qr-img { width: 120px; height: 120px; background: #fff; padding: 5px; margin: 0 auto 10px; border-radius: 8px; }
 
 /* --- Cart Sidebar --- */
 .cart-sidebar {
-    position: fixed; top: 0; right: -100%; 
-    width: 100%; max-width: 400px; height: 100vh; 
-    background: #0a0a0a;
-    border-left: var(--border-light);
-    box-shadow: -10px 0 50px rgba(0,0,0,0.8);
-    z-index: var(--z-drawer);
-    transition: 0.4s ease;
-    display: flex; flex-direction: column;
+    position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh;
+    background: #0a0a0a; border-left: var(--border-light); box-shadow: -10px 0 50px rgba(0,0,0,0.8);
+    z-index: var(--z-drawer); transition: 0.4s ease; display: flex; flex-direction: column;
 }
-.cart-header { padding: 30px; border-bottom: var(--border-light); display: flex; justify-content: space-between; align-items: center; }
+.cart-header { padding: 30px; border-bottom: var(--border-light); }
+.cart-header > div { width: 100%; display: flex; justify-content: space-between; align-items: center; }
 .cart-footer { padding: 30px; background: #050505; border-top: var(--border-light); }
-
-/* Advanced Cart Items */
 .cart-item {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px; padding: 15px; margin-bottom: 15px; display: flex; gap: 15px; align-items: flex-start;
 }
-.cart-checkbox { width: 18px; height: 18px; margin-top: 5px; accent-color: var(--accent); cursor: pointer; }
-.cart-img { width: 70px; height: 90px; object-fit: cover; border-radius: 4px; }
-.cart-details { flex: 1; }
-.cart-name { font-weight: 700; font-size: 0.95rem; line-height: 1.2; margin-bottom: 5px; }
-
-/* --- Modals (Universal) --- */
-.modal-overlay, .variant-modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--bg-overlay); backdrop-filter: blur(8px);
-    z-index: var(--z-modal);
-    display: flex; justify-content: center; align-items: center;
-    opacity: 0; pointer-events: none; transition: 0.3s;
-}
-.modal-overlay.active, .variant-modal-overlay.active { opacity: 1; pointer-events: auto; }
-
-.checkout-modal, .variant-box {
-    background: #111;
-    border: 1px solid var(--accent);
-    width: 90%; max-width: 500px;
-    padding: 30px;
-    border-radius: var(--radius-md);
-    box-shadow: 0 0 50px rgba(0,0,0,0.8);
-    transform: translateY(20px); transition: 0.3s;
-    position: relative;
-}
-.modal-overlay.active .checkout-modal, .variant-modal-overlay.active .variant-box { transform: translateY(0); }
-
-/* Quick Shop Modal Specifics */
-.variant-title { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-.option-group { margin-bottom: 20px; }
-.option-label { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; }
-
-.size-grid { display: flex; gap: 10px; flex-wrap: wrap; }
-.size-btn {
-    border: 1px solid #444; background: #000; color: #fff;
-    width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
-    cursor: pointer; transition: 0.2s; border-radius: 4px;
-}
-.size-btn.selected { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
-
-.color-grid { display: flex; gap: 10px; }
-.color-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
-.color-btn.selected { border-color: var(--accent); transform: scale(1.2); box-shadow: 0 0 10px var(--accent-glow); }
-
-.modal-actions { margin-top: 25px; display: flex; gap: 10px; }
-.btn-cancel { flex: 1; padding: 12px; background: #333; color: #fff; border-radius: 4px; font-weight: bold; }
-.btn-confirm { flex: 2; padding: 12px; background: var(--accent); color: #000; font-weight: bold; border-radius: 4px; }
-
+.coupon-section { padding: 15px 20px; background: #0e0e0e; border-top: 1px solid rgba(255,255,255,0.1); }
+.coupon-input-group { display: flex; gap: 10px; margin-top: 10px; }
+.btn-apply { background: #333; color: #fff; padding: 0 15px; font-size: 0.8rem; border-radius: 4px; }
 
 /* =========================================
-   8. RESPONSIVE & MOBILE FIXES (UPDATED)
+   8. ADMIN DASHBOARD STYLES
+   ========================================= */
+.admin-container { display: flex; min-height: 100vh; }
+.admin-sidebar { width: 250px; background: #0a0a0a; border-right: 1px solid rgba(255,255,255,0.1); padding: 30px; display: flex; flex-direction: column; }
+.admin-nav { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.admin-link { padding: 12px 15px; color: #888; border-radius: 6px; font-weight: 600; transition: 0.3s; }
+.admin-link:hover, .admin-link.active { background: rgba(255,255,255,0.05); color: var(--accent); }
+
+.admin-content { flex: 1; padding: 40px; overflow-y: auto; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+/* Dashboard Widgets */
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.stat-card { background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 25px; display: flex; align-items: center; gap: 20px; transition: 0.3s; }
+.stat-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.stat-icon { width: 60px; height: 60px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; }
+.stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; font-family: var(--font-heading); }
+
+.dashboard-widgets { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-top: 20px; }
+.widget-box { background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; height: 100%; }
+.widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+/* Data Tables */
+.table-container { background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.data-table th { background: #1a1a1a; color: var(--text-muted); padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+.data-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ccc; vertical-align: middle; }
+.admin-img-thumb { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid #333; }
+
+/* Top Products Bar */
+.top-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+.top-bar-bg { width: 100%; height: 4px; background: #222; border-radius: 2px; margin-top: 5px; overflow: hidden; }
+.top-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+
+/* =========================================
+   9. RESPONSIVE / MOBILE STYLES
    ========================================= */
 
 @media (max-width: 1024px) {
     .shop-container { flex-direction: column; }
-    /* ปรับ Sidebar บน Tablet/Mobile ให้เต็มจอ */
-    .sidebar-filter { width: 100% !important; border-right: none; margin-bottom: 20px; position: relative; }
+    .sidebar-filter { width: 100%; border-right: none; margin-bottom: 20px; position: relative; border-radius: var(--radius-sm); }
+}
+
+@media (max-width: 900px) {
+    .dashboard-widgets { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
-    /* 1. แก้หน้าจอเลื่อนแนวนอน (Horizontal Scroll) */
-    html, body {
-        width: 100%;
-        overflow-x: hidden;
-    }
-
-    /* 2. แก้ Header ล้นจอ */
-    header {
-        padding: 15px 20px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    .logo { font-size: 1.4rem; }
-
-    /* 3. แก้เมนู Hamburger ให้ทำงานถูกต้อง */
-    .nav-links {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-        background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
-        flex-direction: column; justify-content: center; align-items: center;
-        z-index: 2000; transform: translateY(-100%); transition: 0.4s; opacity: 0;
-    }
-    .nav-links.active { transform: translateY(0); opacity: 1; }
-    .mobile-close { display: block !important; }
-    .nav-item { font-size: 1.5rem; margin: 15px 0; }
-
-    /* 4. แก้หน้า Shop (Sort Bar ล้นจอ) -> ตัวสำคัญที่ทำให้ต้องซูม */
-    .shop-container main .reveal-on-scroll {
-        flex-wrap: wrap !important; /* บังคับตัดบรรทัด */
-        gap: 15px;
-    }
-    #sort-select { width: 100%; margin-top: 5px; } /* Dropdown เต็มจอ */
-    .shop-container { padding: 30px 15px; width: 100%; box-sizing: border-box; }
-
-    /* 5. แก้ตารางสินค้า (2 คอลัมน์) */
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px !important;
-    }
-    .product-card { border-radius: 8px; }
-    .product-info { padding: 10px; }
-    .product-title { font-size: 0.9rem; margin: 5px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .product-price { font-size: 1rem; }
-    .btn-icon { padding: 8px; font-size: 0.7rem; }
-
-    /* 6. แก้ตะกร้าตกขอบ */
-    .cart-sidebar {
-        height: 100vh !important;
-        position: fixed !important;
-        top: 0 !important; right: -100%;
-        width: 85% !important;
-        z-index: 9999 !important;
-    }
-    #cart-items { flex: 1; overflow-y: auto; padding-bottom: 20px; }
-
-    /* ปรับปุ่ม Add to Cart บนมือถือ */
-    .card-overlay {
-        background: rgba(0,0,0,0.6);
-        transform: translateY(0); padding: 0;
-        display: flex; justify-content: center; align-items: center;
-        bottom: 10px; left: 10px; right: 10px; width: auto; height: auto;
-        border-radius: 4px;
-    }
-    .btn-icon { width: 100%; text-align: center; }
-}
-
-/* =========================================
-   BUG FIXES: COLORS & VISIBILITY
-   ========================================= */
-/* แก้ Dropdown (Sort By) มองไม่เห็นตัวหนังสือ */
-select { background-color: #111 !important; color: #fff !important; }
-select option { background-color: #111 !important; color: #fff !important; padding: 10px; }
-/* ป้องกัน Input อื่นๆ สีเพี้ยน */
-input, textarea { background-color: rgba(255, 255, 255, 0.05) !important; color: #fff !important; }
-
-/* =========================================
-   MOBILE & UI FIXES (FINAL PATCH)
-   วางต่อท้ายสุดของไฟล์ style.css
-   ========================================= */
-
-/* --- 1. แก้ปุ่มกากบาทในหน้า Checkout (ให้เป็นสีขาวและชิดมุม) --- */
-.close-modal {
-    position: absolute !important;
-    top: 15px !important;
-    right: 15px !important;
-    color: #ffffff !important; /* เปลี่ยนเป็นสีขาว */
-    background: transparent !important;
-    font-size: 1.8rem !important;
-    cursor: pointer;
-    z-index: 10;
-    line-height: 1;
-    width: 30px; height: 30px;
-    display: flex; align-items: center; justify-content: center;
-}
-.close-modal:hover { color: var(--accent) !important; transform: scale(1.1); }
-
-/* --- 2. แก้ปุ่มกากบาทในหน้า Cart Sidebar (ให้ชิดขวาและอยู่บรรทัดเดียวกับหัวข้อ) --- */
-.cart-header > div {
-    width: 100%; /* บังคับให้กล่องข้างในกว้างเต็ม 100% */
-    display: flex;
-    justify-content: space-between; /* ดันข้อความกับปุ่มกากบาทไปคนละฝั่ง */
-    align-items: center;
-}
-
-/* --- 3. จัดการ Layout มือถือ (แก้หน้าจอเลื่อน/ซูม และเมนู) --- */
-@media (max-width: 768px) {
-    /* ป้องกันหน้าจอเลื่อนซ้ายขวา */
-    html, body {
-        width: 100%;
-        overflow-x: hidden;
-    }
-
-    /* จัด Header ให้แน่นและสวยงาม */
-    header {
-        padding: 15px 20px;
-        flex-wrap: nowrap !important; /* ห้ามตัดบรรทัด */
-        gap: 15px;
-        justify-content: space-between;
-    }
-
-    /* ปรับขนาด Logo */
+    /* --- Base Layout --- */
+    html, body { width: 100%; overflow-x: hidden; }
+    
+    /* --- Header --- */
+    header { padding: 15px 20px; justify-content: space-between; gap: 10px; }
     .logo { font-size: 1.4rem; white-space: nowrap; }
+    #user-name-display { display: none !important; } /* Hide user name on mobile */
 
-    /* เมนู Hamburger (3 ขีด) */
-    .hamburger {
-        display: block !important; /* โชว์ปุ่มเมนู */
-        font-size: 1.5rem;
-        z-index: 2001; /* อยู่เหนือทุกอย่าง */
-    }
+    /* --- Navigation (Hamburger) --- */
+    .nav-links { display: none; } /* Ensure old nav is hidden */
+    
+    /* --- Shop Page --- */
+    .search-section-wrapper { padding: 15px 15px 0 15px !important; margin-bottom: -25px; }
+    .shop-container { padding: 0 15px; margin-top: 0; }
+    .shop-container main .reveal-on-scroll { flex-wrap: wrap; gap: 10px; }
+    #sort-select { width: 100%; margin-top: 5px; background: #111; color: #fff; }
+    
+    /* Sidebar Filter (Mobile) */
+    .sidebar-filter { padding: 0 15px; margin-bottom: 40px; background: transparent; border: none; }
+    .filter-title:first-child { margin-top: -35px; margin-bottom: 15px; }
 
-    /* เมนู Nav Links (Home/Shop/About) เมื่อเปิดบนมือถือ */
-    .nav-links {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100vh;
-        background: rgba(0,0,0,0.95); /* พื้นหลังดำทึบ */
-        backdrop-filter: blur(10px);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-        transform: translateY(-100%); /* ซ่อนไว้ข้างบน */
-        transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-        opacity: 0;
-        pointer-events: none; /* ห้ามกดถ้ายังไม่เปิด */
-    }
-
-    /* เมื่อกดเปิดเมนู */
-    .nav-links.active {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .nav-item {
-        font-size: 1.8rem; /* ตัวหนังสือใหญ่ขึ้น */
-        margin: 20px 0;
-        font-weight: 800;
-    }
-
-    /* ปุ่มปิดเมนู (X) ใน Nav Links */
-    .mobile-close {
-        display: block !important;
-        position: absolute;
-        top: 20px; right: 20px;
-        color: #fff;
-        font-size: 2rem;
-    }
-
-    /* --- หน้า Shop (แก้ Sort Bar ล้นจอ) --- */
-    .shop-container main .reveal-on-scroll {
-        flex-wrap: wrap !important;
-        gap: 10px;
-    }
-    #sort-select { width: 100%; margin-top: 5px; background: #111; color: #fff; } 
-    .shop-container { padding: 20px 15px; width: 100%; }
-
-    /* --- ตารางสินค้า (2 คอลัมน์) --- */
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
-    }
-    .product-card { border-radius: 8px; }
+    /* Product Grid (2 Columns) */
+    .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
     .product-title { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .product-price { font-size: 0.95rem; }
+    .card-overlay { 
+        background: rgba(0,0,0,0.6); transform: translateY(0); padding: 0; 
+        bottom: 10px; left: 5px; right: 5px; width: auto; border-radius: 4px;
+        display: flex; justify-content: center; align-items: center;
+    }
+    .btn-icon { width: 100%; text-align: center; padding: 8px; font-size: 0.7rem; }
+
+    /* --- About Page --- */
+    .about-hero { min-height: 30vh; padding: 60px 20px 20px; align-items: flex-end; }
+    .hero-title { font-size: 2.8rem; }
+    .about-grid { display: flex; flex-direction: column; padding: 30px 20px 60px; gap: 25px; }
+    .about-image, .about-img-element { width: 100%; }
+    .about-img-element { height: 450px; object-fit: cover; object-position: top center; }
+    .about-text h2 { font-size: 1.5rem; text-align: center; }
+    .about-text p { text-align: justify; font-size: 0.95rem; }
+
+    /* --- Cart Sidebar --- */
+    .cart-sidebar { width: 85%; max-width: none; z-index: 9999; }
     
-    /* --- ตะกร้าสินค้า (Cart Sidebar) --- */
-    .cart-sidebar {
-        width: 85% !important;
-        max-width: none;
-    }
-    
-    /* --- Checkout Modal (จัดระเบียบแบบฟอร์ม) --- */
-    .checkout-modal {
-        width: 95% !important;
-        padding: 25px 20px;
-        max-height: 85vh;
-        overflow-y: auto;
-    }
-}
-/* =========================================
-   IMPROVED VARIANT MODAL (UX UPDATE)
-   วางต่อท้ายสุดของไฟล์ style.css
-   ========================================= */
-
-/* ปรับขนาดกล่อง Modal ให้กระชับ */
-.variant-box {
-    max-width: 400px !important;
-    background: #111 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.9) !important;
-    padding: 25px !important;
-}
-
-/* หัวข้อตัวเลือก (SIZE, COLOR, QTY) */
-.option-label {
-    display: block;
-    color: #888;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    margin-bottom: 10px;
-}
-
-/* ปุ่มปิด Modal เฉพาะหน้า Variant */
-.close-modal-variant {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    line-height: 1;
-    padding: 5px;
-}
-.close-modal-variant:hover { color: var(--accent); }
-
-/* --- 1. Size Selectors (ปุ่มใหญ่ขึ้น) --- */
-.size-grid {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-.size-btn {
-    min-width: 50px;
-    height: 45px;
-    background: transparent;
-    border: 1px solid #444;
-    color: #fff;
-    font-family: var(--font-body);
-    font-weight: 500;
-    font-size: 0.9rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex; align-items: center; justify-content: center;
-}
-.size-btn:hover { border-color: #fff; }
-.size-btn.active {
-    background: #fff;
-    color: #000;
-    border-color: #fff;
-    font-weight: 800;
-    box-shadow: 0 0 15px rgba(255,255,255,0.2);
-}
-
-/* --- 2. Color Selectors (วงกลมชัดขึ้น) --- */
-.color-grid {
-    display: flex;
-    gap: 15px;
-}
-.color-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid #333; /* กรอบปกติ */
-    position: relative;
-    transition: 0.2s;
-}
-.color-btn::after {
-    /* สร้างวงแหวนซ้อนเมื่อเลือก */
-    content: '';
-    position: absolute;
-    top: -4px; left: -4px; right: -4px; bottom: -4px;
-    border-radius: 50%;
-    border: 1px solid transparent;
-    transition: 0.2s;
-}
-.color-btn.active {
-    border-color: transparent;
-    transform: scale(1.1);
-}
-.color-btn.active::after {
-    border-color: var(--accent); /* วงแหวนสีทอง */
-}
-
-/* --- 3. Quantity Control (แบบใหม่ ใช้ง่าย) --- */
-.qty-control-large {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #000;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 5px;
-    width: 160px; /* ความกว้างคงที่ */
-    height: 50px;
-}
-
-.qty-btn-large {
-    width: 45px;
-    height: 100%;
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: 0.2s;
-}
-.qty-btn-large:hover { background: #333; color: var(--accent); }
-.qty-btn-large:active { transform: scale(0.95); }
-
-#modal-qty {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #fff;
-    width: 40px;
-    text-align: center;
-}
-
-/* ปุ่ม ADD TO CART ให้เด่นสุด */
-.btn-add-confirm {
-    width: 100%;
-    height: 55px;
-    font-size: 1rem;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-.btn-add-confirm:hover {
-    background: #fff;
-    box-shadow: 0 0 20px var(--accent-glow);
-}
-/* =========================================
-   MOBILE FIXES V2 (Paste at bottom of style.css)
-   ========================================= */
-
-@media (max-width: 768px) {
-    /* 1. เมนู Hamburger ในหน้า Shop */
-    .hamburger { display: block !important; z-index: 2001; }
-    
-    /* 2. ลดขนาด Modal เลือกไซส์ (Variant Box) */
-    .variant-box {
-        width: 85% !important;
-        max-width: 320px !important; /* บังคับไม่ให้กว้างเกินมือถือ */
-        padding: 20px !important;
-    }
-    
-    /* ปรับปุ่มใน Modal ให้เล็กลง */
-    .size-btn { width: 35px; height: 35px; font-size: 0.8rem; }
-    .color-btn { width: 30px; height: 30px; }
-    .qty-control-large { width: 110px; height: 40px; }
-    .qty-btn-large { width: 35px; }
-    .btn-add-confirm { height: 45px; font-size: 0.9rem; }
-
-    /* 3. Checkout Modal (ป้องกันล้นจอ) */
-    .checkout-modal {
-        max-height: 80vh; /* สูงสุด 80% ของจอ */
-        display: flex;
-        flex-direction: column;
-    }
-    /* ให้รายการข้างในเลื่อนได้ (ถ้ามี Class custom-scroll) */
-    .custom-scroll {
-        -webkit-overflow-scrolling: touch;
-    }
-}
-
-/* จัด Header ให้ปุ่มอยู่ซ้ายขวาตามต้องการ */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative; /* สำคัญ! */
-    z-index: 1000;
-}
-
-/* ปุ่ม 3 ขีด (Hamburger) */
-.hamburger-btn {
-    cursor: pointer;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    padding: 5px;
-}
-
-/* กล่องเมนู Popup (อยู่ซ้ายล่างของ Header) */
-.nav-popup {
-    display: none; /* ซ่อนไว้ก่อน */
-    position: absolute;
-    top: 100%;      /* ต่อจากขอบล่าง Header */
-    left: 20px;     /* ชิดซ้าย */
-    width: 180px;   /* กว้างแค่นิดเดียว */
-    background: #111;
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 5px 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    z-index: 9999;
-}
-
-/* เมื่อมี class active ให้แสดงผล */
-.nav-popup.active {
-    display: block !important;
-    animation: fadeIn 0.2s ease-out;
-}
-
-/* Animation เล็กน้อย */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* รายการในเมนู */
-.nav-item-popup {
-    display: block;
-    padding: 12px 20px;
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.nav-item-popup:last-child { border-bottom: none; }
-.nav-item-popup:hover {
-    background: rgba(255, 215, 0, 0.1);
-    color: var(--accent);
-}
-
-/* ซ่อน Nav แบบเก่าถาวร */
-.nav-links { display: none !important; }
-
-/* ปรับระยะห่างไอคอนใน Header */
-header > div {
-    gap: 15px;
-}
-
-#user-account-btn svg {
-    width: 24px; 
-    height: 24px; 
-    fill: currentColor;
-    transition: 0.3s;
-}
-
-#user-account-btn:hover svg {
-    fill: var(--accent);
-    filter: drop-shadow(0 0 5px var(--accent-glow));
-}
-
-#user-name-display {
-    text-transform: uppercase;
-    color: var(--accent);
-    letter-spacing: 1px;
-}
-
-/* ซ่อนชื่อคนถ้าจอเล็กเกินไป (โชว์แต่ไอคอน) */
-@media (max-width: 400px) {
-    #user-name-display { display: none !important; }
-}
-
-#user-account-btn {
-    transition: 0.3s;
-}
-#user-account-btn:hover {
-    color: var(--accent) !important;
-}   
-/* =========================================
-   V7 UPGRADES: USER MENU, HISTORY, EMPTY CART
-   ========================================= */
-
-/* 1. User Dropdown Menu (เมนูเล็กๆ ใต้รูปคน) */
-.user-dropdown {
-    position: absolute;
-    top: 100%; right: 0;
-    width: 200px;
-    background: #111;
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 10px 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    opacity: 0; pointer-events: none; transform: translateY(-10px);
-    transition: 0.3s;
-    z-index: 5000;
-}
-.user-dropdown.active {
-    opacity: 1; pointer-events: auto; transform: translateY(10px);
-}
-.user-menu-item {
-    padding: 12px 20px;
-    color: #fff;
-    font-size: 0.85rem;
-    cursor: pointer;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    display: flex; align-items: center; gap: 10px;
-}
-.user-menu-item:hover { background: rgba(255, 215, 0, 0.1); color: var(--accent); }
-.user-menu-item:last-child { border-bottom: none; color: var(--danger); }
-
-/* 2. Empty Cart State (หน้าตาตอนตะกร้าว่าง) */
-.empty-cart-state {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    height: 100%; text-align: center; color: var(--text-muted);
-}
-.empty-cart-icon {
-    font-size: 3rem; margin-bottom: 20px; opacity: 0.3;
-}
-
-/* 3. Order History Modal (หน้าประวัติ) */
-.order-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 8px;
-    padding: 15px; margin-bottom: 15px;
-}
-.order-header {
-    display: flex; justify-content: space-between;
-    font-size: 0.8rem; color: var(--text-muted);
-    margin-bottom: 10px; padding-bottom: 10px;
-    border-bottom: 1px dashed rgba(255,255,255,0.1);
-}
-.order-item-row {
-    display: flex; gap: 10px; margin-bottom: 8px;
-}
-.status-badge {
-    padding: 3px 8px; border-radius: 4px;
-    background: rgba(46, 204, 113, 0.2); color: #2ecc71;
-    font-size: 0.7rem; font-weight: bold;
-}
-/* =========================================
-   FINAL MOBILE LAYOUT FIX (CLEAN VERSION)
-   ========================================= */
-
-/* 1. จัดระเบียบกล่องค้นหา (Search Wrapper) */
-.search-section-wrapper {
-    padding: 10px 5% 0 5%;
-    max-width: 1440px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* 2. การแสดงผลเฉพาะมือถือ (Mobile Only) */
-@media (max-width: 768px) {
-    
-    /* กล่องค้นหา: ลดขอบล่างให้ชิดที่สุด */
-    .search-section-wrapper {
-        padding: 15px 15px 0 15px !important; /* ล่าง 0 */
-        margin-bottom: -25px !important; /* ดึงขึ้นนิดนึงเพื่อความชิด */
-        position: relative;
-        z-index: 10;
-    }
-
-    /* กล่องสินค้าใหญ่ (Shop Container): ดึงขึ้นไปชน Search Bar */
-    .shop-container {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-
-    /* กล่อง Sidebar Filter (ที่มีคำว่า CATEGORY) */
-    .sidebar-filter {
-        padding: 0 15px !important; 
-        margin-top: 0 !important;
-        margin-bottom: 40px !important; /* [เพิ่มบรรทัดนี้] ดันกล่องข้างล่างให้ห่างออกมา */
-        border: none !important;
-        background: transparent !important;
-    }
-
-    /* หัวข้อ CATEGORY: ขยับระยะห่างให้พอดี */
-    .filter-title:first-child {
-        margin-top: -35px !important; /* ระยะห่างจาก Search Bar */
-        margin-bottom: 15px !important;
-        padding-top: 0 !important;
-    }
-    
-    /* ปรับช่อง Input ให้ดูพอดีนิ้ว */
-    #search-input {
-        padding: 12px 15px !important;
-        font-size: 0.9rem !important;
-    }
-}
-/* =========================================
-   TOAST NOTIFICATION (REDESIGN: TOP STYLE)
-   วางทับโค้ด .toast เดิมใน style.css
-   ========================================= */
-.toast {
-    position: fixed;
-    top: 30px; /* ย้ายมาอยู่ด้านบน */
-    left: 50%;
-    /* เริ่มต้นซ่อนไว้ข้างบน (ติดลบ Y) */
-    transform: translateX(-50%) translateY(-200%);
-    
-    /* ดีไซน์ใหม่: กระจกสีดำ + ขอบทองเรืองแสง */
-    background: rgba(10, 10, 10, 0.85); 
-    backdrop-filter: blur(12px);         /* เอฟเฟกต์เบลอฉากหลัง */
-    -webkit-backdrop-filter: blur(12px);
-    
-    color: #fff;
-    padding: 16px 35px;
-    min-width: 320px; /* กำหนดความกว้างขั้นต่ำให้ดูดี */
-    text-align: center;
-    
-    /* รูปทรงเหลี่ยมมน ทันสมัยกว่าวงรี */
-    border-radius: 12px; 
-    border: 1px solid rgba(255, 215, 0, 0.3); /* ขอบทองจางๆ */
-    border-top: 3px solid var(--accent);      /* เส้นเน้นสีทองด้านบน */
-    
-    /* แสงเงา Glow */
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6), 
-                0 0 15px rgba(255, 215, 0, 0.15); 
-    
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    
-    /* Typography */
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    
-    /* Animation แบบเด้ง (Bouncy) */
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* เมื่อมี Class show ให้เด้งลงมา */
-.toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-/* =========================================
-   ABOUT PAGE MOBILE FIX
-   ========================================= */
-.about-img-element {
-    width: 100%;
-    border-radius: 16px;
-    border: 1px solid var(--border-light);
-    display: block;
-}
-
-@media (max-width: 768px) {
-    /* 1. ส่วนหัวข้อ (Beyond Reality) ลดความสูงลง */
-    .about-hero {
-        min-height: 30vh !important; /* ลดความสูงลง */
-        padding: 60px 20px 20px 20px !important;
-        display: flex;
-        align-items: flex-end; /* ให้ตัวหนังสืออยู่ด้านล่าง */
-        justify-content: center;
-    }
-    
-    .hero-title {
-        font-size: 2.8rem !important;
-        margin-bottom: 0 !important;
-        line-height: 1 !important;
-    }
-
-    /* 2. จัด Layout เนื้อหาใหม่ */
-    .about-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 30px 20px 60px 20px !important;
-        gap: 25px !important;
-    }
-
-    /* 3. แก้ไขรูปภาพ (สำคัญ: แก้รูปหัวขาด) */
-    .about-image {
-        width: 100% !important;
-        margin: 0 !important;
-    }
-
-    .about-img-element {
-        width: 100% !important;
-        height: 450px !important; /* กำหนดความสูงให้พอดีจอ */
-        object-fit: cover !important; /* ตัดส่วนเกินออก */
-        object-position: top center !important; /* [สำคัญ] บังคับให้โฟกัสที่ "ด้านบน" (หัวคน) เสมอ */
-        box-shadow: 0 10px 40px rgba(0,0,0,0.6) !important; /* เพิ่มเงาให้รูปลอยสวย */
-        border: 1px solid var(--accent) !important; /* เปลี่ยนขอบเป็นสีทองให้ดูแพง */
-    }
-
-    /* 4. จัดข้อความให้อ่านง่าย */
-    .about-text {
-        padding: 0 5px !important;
-    }
-    
-    .about-text h2 {
-        font-size: 1.5rem !important;
-        text-align: center; /* จัดหัวข้อกลาง */
-        margin-bottom: 20px !important;
-        color: var(--accent) !important;
-        text-transform: uppercase;
-        letter-spacing: 3px !important;
-    }
-
-    .about-text p {
-        font-size: 0.95rem !important;
-        line-height: 1.7 !important;
-        color: #ddd !important; /* สีตัวอักษรสว่างขึ้นนิดนึง */
-        text-align: justify; /* จัดชิดขอบซ้ายขวาให้อ่านสบาย */
-        margin-bottom: 20px !important;
-    }
-}
-
-/* =========================================
-   SYSTEM A: WISHLIST & COUPON STYLES
-   (Add to bottom of style.css)
-   ========================================= */
-
-/* --- 1. Wishlist Heart Button --- */
-.btn-wishlist {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(0,0,0,0.5);
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: 0.3s;
-    backdrop-filter: blur(4px);
-}
-.btn-wishlist svg {
-    width: 18px; height: 18px;
-    fill: none;
-    stroke: #fff;
-    stroke-width: 2;
-    transition: 0.3s;
-}
-.btn-wishlist:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
-
-/* สถานะกดถูกใจแล้ว (สีแดง) */
-.btn-wishlist.active svg {
-    fill: var(--danger);
-    stroke: var(--danger);
-    animation: heartBeat 0.4s;
-}
-
-@keyframes heartBeat {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
-}
-
-/* --- 2. Coupon Box in Cart Sidebar --- */
-.coupon-section {
-    padding: 15px 20px;
-    background: #0e0e0e;
-    border-top: 1px solid rgba(255,255,255,0.1);
-}
-.coupon-input-group {
-    display: flex; gap: 10px;
-    margin-top: 10px;
-}
-.coupon-input {
-    flex: 1;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.btn-apply {
-    background: #333;
-    color: #fff;
-    border: none;
-    padding: 0 15px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: 0.3s;
-}
-.btn-apply:hover { background: var(--accent); color: #000; }
-
-/* แสดงส่วนลด */
-.discount-row {
-    display: flex; justify-content: space-between;
-    font-size: 0.9rem; color: var(--danger);
-    margin-bottom: 5px;
-}
-/* =========================================
-   WISHLIST FILTER STYLE
-   (Add to bottom of style.css)
-   ========================================= */
-
-/* ปกติ: หัวใจสีจาง */
-.filter-option:hover .wishlist-label {
-    color: #fff !important; /* เมาส์ชี้แล้วสว่างขึ้น */
-}
-
-/* เมื่อติ๊กถูก: หัวใจเป็นสีแดง + ตัวหนังสือสว่าง */
-.filter-option input:checked ~ .wishlist-label {
-    color: #fff;
-}
-
-.filter-option input:checked ~ .wishlist-label svg {
-    fill: var(--danger);   /* ถมสีแดงข้างใน */
-    stroke: var(--danger); /* เส้นขอบแดง */
-    filter: drop-shadow(0 0 5px rgba(255, 59, 59, 0.5)); /* เรืองแสงนิดๆ */
-}
-
-/* =========================================
-   SYSTEM B: PRODUCT GALLERY & REVIEWS
-   (Add to bottom of style.css)
-   ========================================= */
-
-/* ขยายขนาด Modal ให้กว้างขึ้นเพื่อแบ่ง 2 ฝั่ง */
-.variant-box {
-    max-width: 900px !important; /* กว้างขึ้น */
-    width: 95% !important;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    padding: 30px !important;
-}
-
-/* --- Left Column: Gallery --- */
-.product-gallery {
-    flex: 1;
-    min-width: 300px;
-}
-.main-img-frame {
-    width: 100%;
-    aspect-ratio: 1/1; /* สี่เหลี่ยมจัตุรัส */
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    border: 1px solid #333;
-}
-.main-img-display {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: 0.3s;
-}
-.thumb-grid {
-    display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;
-}
-.thumb-img {
-    width: 60px; height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    opacity: 0.6; transition: 0.2s;
-}
-.thumb-img:hover, .thumb-img.active {
-    border-color: var(--accent);
-    opacity: 1;
-}
-
-/* --- Right Column: Details & Reviews --- */
-.product-details-col {
-    flex: 1;
-    min-width: 300px;
-    display: flex; flex-direction: column;
-}
-
-/* Review Section */
-.review-section {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-}
-.review-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 15px;
-}
-.star-rating { color: var(--accent); letter-spacing: 2px; }
-
-.review-list {
-    max-height: 150px;
-    overflow-y: auto;
-    margin-bottom: 15px;
-    padding-right: 5px;
-}
-.review-item {
-    background: rgba(255,255,255,0.03);
-    padding: 10px; border-radius: 6px;
-    margin-bottom: 8px;
-    font-size: 0.85rem;
-}
-.review-user { font-weight: bold; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2px; }
-.review-text { color: #ddd; line-height: 1.4; }
-
-/* Review Input Form */
-.review-form { display: flex; gap: 10px; }
-.review-input {
-    flex: 1;
-    background: #111; border: 1px solid #333;
-    color: #fff; padding: 8px; border-radius: 4px;
-    font-size: 0.85rem;
-}
-.btn-submit-review {
-    background: #333; color: #fff; border: none;
-    padding: 0 15px; border-radius: 4px; cursor: pointer;
-}
-.btn-submit-review:hover { background: var(--accent); color: #000; }
-
-/* Responsive: มือถือให้เรียงลงมา */
-@media (max-width: 768px) {
-    .variant-box { flex-direction: column; max-height: 85vh; overflow-y: auto; }
-}
-/* =========================================
-   FIXES: LOGIN LAYOUT & MODAL SIZING
-   (Paste at the very bottom of style.css)
-   ========================================= */
-
-/* --- 1. แก้หน้า Login เบี้ยว --- */
-/* บังคับให้หน้า Login เรียงแนวตั้ง (ไม่ใช้ Flex แบบ Gallery) และลดขนาดให้พอดี */
-#auth-modal .variant-box {
-    display: block !important;    /* เรียงลงมาตามปกติ */
-    max-width: 420px !important;  /* ความกว้างพอดีๆ ไม่กว้างเท่า Gallery */
-    width: 90% !important;        /* เว้นขอบข้างในมือถือ */
-    margin: 0 auto;
-    text-align: center;           /* จัดกึ่งกลาง */
-}
-
-/* ปรับระยะห่างหัวข้อในหน้า Login */
-#auth-modal .variant-title {
-    margin-bottom: 25px !important;
-    justify-content: center;      /* จัด title กึ่งกลาง */
-}
-
-/* --- 2. แก้หน้าสินค้า (Product Modal) เต็มจอเกินไป --- */
-#variant-modal .variant-box {
-    max-width: 850px !important;  /* ลดความกว้างสูงสุดจาก 900px เหลือ 850px */
-    width: 92% !important;        /* เว้นขอบข้างเพิ่มขึ้น */
-    max-height: 90vh;             /* จำกัดความสูงไม่ให้ล้นจอ (90% ของความสูงจอ) */
-    overflow-y: auto;             /* ถ้าเนื้อหายาวเกิน ให้มี Scrollbar เฉพาะในกล่อง */
-    padding: 25px !important;     /* ลด Padding ลงนิดหน่อย */
-    
-    /* จัดกึ่งกลางจอ */
-    margin: auto;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* ปรับ Layout มือถือให้พอดี (Mobile Fit) */
-@media (max-width: 768px) {
-    #variant-modal .variant-box {
-        padding: 15px !important; /* ลดขอบในมือถือเพื่อเพิ่มพื้นที่ */
-        width: 95% !important;
-        max-height: 70vh;         /* ลดความสูงลงอีกนิดในมือถือ */
-        display: block !important; /* เรียงลงมาตรงๆ */
-    }
-
-    /* ให้รูปและข้อมูลเต็มความกว้าง */
-    .product-gallery, 
-    .product-details-col {
-        width: 100% !important;
-        min-width: 100% !important;
-        margin-bottom: 20px;
-    }
-
-    /* ปรับขนาดรูปในมือถือไม่ให้กินที่เกินไป */
-    .main-img-frame {
-        height: 300px; /* ล็อกความสูงรูปไม่ให้ยาวจนต้องเลื่อนเยอะ */
-    }
-    .main-img-display {
-        object-fit: contain; /* โชว์รูปให้ครบ */
-        background: #000;
-    }
-}
-/* =========================================
-   🔥 FINAL MODAL FIX V2 (FIXED SCROLL & REVIEWS)
-   วางทับส่วน Compact เดิม หรือวางล่างสุดของ style.css
-   ========================================= */
-
-/* 1. จัดโครงสร้าง Modal บน PC */
-#variant-modal .variant-box {
-    max-width: 800px !important;
-    width: 90% !important;
-    height: 85vh !important;          /* บังคับความสูงคงที่เพื่อให้จัด Scroll ได้ */
-    max-height: 700px !important;
-    padding: 30px !important;
-    overflow: hidden !important;      /* ห้ามตัวกล่องหลักเลื่อน */
-    display: flex !important;
-    flex-direction: row !important;   /* เรียงซ้าย-ขวา */
-    gap: 30px !important;
-    align-items: stretch;             /* ยืดให้เต็มความสูง */
-    
-    /* จัดกึ่งกลางจอ */
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    background: #161616 !important;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-}
-
-/* 2. ฝั่งซ้าย (รูปภาพ) บน PC */
-.product-gallery {
-    flex: 0 0 45% !important; /* กว้าง 45% */
-    display: flex; 
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.main-img-frame {
-    width: 100%;
-    height: auto !important;
-    aspect-ratio: 1/1;       /* ให้เป็นสี่เหลี่ยมจัตุรัสสวยๆ */
-    max-height: 350px;       /* ไม่ให้สูงเกินไป */
-    border: 1px solid #333;
-    border-radius: 8px;
-    background: #000;
-    margin-bottom: 10px;
-}
-
-.main-img-display {
-    width: 100%; height: 100%; 
-    object-fit: contain !important;
-}
-
-/* 3. ฝั่งขวา (ข้อมูล + รีวิว) - แก้ให้ Scroll ได้ */
-.product-details-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto !important;  /* ✅ อนุญาตให้เลื่อนเฉพาะฝั่งขวา */
-    padding-right: 10px;          /* เว้นที่ให้ Scrollbar ไม่ทับเนื้อหา */
-    height: 100%;                 /* ใช้ความสูงเต็มพื้นที่ */
-}
-
-/* ตกแต่ง Scrollbar ฝั่งขวาให้น่าใช้ */
-.product-details-col::-webkit-scrollbar { width: 5px; }
-.product-details-col::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-.product-details-col::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; }
-.product-details-col::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-/* ดันส่วนรีวิวให้ห่างจากปุ่ม Add to Cart */
-.review-section {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 20px; /* เพิ่มขอบล่างกันตกขอบ */
-}
-
-/* =========================================
-   📱 MOBILE FIX (แก้ให้เลื่อนดูคอมเมนต์ได้ง่าย)
-   ========================================= */
-@media (max-width: 768px) {
-    #variant-modal .variant-box {
-        display: block !important;    /* เรียงลงมาปกติ */
-        height: auto !important;      /* ความสูงตามเนื้อหา */
-        max-height: 85vh !important;  /* แต่ห้ามเกิน 85% ของจอ */
-        overflow-y: auto !important;  /* ✅ ให้ Scroll ทั้งกล่อง */
-        width: 90% !important;
-        padding: 20px !important;
-        flex-direction: column !important;
-    }
-
-    /* รีเซ็ตค่าฝั่งขวาบนมือถือ (ให้เลื่อนตามกล่องหลัก) */
-    .product-details-col {
-        overflow-y: visible !important; 
-        height: auto !important;
-        padding-right: 0;
-    }
-
-    .product-gallery {
-        width: 100% !important;
-        flex: none !important;
-    }
-
-    .main-img-frame {
-        height: 200px !important; /* ลดขนาดรูปบนมือถือ */
-        margin: 0 auto 15px auto;
-    }
-}
-
-
-/* =========================================
-   📱 MOBILE ADJUSTMENTS (COMPACT VIEW)
-   ========================================= */
-@media (max-width: 768px) {
-    #variant-modal .variant-box {
-        display: flex !important;
-        flex-direction: column !important; /* เรียงลงมา */
-        width: 88% !important;        /* เว้นขอบข้าง */
-        max-height: 80vh !important;  /* สูงแค่ 80% ของจอ */
-        padding: 15px !important;
-        gap: 15px !important;
-        overflow-y: auto !important;  /* ให้ Scroll ในกล่องได้ */
-        border-radius: 16px !important;
-    }
-
-    /* ลดขนาดรูปบนมือถือ (สำคัญมาก!) */
-    .product-gallery {
-        flex: 0 0 auto !important;
-        width: 100% !important;
-        margin-bottom: 0 !important;
-    }
-
-    .main-img-frame {
-        height: 180px !important;     /* ลดความสูงรูปลงเยอะๆ ให้เหลือที่ใส่เนื้อหา */
-        margin-bottom: 10px;
-        border: none !important;      /* เอาขอบออกให้ดูคลีน */
-        background: transparent !important;
-    }
-
-    .main-img-display {
-        padding: 0;
-        object-fit: contain !important;
-    }
-    
-    /* ซ่อนรูปเล็ก (Thumbnails) บนมือถือถ้าเกะกะ หรือจะย่อขนาดก็ได้ */
-    .thumb-grid {
-        justify-content: center;
-        gap: 8px;
-    }
-    .thumb-img {
-        width: 40px !important; 
-        height: 40px !important;
-    }
-
-    /* ปรับตัวอักษรให้เล็กลงนิดนึงบนมือถือ */
-    #modal-title { font-size: 1.1rem !important; margin-bottom: 5px !important; text-align: center; }
-    #modal-price { font-size: 1.1rem !important; text-align: center; margin-bottom: 15px !important; }
-
-    /* ปรับ Layout ปุ่มเลือกไซส์/สี ให้อยู่กลาง */
-    .size-grid, .color-grid { justify-content: center; }
-    .option-label { text-align: center; }
-    
-    /* ปุ่ม Add to Cart ลอยเด่น */
-    .btn-add-confirm {
-        position: sticky;
-        bottom: 0;
-        z-index: 10;
-        box-shadow: 0 -10px 20px rgba(0,0,0,0.5); /* เงาให้รู้ว่าปุ่มลอย */
-    }
-}
-
-/* =========================================
-   SYSTEM C: ADMIN DASHBOARD STYLES
-   (Add to bottom of style.css)
-   ========================================= */
-
-.admin-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Sidebar */
-.admin-sidebar {
-    width: 250px;
-    background: #0a0a0a;
-    border-right: 1px solid rgba(255,255,255,0.1);
-    padding: 30px;
-    display: flex; flex-direction: column;
-}
-.admin-nav { display: flex; flex-direction: column; gap: 10px; flex: 1; }
-.admin-link {
-    padding: 12px 15px;
-    color: #888;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: 0.3s;
-}
-.admin-link:hover, .admin-link.active {
-    background: rgba(255,255,255,0.05);
-    color: var(--accent);
-}
-
-/* Content Area */
-.admin-content {
-    flex: 1;
-    padding: 40px;
-    overflow-y: auto;
-}
-.admin-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Data Table */
-.table-container {
-    background: #111;
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 8px;
-    overflow: hidden;
-}
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-}
-.data-table th {
-    background: #1a1a1a;
-    color: var(--text-muted);
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    border-bottom: 1px solid #333;
-}
-.data-table td {
-    padding: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    color: #ccc;
-    vertical-align: middle;
-}
-.data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover { background: rgba(255,255,255,0.02); }
-
-.admin-img-thumb {
-    width: 40px; height: 40px;
-    border-radius: 4px;
-    object-fit: cover;
-    border: 1px solid #333;
-}
-
-/* Action Buttons */
-.btn-delete {
-    color: var(--danger);
-    font-size: 0.8rem;
-    text-decoration: underline;
-    cursor: pointer;
-    background: none; border: none;
-}
-.btn-delete:hover { color: #ff6b6b; }
-
-/* Mobile Admin */
-@media (max-width: 768px) {
+    /* --- Admin Mobile --- */
     .admin-container { flex-direction: column; }
     .admin-sidebar { width: 100%; padding: 20px; border-right: none; border-bottom: 1px solid #333; }
     .admin-content { padding: 20px; }
-    .data-table th:nth-child(3), .data-table td:nth-child(3) { display: none; /* ซ่อน Category ในมือถือ */ }
+    .data-table th:nth-child(3), .data-table td:nth-child(3) { display: none; /* Hide Category/Items col */ }
+
+    /* --- Variant Modal (Mobile) --- */
+    #variant-modal .variant-box {
+        display: block !important; width: 90%; max-height: 85vh; padding: 20px;
+        flex-direction: column; overflow-y: auto;
+    }
+    .product-gallery { width: 100%; flex: none; margin-bottom: 20px; }
+    .main-img-frame { height: 200px; border: none; background: transparent; }
+    .main-img-display { object-fit: contain; }
+    .product-details-col { overflow-y: visible; height: auto; padding-right: 0; }
+    .btn-add-confirm { position: sticky; bottom: 0; z-index: 10; box-shadow: 0 -10px 20px rgba(0,0,0,0.5); }
 }
+
 /* =========================================
-   ADMIN MODAL CLOSE BUTTON FIX
-   (แก้ปุ่มกากบาทหน้า Admin ให้อยู่ขวาบน)
+   🛒 CHECKOUT MODAL FIX (BEAUTIFY & SIZE)
+   วางต่อท้ายสุดของไฟล์ style.css
    ========================================= */
 
-/* 1. กำหนดให้กล่อง Modal เป็นจุดอ้างอิง */
-#add-product-modal .variant-box {
-    position: relative !important;
-}
-
-/* 2. บังคับปุ่มกากบาทให้ลอยไปมุมขวาบน */
-#add-product-modal .close-modal-variant {
-    position: absolute !important; /* ลอยอิสระ */
-    top: 20px !important;          /* ห่างจากขอบบน 20px */
-    right: 20px !important;        /* ห่างจากขอบขวา 20px */
-    left: auto !important;         /* ยกเลิกการชิดซ้าย */
-    transform: none !important;    /* ยกเลิกการจัดกึ่งกลาง (ถ้ามี) */
+/* 1. ปรับขนาดกล่อง Checkout ให้อยู่กึ่งกลางและมีขนาดพอดี */
+#checkout-overlay .checkout-modal {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
     
-    /* ปรับแต่งปุ่มให้ดูดีขึ้น */
-    background: rgba(255, 255, 255, 0.1) !important;
-    width: 35px; height: 35px;
-    border-radius: 50%;
-    display: flex; justify-content: center; align-items: center;
-    color: #fff !important;
-    z-index: 100;
+    width: 90% !important;           /* มือถือ: กว้าง 90% */
+    max-width: 420px !important;     /* PC: กว้างไม่เกิน 420px (กำลังสวย) */
+    max-height: 85vh !important;     /* สูงไม่เกิน 85% ของหน้าจอ */
+    
+    background: #121212 !important;  /* พื้นหลังสีดำด้าน */
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 16px !important;  /* มุมโค้งมน */
+    padding: 25px 25px !important;   /* เว้นขอบด้านใน */
+    
+    overflow-y: auto !important;     /* ✅ ถ้าเนื้อหายาว ให้เลื่อนได้ */
+    box-shadow: 0 25px 50px rgba(0,0,0,0.9) !important;
+    display: block !important;
 }
 
-#add-product-modal .close-modal-variant:hover {
+/* 2. จัดหัวข้อ SECURE CHECKOUT */
+.checkout-header {
+    font-family: 'Syncopate', sans-serif !important; /* ฟอนต์หัวข้อ */
+    font-size: 1.1rem !important;
+    color: #fff !important;
+    text-align: center !important;   /* จัดกึ่งกลาง */
+    margin-bottom: 20px !important;
+    padding-bottom: 15px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    letter-spacing: 1px !important;
+    padding-right: 0 !important;     /* แก้เผื่อมีค่าเก่าค้าง */
+}
+
+/* 3. ปรับปุ่มกากบาท (X) ให้สวยและอยู่มุมขวาบน */
+#checkout-overlay .close-modal {
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    background: rgba(255,255,255,0.05) !important; /* พื้นหลังจางๆ */
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    display: flex !important; justify-content: center !important; align-items: center !important;
+    color: #888 !important;
+    font-size: 1.2rem !important;
+    border: none !important;
+    z-index: 10 !important;
+    transition: 0.3s !important;
+}
+#checkout-overlay .close-modal:hover {
+    background: var(--danger) !important;
+    color: #fff !important;
+    transform: rotate(90deg) !important;
+}
+
+/* 4. ปรับกล่องสรุปรายการสินค้า (Order Summary) */
+#checkout-summary-box {
+    background: #0a0a0a !important;  /* สีพื้นหลังเข้มขึ้นอีกนิด */
+    border: 1px solid rgba(255,255,255,0.05) !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+}
+
+/* 5. ปรับช่องกรอกข้อมูล (Input) */
+#checkout-overlay .form-group {
+    margin-bottom: 15px !important;
+}
+#checkout-overlay .form-input {
+    background: #050505 !important;
+    border: 1px solid #333 !important;
+    padding: 10px 15px !important;
+    font-size: 0.9rem !important;
+}
+#checkout-overlay .form-input:focus {
+    border-color: var(--accent) !important;
+}
+
+/* 6. ปรับ Scrollbar ให้นุ่มนวล */
+#checkout-overlay .checkout-modal::-webkit-scrollbar { width: 5px; }
+#checkout-overlay .checkout-modal::-webkit-scrollbar-track { background: transparent; }
+#checkout-overlay .checkout-modal::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+/* =========================================
+   SYSTEM: PRODUCT CARD UPGRADES (Stock & Colors)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+/* --- 1. ป้ายสถานะสินค้า (Stock Badges) --- */
+.badge-stock {
+    position: absolute;
+    top: 15px; left: 15px;
+    padding: 4px 10px;
+    font-weight: 800; font-size: 0.65rem;
+    text-transform: uppercase; letter-spacing: 1px;
+    z-index: 5;
+    border-radius: 2px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+/* สีของป้ายแต่ละสถานะ */
+.badge-sold { background: #333; color: #aaa; border: 1px solid #555; } /* หมด */
+.badge-low  { background: #ff5e00; color: #fff; } /* เหลือล้อย */
+.badge-new  { background: #2ecc71; color: #000; } /* มาใหม่ */
+.badge-sale { background: var(--danger); color: #fff; } /* ลดราคา */
+
+/* --- 2. จุดเลือกสี (Color Swatches) --- */
+.card-colors {
+    display: flex; gap: 8px;
+    margin-top: 10px;
+    height: 20px; align-items: center;
+}
+
+.color-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+/* เอฟเฟกต์ตอนชี้: ขยาย + มีวงแหวน */
+.color-dot:hover {
+    transform: scale(1.2);
+    border-color: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* --- 3. ปรับสถานะสินค้าหมด (Sold Out State) --- */
+.product-card.sold-out {
+    opacity: 0.7;
+    pointer-events: none; /* ห้ามกด */
+    filter: grayscale(100%);
+}
+.product-card.sold-out .card-overlay {
+    display: none; /* ซ่อนปุ่ม Add to cart */
+}
+
+/* =========================================
+   SYSTEM: QUICK ADD BUTTONS
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+/* ปรับ Overlay ให้วางปุ่มแนวนอน */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+/* ปุ่มดูรายละเอียด (VIEW) */
+.btn-view {
+    flex: 1; /* ให้กินพื้นที่ส่วนใหญ่ */
+    background: #fff; 
+    color: #000;
+    border: none;
+    font-weight: 800;
+    font-size: 0.75rem;
+    padding: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+.btn-view:hover {
+    background: #e0e0e0;
+}
+
+/* ปุ่ม Quick Add (+) */
+.btn-quick {
+    width: 42px; 
+    flex-shrink: 0; /* ห้ามหด */
+    background: var(--accent);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 2px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn-quick:hover {
+    background: #fff;
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+/* =========================================
+   🚨 DASHBOARD WIDGET FIX (แก้รูปใหญ่เกิน)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+/* 1. จัดระเบียบกล่อง Top Selling */
+#dash-top-products {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* ระยะห่างระหว่างรายการ */
+}
+
+/* 2. จัดรายการสินค้า (รูปซ้าย - เนื้อหาขวา) */
+.top-item {
+    display: flex !important;       /* บังคับแนวนอน */
+    align-items: center !important; /* จัดกึ่งกลางแนวตั้ง */
+    gap: 15px !important;           /* ห่างจากรูป 15px */
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    margin-bottom: 0 !important;
+}
+.top-item:last-child { border: none !important; }
+
+/* 3. บังคับขนาดรูปภาพให้เป็นสี่เหลี่ยมจัตุรัสเล็กๆ */
+.top-img {
+    width: 60px !important;        /* กว้าง 60px พอ */
+    height: 60px !important;       /* สูง 60px */
+    object-fit: cover !important;  /* ตัดส่วนเกินออกให้รูปไม่เบี้ยว */
+    border-radius: 8px !important; /* มุมโค้งมน */
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    flex-shrink: 0 !important;     /* ห้ามรูปหด */
+    margin: 0 !important;          /* ล้างค่า Margin เก่า */
+}
+
+/* 4. จัดส่วนเนื้อหาข้อความ */
+.top-info {
+    flex: 1 !important;            /* ให้กินพื้นที่ที่เหลือ */
+    min-width: 0 !important;       /* แก้บั๊กข้อความล้น */
+}
+
+.top-name {
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;       /* ถ้าชื่อยาวเกินให้เป็น ... */
+    display: block;
+    margin-bottom: 4px;
+}
+
+.top-sales {
+    font-size: 0.75rem !important;
+    color: var(--accent) !important; /* สีทอง */
+    font-family: monospace;
+}
+
+/* 5. หลอดกราฟยอดขาย (Progress Bar) */
+.top-bar-bg {
+    width: 100%;
+    height: 4px !important;
+    background: rgba(255,255,255,0.1) !important;
+    border-radius: 2px;
+    margin-top: 6px !important;
+    overflow: hidden;
+}
+
+.top-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #fff) !important;
+    border-radius: 2px;
+}
+
+/* =========================================
+   🛠️ ADMIN MODAL BEAUTIFY (แก้หน้าเพิ่มของ/คูปองให้สวย)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+/* 1. แก้หน้า "เพิ่มสินค้า" (ADD NEW PRODUCT) */
+#add-product-modal .variant-box,
+#add-product-modal .checkout-modal {
+    max-width: 700px !important;     /* ขยายให้กว้างขึ้น (จากเดิมบีบๆ) */
+    width: 90% !important;           /* มือถือให้กว้าง 90% */
+    padding: 35px 40px !important;   /* เพิ่มขอบในให้ดูโปร่ง สบายตา */
+    background: #121212 !important;  /* สีพื้นหลังดำด้าน */
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.9) !important;
+    
+    /* จัดกึ่งกลางจอ */
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+}
+
+/* 2. แก้หน้า "เพิ่มคูปอง" (ADD NEW COUPON) */
+#add-coupon-modal .variant-box,
+#add-coupon-modal .checkout-modal {
+    max-width: 480px !important;     /* ขยายจาก 400px เป็น 480px ให้พอดี */
+    width: 90% !important;
+    padding: 35px 35px !important;
+    background: #121212 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 16px !important;
+    
+    /* จัดกึ่งกลางจอ */
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+}
+
+/* 3. จัดหัวข้อ (Title) ให้ดูแพงและไม่ชนปุ่มปิด */
+#add-product-modal .variant-title,
+#add-coupon-modal .variant-title {
+    font-size: 1.5rem !important;    /* ตัวใหญ่ขึ้น */
+    margin-top: 0 !important;
+    margin-bottom: 30px !important;  /* เว้นห่างจากฟอร์ม */
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    padding-bottom: 20px !important;
+    color: var(--accent) !important;
+    letter-spacing: 2px !important;
+    text-align: left !important;     /* จัดชิดซ้าย */
+}
+
+/* 4. ปรับช่องกรอกข้อมูล (Inputs) ให้ดูทันสมัย */
+#add-product-modal .form-input,
+#add-coupon-modal .form-input,
+#add-product-modal select,
+#add-coupon-modal select {
+    background: rgba(0, 0, 0, 0.5) !important; /* พื้นหลังเข้ม */
+    border: 1px solid #333 !important;
+    padding: 14px 15px !important;   /* ช่องใหญ่ขึ้น กรอกง่าย */
+    font-size: 1rem !important;
+    border-radius: 6px !important;
+    color: #fff !important;
+    transition: 0.3s !important;
+}
+
+#add-product-modal .form-input:focus,
+#add-coupon-modal .form-input:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1) !important;
+}
+
+/* 5. ปรับปุ่มกด (Buttons) ให้เต็มและเด่น */
+#add-product-modal .btn-add-confirm,
+#add-coupon-modal .btn-add-confirm {
+    width: 100% !important;
+    height: 55px !important;
+    margin-top: 20px !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    border-radius: 8px !important;
+    letter-spacing: 1px !important;
+}
+
+/* 6. ย้ำตำแหน่งปุ่มกากบาท (Close Button) ให้อยู่มุมขวาบนเป๊ะๆ */
+#add-product-modal .close-modal-variant,
+#add-coupon-modal .close-modal-variant {
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: rgba(255,255,255,0.05) !important;
+    color: #888 !important;
+    z-index: 100 !important;
+}
+#add-product-modal .close-modal-variant:hover,
+#add-coupon-modal .close-modal-variant:hover {
     background: var(--danger) !important;
     color: #fff !important;
 }
 
 /* =========================================
-   FIX: HISTORY MODAL LAYOUT
-   (แก้หน้าประวัติสั่งซื้อที่เบี้ยว ให้เรียงบนลงล่างปกติ)
+   SYSTEM: SHOP HERO SLIDER (แก้หน้าโล่ง)
+   วางต่อท้ายสุดของไฟล์ style.css
    ========================================= */
 
-/* 1. บังคับให้กล่อง History เรียงแนวตั้ง (Block) ไม่ใช่แนวนอน */
-#history-modal .variant-box {
-    display: block !important;       /* ยกเลิกการเรียงซ้ายขวา */
-    width: 95% !important;
-    max-width: 600px !important;     /* ความกว้างที่พอดี */
-    height: auto !important;         /* สูงตามเนื้อหา */
-    max-height: 80vh !important;     /* ไม่ให้ล้นจอ */
-    padding: 25px !important;
-    
-    /* ยกเลิกค่าของหน้าสินค้า */
-    position: relative !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    overflow-y: auto !important;     /* ให้ Scroll ได้ */
-}
-
-/* 2. จัดหัวข้อและปุ่มปิดให้เต็มความกว้าง */
-#history-modal .variant-box > div:first-child {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    margin-bottom: 20px !important;
-}
-
-/* 3. ปรับขนาดปุ่มปิด (X) ในหน้าประวัติให้พอดี */
-#history-modal .close-modal-variant {
-    position: static !important; /* ยกเลิกการลอย */
-    font-size: 1.5rem !important;
-    background: none !important;
-    width: auto !important;
-    height: auto !important;
-}
-
-/* =========================================
-   🚨 EMERGENCY FIX: FORCE LAYOUT RESET
-   (วางล่างสุดของไฟล์ เพื่อแก้หน้าต่างเบี้ยวหายขาด)
-   ========================================= */
-
-/* 1. บังคับหน้าประวัติ (History) ให้เรียงแนวตั้ง */
-#history-modal .variant-box {
-    display: block !important;        /* เลิกใช้ Flexbox */
-    flex-direction: column !important;
-    width: 95% !important;
-    max-width: 600px !important;
-    height: auto !important;
-    max-height: 80vh !important;
-    overflow-y: auto !important;
-    padding: 30px !important;
-    
-    /* รีเซ็ตตำแหน่งให้อยู่กลางจอ */
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-}
-
-/* 2. บังคับหน้า Login/Register ให้เรียงแนวตั้ง */
-#auth-modal .variant-box {
-    display: block !important;
-    max-width: 400px !important;
-    text-align: center !important;
-}
-
-/* 3. บังคับหน้า Checkout ให้เรียงแนวตั้ง */
-#checkout-overlay .checkout-modal {
-    display: block !important;
-    max-width: 500px !important;
-}
-
-/* 4. ปรับหัวข้อในหน้าประวัติให้ชิดซ้ายขวาถูกต้อง */
-#history-modal .variant-box > div:first-child {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin-bottom: 20px !important;
-}
-
-/* 5. แก้ปุ่มปิด (X) ไม่ให้ลอยผิดที่ */
-#history-modal .close-modal-variant,
-#auth-modal .close-modal-variant {
-    position: static !important; /* ยกเลิกการลอยอิสระ */
-    width: auto !important;
-    height: auto !important;
-    background: none !important;
-    font-size: 1.5rem !important;
-    transform: none !important;
-}
-#history-modal .close-modal-variant:hover {
-    color: var(--danger) !important;
-    background: none !important;
-}
-
-/* =========================================
-   🚨 HISTORY MODAL FIX (แก้หน้าประวัติเบี้ยว แบบบังคับ)
-   วางส่วนนี้ไว้ล่างสุดของ style.css เสมอ
-   ========================================= */
-
-/* 1. บังคับโครงสร้างกล่องให้กลับมาเป็นปกติ */
-#history-modal .variant-box {
-    display: block !important;          /* ยกเลิก Flexbox แนวนอน */
-    width: 90% !important;              /* ให้กว้าง 90% ของจอ */
-    max-width: 600px !important;        /* แต่ไม่เกิน 600px */
-    height: auto !important;            /* สูงตามเนื้อหา */
-    max-height: 80vh !important;        /* ไม่ให้ล้นจอ */
-    padding: 30px !important;
-    background: #111 !important;
-    
-    /* จัดกึ่งกลางจอ */
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    
-    /* ให้ Scroll ได้ถ้าประวัติยาว */
-    overflow-y: auto !important;
-}
-
-/* 2. จัดส่วนหัวข้อ (Title) และปุ่มปิด (X) ให้แยกซ้ายขวา */
-#history-modal .variant-box > div:first-child {
-    display: flex !important;
-    width: 100% !important;             /* บังคับกว้างเต็ม */
-    justify-content: space-between !important; /* ดันคนละฝั่ง */
-    align-items: center !important;
-    margin-bottom: 25px !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 15px;
-}
-
-/* 3. ปรับปุ่มกากบาทให้สวยงามและกดง่าย */
-#history-modal .close-modal-variant {
-    position: static !important;        /* ยกเลิกการลอยมั่ว */
-    font-size: 2rem !important;
-    color: #888 !important;
-    background: transparent !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer;
-    border: none !important;
-}
-#history-modal .close-modal-variant:hover {
-    color: var(--danger) !important;    /* ชี้แล้วเป็นสีแดง */
-    transform: scale(1.1);
-}
-
-/* 4. ปรับรายการออเดอร์ให้เต็มความกว้าง */
-#order-history-list {
-    width: 100% !important;
-    padding-right: 5px;
-}
-.order-card {
-    width: 100% !important;
-    box-sizing: border-box; /* รวม padding ในความกว้าง */
-}
-/* =========================================
-   SYSTEM: PAYMENT GATEWAY STYLES
-   ========================================= */
-
-/* ปรับแต่ง Modal ชำระเงิน */
-#payment-modal .variant-box {
-    max-width: 450px !important;
-    text-align: center;
-}
-
-/* หัวข้อ */
-.payment-title {
-    font-family: var(--font-heading);
-    color: var(--accent);
-    margin-bottom: 25px;
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-}
-
-/* ปุ่มเลือกวิธีชำระเงิน */
-.payment-methods {
-    display: flex; gap: 15px; margin-bottom: 25px;
-}
-.pay-method-btn {
-    flex: 1;
-    padding: 15px;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #888;
-    cursor: pointer;
-    transition: 0.3s;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-}
-.pay-method-btn svg { width: 30px; height: 30px; fill: currentColor; }
-.pay-method-btn:hover, .pay-method-btn.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(255, 215, 0, 0.05);
-}
-
-/* ส่วนแสดงผล QR และแบบฟอร์ม */
-.payment-content {
-    background: rgba(255,255,255,0.03);
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    min-height: 200px;
-    display: flex; align-items: center; justify-content: center;
-}
-
-/* QR Code จำลอง */
-.qr-container { text-align: center; }
-.qr-img {
-    width: 150px; height: 150px;
-    background: #fff; padding: 10px;
-    margin: 0 auto 15px auto;
-    border-radius: 8px;
-}
-.file-upload-btn {
-    width: 100%; padding: 10px;
-    background: #333; color: #fff;
-    border: 1px dashed #666;
-    border-radius: 4px; cursor: pointer;
-    font-size: 0.8rem;
-}
-
-/* Credit Card Form */
-.cc-form { width: 100%; text-align: left; }
-.cc-input {
-    width: 100%; background: #000;
-    border: 1px solid #444; color: #fff;
-    padding: 12px; border-radius: 4px;
-    margin-bottom: 15px; font-family: monospace;
-}
-.cc-row { display: flex; gap: 10px; }
-
-/* =========================================
-   FIX: PAYMENT MODAL SIZE
-   (แก้หน้าต่างชำระเงินให้เล็กและกระชับ)
-   ========================================= */
-
-/* 1. บังคับขนาดกล่องให้เล็กลง */
-#payment-modal .variant-box,
-#payment-modal .checkout-modal {
-    max-width: 400px !important;  /* จำกัดความกว้างแค่ 400px (จากเดิม 500-900px) */
-    width: 90% !important;        /* ในมือถือให้กว้าง 90% ของจอ */
-    padding: 25px 20px !important; /* ลดช่องว่างขอบใน */
-    height: auto !important;      /* ความสูงตามเนื้อหา */
-    max-height: 85vh !important;  /* ห้ามสูงเกิน 85% ของจอ */
-    overflow-y: auto !important;  /* ถ้าเนื้อหาล้นให้เลื่อนได้ */
-    
-    /* จัดกึ่งกลางจอเป๊ะๆ */
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    
-    display: block !important;    /* ยกเลิก Flexbox ที่อาจทำให้ยืด */
-    text-align: center !important; /* จัดทุกอย่างกึ่งกลาง */
-}
-
-/* 2. ปรับขนาดรูป QR Code ให้เล็กลง */
-.qr-img {
-    width: 120px !important;      /* ลดขนาด QR Code */
-    height: 120px !important;
-    margin: 0 auto 10px auto;     /* จัดกึ่งกลาง */
-    padding: 5px !important;
-}
-
-/* 3. ปรับขนาดปุ่มเลือกวิธีชำระเงิน */
-.payment-methods {
-    margin-bottom: 20px !important;
-    gap: 10px !important;
-}
-.pay-method-btn {
-    padding: 10px !important;     /* ลดความหนาปุ่ม */
-    font-size: 0.85rem !important;
-}
-.pay-method-btn svg {
-    width: 24px !important;       /* ลดขนาดไอคอน */
-    height: 24px !important;
-}
-
-/* 4. ปรับหัวข้อให้เล็กลง */
-.payment-title {
-    font-size: 1.1rem !important;
-    margin-bottom: 15px !important;
-    background: #111 !important;  /* สีพื้นหลังให้กลืนกับกล่อง */
-    color: var(--accent) !important;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* 5. ปรับปุ่ม Confirm ด้านล่าง */
-#payment-modal .btn-add-confirm {
-    margin-top: 15px !important;
-    height: 40px !important;      /* ลดความสูงปุ่ม */
-    font-size: 0.9rem !important;
-}
-/* =========================================
-   FIX: PAYMENT CLOSE BUTTON POSITION
-   (ย้ายปุ่มกากบาทหน้าชำระเงินไปมุมขวาบนสุด)
-   ========================================= */
-
-#payment-modal .close-modal-variant {
-    position: absolute !important;   /* สั่งให้ลอยอิสระ */
-    top: 15px !important;            /* ห่างจากขอบบน 15px */
-    right: 15px !important;          /* ห่างจากขอบขวา 15px */
-    left: auto !important;           /* ยกเลิกการจัดกึ่งกลาง */
-    transform: none !important;      /* ยกเลิก Effect หมุน/เลื่อนเดิม */
-    
-    /* ปรับหน้าตาปุ่มให้คลีนๆ */
-    background: transparent !important;
-    border: none !important;
-    color: #666 !important;
-    font-size: 1.5rem !important;
-    width: 30px !important;
-    height: 30px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-/* เอฟเฟกต์ตอนเอาเมาส์ชี้ */
-#payment-modal .close-modal-variant:hover {
-    color: var(--danger) !important;
-    transform: scale(1.1) !important;
-}
-/* =========================================
-   FIX: PAYMENT TITLE OVERLAP
-   (แก้ปุ่มกากบาทบังตัวหนังสือ SELECT PAYMENT)
-   ========================================= */
-
-/* 1. จัดหัวข้อใหม่ ให้หลบปุ่มกากบาท */
-.payment-title {
-    margin-top: 15px !important;    /* ดันข้อความลงมา */
-    padding: 0 40px !important;     /* บีบข้อความเข้ามา 40px ทั้งซ้ายและขวา (เพื่อไม่ให้ยาวไปชนปุ่ม) */
-    line-height: 1.4 !important;    /* เพิ่มความสูงบรรทัด */
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* 2. ปรับตำแหน่งปุ่ม X ให้ชิดมุมขวาบนสุด */
-#payment-modal .close-modal-variant {
-    top: 10px !important;           /* ขยับขึ้นไปติดขอบบนมากขึ้น */
-    right: 10px !important;         /* ขยับชิดขวามากขึ้น */
-    z-index: 100 !important;        /* ให้มั่นใจว่าปุ่มอยู่บนสุด */
-    
-    /* (เสริม) เพิ่มพื้นหลังจางๆ ให้ปุ่มเห็นชัดขึ้น ไม่จมไปกับพื้นหลัง */
-    background: rgba(255, 255, 255, 0.05) !important; 
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 50%;
-}
-
-/* =========================================
-   🚨 EMERGENCY FIX: PRODUCT MODAL POSITION
-   (แก้หน้าสินค้าที่ไหลไปทางขวา ให้กลับมาตรงกลาง)
-   ========================================= */
-
-/* 1. ดึงกล่องสินค้ากลับมาอยู่ตรงกลาง */
-#variant-modal .variant-box {
-    position: fixed !important;      /* ใช้ fixed เพื่อให้อ้างอิงจากหน้าจอ */
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important; /* ดึงกลับมา 50% ให้อยู่กลางเป๊ะ */
-    margin: 0 !important;
-}
-
-/* 2. ปุ่มกากบาท (ย้ำตำแหน่งอีกครั้ง) */
-#variant-modal .close-modal-variant {
-    position: absolute !important;
-    top: 20px !important;
-    right: 20px !important;
-    left: auto !important;           /* ยกเลิกค่าซ้าย */
-    transform: none !important;
-    z-index: 100 !important;
-}
-
-/* =========================================
-   SYSTEM C: DASHBOARD ANALYTICS STYLES
-   ========================================= */
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.stat-card {
-    background: #111;
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 12px;
-    padding: 25px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: 0.3s;
-}
-.stat-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255,255,255,0.1);
+.shop-hero-container {
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    margin: 20px auto 0; /* เว้นระยะจาก Header นิดหน่อย */
+    height: 400px;       /* ความสูงของ Banner */
+    overflow: hidden;
+    border-radius: 12px; /* มุมโค้งมน */
+    border: 1px solid rgba(255,255,255,0.1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.stat-icon {
-    width: 60px; height: 60px;
-    border-radius: 12px;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 1.8rem;
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .shop-hero-container {
+        height: 300px;
+        margin: 10px 15px; /* เว้นขอบข้างในมือถือ */
+        width: auto;
+    }
 }
 
-.stat-info h3 {
-    font-size: 0.75rem;
-    color: #888;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
+.hero-slider {
+    width: 100%; height: 100%;
+    position: relative;
 }
 
-.stat-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #fff;
+.hero-slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    display: flex; align-items: center; padding-left: 80px;
+}
+.hero-slide.active { opacity: 1; z-index: 2; }
+
+/* Background Image & Overlay */
+.slide-bg {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.4) contrast(1.1); /* ทำให้รูปมืดลงเพื่อให้ตัวหนังสือเด่น */
+}
+
+/* Slide Content Animation */
+.slide-content {
+    max-width: 500px;
+    transform: translateY(20px); opacity: 0; transition: 0.5s 0.3s;
+}
+.hero-slide.active .slide-content { transform: translateY(0); opacity: 1; }
+
+.slide-subtitle {
+    font-size: 0.9rem; letter-spacing: 3px; color: var(--accent);
+    margin-bottom: 10px; text-transform: uppercase; font-weight: 700;
+}
+
+.slide-title {
     font-family: var(--font-heading);
+    font-size: 3.5rem; line-height: 1; color: #fff;
+    margin-bottom: 15px; text-transform: uppercase;
+}
+.slide-desc {
+    font-size: 1rem; color: #ccc; margin-bottom: 25px;
+    font-weight: 300;
+}
+
+/* Mobile Content Adjustments */
+@media (max-width: 768px) {
+    .hero-slide { padding-left: 30px; }
+    .slide-title { font-size: 2.2rem; }
+}
+
+/* Navigation Buttons (Arrows) */
+.slider-nav button {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.5); color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    width: 40px; height: 40px; border-radius: 50%;
+    cursor: pointer; z-index: 10; font-size: 1.2rem;
+    transition: 0.3s;
+}
+.slider-nav button:hover { background: var(--accent); color: #000; }
+.slider-nav button:first-child { left: 20px; }
+.slider-nav button:last-child { right: 20px; }
+
+/* Dots Indicator */
+.slider-dots {
+    position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 10;
+}
+.slider-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.3); cursor: pointer; transition: 0.3s;
+}
+.slider-dot.active { background: var(--accent); transform: scale(1.2); }
+
+/* =========================================
+   🚨 FINAL MOBILE FIX: CATEGORY & LAYOUT
+   (แก้ Category เละ, ล้างค่า Inline Style, จัดปุ่มให้สวย)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* 1. จัดโครงสร้างหลัก (Main Container) */
+    .shop-container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important; /* เว้นระยะห่างระหว่าง Filter กับ สินค้า */
+        padding: 0 15px !important;
+        margin-top: 0 !important;
+    }
+
+    /* 2. จัดกล่อง Filter (Category/Price) ใหม่ */
+    .sidebar-filter {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        background: #0a0a0a !important;
+        border: 1px solid rgba(255,255,255,0.15) !important;
+        border-radius: 12px !important;
+        padding: 20px !important;
+        margin-bottom: 0 !important;
+        z-index: 10 !important;
+
+        /* ใช้ Grid จัดเรียง 2 คอลัมน์ */
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px 15px !important; /* ระยะห่าง บนล่าง ซ้ายขวา */
+        align-items: center !important;
+    }
+
+    /* 3. จัดหัวข้อ (CATEGORY / PRICE RANGE) ให้กินเต็มแถว */
+    .filter-title {
+        grid-column: 1 / -1 !important; /* กินพื้นที่เต็มความกว้าง */
+        width: 100% !important;
+        font-size: 0.9rem !important;
+        color: var(--accent) !important;
+        margin: 0 !important;
+        padding-top: 15px !important;
+        border-top: 1px dashed rgba(255,255,255,0.1) !important;
+    }
+    .filter-title:first-child {
+        padding-top: 0 !important;
+        border-top: none !important;
+    }
+
+    /* 4. ล้างค่า Style ที่ติดมากับ HTML (ตัวปัญหาที่ทำให้เละ) */
+    .filter-option {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important; /* ลบเส้นขีดคั่นเดิมออก */
+        font-size: 0.8rem !important;
+        display: flex !important;
+        align-items: center !important;
+        color: #b0b0b0 !important;
+    }
+
+    /* จัด Checkbox/Radio ให้ตรง */
+    .checkmark {
+        position: relative !important;
+        display: inline-block !important;
+        margin-right: 8px !important;
+        top: auto !important;
+        left: auto !important;
+        flex-shrink: 0 !important;
+    }
+    .filter-option input { opacity: 0 !important; width: 0 !important; }
+
+    /* 5. จัดส่วน "Showing Results" และปุ่ม Sort (ให้หายซ้อน) */
+    .shop-container main > div:first-child {
+        display: flex !important;
+        flex-direction: column-reverse !important; /* สลับเอาปุ่ม Sort ขึ้นก่อน */
+        gap: 15px !important;
+        margin-bottom: 25px !important;
+        /* ... */
+    }
+
+    #result-count {
+        display: block !important;
+        text-align: center !important; /* จัดกึ่งกลางสวยงาม */
+        font-size: 0.75rem !important;
+        color: #666 !important;
+        margin-top: 5px !important;    /* เว้นระยะห่างไม่ให้เบียด */
+    }
+
+    /* 6. กู้คืนปุ่มกด (VIEW / ADD) บนการ์ดสินค้า */
+    .product-card .card-overlay {
+        display: flex !important;
+        opacity: 1 !important;
+        transform: none !important;
+        background: linear-gradient(to top, rgba(0,0,0,0.95), transparent) !important;
+        padding: 10px 8px !important;
+        position: absolute !important;
+        bottom: 0 !important; left: 0 !important; width: 100% !important;
+        pointer-events: auto !important;
+        z-index: 5 !important;
+    }
+
+    .product-card .card-actions {
+        display: flex !important;
+        gap: 6px !important;
+        width: 100% !important;
+        align-items: center !important;
+    }
+
+    .product-card .btn-view {
+        flex: 1 !important;
+        height: 32px !important;
+        font-size: 0.6rem !important;
+        font-weight: 800 !important;
+        background: rgba(255,255,255,0.9) !important;
+        color: #000 !important;
+        border-radius: 4px !important;
+        border: none !important;
+        display: flex !important; align-items: center !important; justify-content: center !important;
+        padding: 0 !important;
+    }
+
+    .product-card .btn-quick {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1.2rem !important;
+        background: var(--accent) !important;
+        color: #000 !important;
+        border-radius: 4px !important;
+        border: none !important;
+        padding: 0 !important;
+        display: flex !important; align-items: center !important; justify-content: center !important;
+    }
 }
 
 /* =========================================
-   SYSTEM: EDIT BUTTON STYLE
+   🖥️ PC & GLOBAL LAYOUT FIX (จัดระเบียบจอคอม)
+   วางต่อท้ายสุดของไฟล์ style.css
    ========================================= */
-.btn-edit {
-    color: var(--accent); /* สีทอง */
-    font-size: 0.8rem;
-    text-decoration: underline;
-    cursor: pointer;
-    background: none; border: none;
-    margin-right: 10px; /* เว้นระยะห่างจากปุ่ม Delete */
+
+/* 1. จัดระเบียบตัวเลือก Filter (ล้างค่าที่ติดมากับ HTML) */
+.filter-option {
+    display: flex !important;
+    align-items: center !important; /* จัดกึ่งกลางแนวตั้ง */
+    margin: 0 0 12px 0 !important;  /* เว้นระยะบรรทัด */
+    padding: 0 !important;
+    border: none !important;        /* ลบเส้นขีดคั่นที่ไม่ต้องการ */
+    font-size: 0.9rem !important;
+    color: var(--text-muted) !important;
+    cursor: pointer !important;
+    width: 100% !important;
 }
-.btn-edit:hover { color: #fff; }
+
+/* 2. จัดกล่องสี่เหลี่ยม (Checkbox) ให้อยู่ตรงกลางบรรทัด */
+.filter-option .checkmark {
+    position: relative !important;  /* เลิกใช้ Absolute เพื่อไม่ให้ลอย */
+    display: inline-block !important;
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 12px !important;  /* เว้นระยะห่างจากตัวหนังสือ */
+    top: auto !important;
+    left: auto !important;
+    flex-shrink: 0 !important;
+    border: 1px solid #555 !important;
+    border-radius: 4px !important;
+    background: transparent !important;
+    margin-top: 0 !important;
+}
+
+/* สีเมื่อติ๊กถูก */
+.filter-option input:checked ~ .checkmark {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+
+/* 3. จัดปุ่ม Wishlist (ที่มีไอคอนหัวใจ) ให้ตรงแนว */
+.wishlist-label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-weight: 600 !important;
+    color: var(--text-muted) !important;
+    letter-spacing: 1px !important;
+}
+/* ขยับไอคอนหัวใจให้สวยงาม */
+.wishlist-label svg {
+    width: 18px !important;
+    height: 18px !important;
+    display: block !important;
+    margin-top: -2px !important; 
+}
+
+/* 4. จัดหัวข้อ Category / Price Range ให้มีระยะห่างสวยงาม */
+.filter-title {
+    font-family: var(--font-heading) !important;
+    color: var(--accent) !important;
+    margin-bottom: 20px !important;
+    margin-top: 30px !important;    /* เว้นระยะจากกลุ่มด้านบน */
+    padding-top: 20px !important;
+    border-top: 1px dashed rgba(255,255,255,0.1) !important; /* เส้นคั่นบางๆ */
+    font-size: 0.95rem !important;
+    letter-spacing: 1px !important;
+}
+/* หัวข้อแรกสุดไม่ต้องมีเส้น/ระยะด้านบน */
+.filter-title:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+}
+
+/* 5. ปรับส่วนแสดงผลลัพธ์ (Showing Results) ในจอคอม */
+.shop-container main > div:first-child {
+    margin-bottom: 30px !important;
+    padding-bottom: 20px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* 6. ปรับช่อง Sort ในจอคอม */
+#sort-select {
+    width: auto !important;
+    min-width: 250px !important;
+    background: #0a0a0a !important;
+    border: 1px solid #333 !important;
+    cursor: pointer !important;
+}
+
+/* =========================================
+   🏠 HOME PAGE ADD-ONS (เพิ่มหน้า Home)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+/* 1. Marquee (ตัวหนังสือวิ่ง) */
+.marquee-strip {
+    background: var(--accent);
+    color: #000;
+    padding: 15px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-1deg) scale(1.02); /* เอียงนิดๆ ให้ดูเท่ */
+    margin: -30px 0 50px 0;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+.marquee-content {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    animation: marquee 20s linear infinite;
+}
+.marquee-content span { margin: 0 30px; opacity: 0.5; }
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* 2. Section Title */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: #fff;
+}
+.btn-link {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-bottom: 1px solid transparent;
+}
+.btn-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* 3. Feature Section */
+.features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 80px 5%;
+    background: #0a0a0a;
+    border-top: 1px solid #222;
+    border-bottom: 1px solid #222;
+}
+.feature-box {
+    text-align: center;
+    padding: 30px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    transition: 0.3s;
+}
+.feature-box:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent);
+    background: rgba(255, 215, 0, 0.05);
+}
+.feature-icon { font-size: 3rem; margin-bottom: 20px; }
+.feature-box h3 {
+    font-family: var(--font-heading);
+    color: #fff; margin-bottom: 10px; font-size: 1.2rem;
+}
+.feature-box p { color: #888; font-size: 0.9rem; }
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .section-title { font-size: 1.8rem; }
+    .marquee-strip { transform: none; margin-top: 0; }
+    .features-section { padding: 50px 20px; }
+}
+
+/* =========================================
+   🚀 HERO MARQUEE (แถบวิ่งหลังตัวหนังสือ)
+   วางต่อท้ายสุดของไฟล์ style.css
+   ========================================= */
+
+.hero-marquee {
+    position: absolute;          /* สั่งให้ลอยตัวอิสระ */
+    top: 50%;                    /* ให้อยู่กึ่งกลางแนวตั้ง */
+    left: -5%;                   /* ขยายออกไปทางซ้ายเผื่อเวลาเอียง */
+    width: 110%;                 /* ขยายความกว้างให้เกินจอ */
+    background: var(--accent);   /* สีทอง */
+    color: #000;                 /* ตัวหนังสือสีดำ */
+    padding: 12px 0;             /* ความสูงของแถบ */
+    
+    transform: translateY(-50%) rotate(-3deg); /* จัดกึ่งกลาง + เอียง -3 องศา */
+    z-index: 1;                  /* ⚠️ สำคัญ: อยู่หน้าพื้นหลัง(0) แต่อยู่หลังข้อความ(2) */
+    
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2); /* แสงฟุ้งๆ */
+    pointer-events: none;        /* ห้ามให้แถบนี้บังการกดปุ่ม */
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* นำ Animation เดิมมาใช้ */
+.marquee-content {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.5rem;           /* ขนาดตัวหนังสือในแถบ */
+    letter-spacing: 2px;
+    animation: marquee 20s linear infinite;
+}
+
+.marquee-content span { 
+    margin: 0 40px; 
+    opacity: 0.4; 
+}
+
+/* Animation การวิ่ง */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ปรับแต่งสำหรับมือถือ */
+@media (max-width: 768px) {
+    .hero-marquee {
+        padding: 8px 0;
+        top: 45%; /* ขยับขึ้นนิดนึงในมือถือ */
+    }
+    .marquee-content {
+        font-size: 1rem;
+    }
+}
